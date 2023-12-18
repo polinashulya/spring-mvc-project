@@ -8,17 +8,21 @@ import com.example.exception.DAOException;
 import com.example.exception.RepositoryException;
 import com.example.exception.ServiceException;
 import com.example.repository.CountryRepository;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
+@Repository
+@AllArgsConstructor
 public class CountryRepositoryImpl implements CountryRepository {
 
     private final CountryDao countryDao;
 
-    public CountryRepositoryImpl() {
-        countryDao = new CountryDaoImpl();
-    }
+//    public CountryRepositoryImpl() {
+//        countryDao = new CountryDaoImpl();
+//    }
 
     @Override
     public List<Country> findAll() {

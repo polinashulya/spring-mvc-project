@@ -7,6 +7,8 @@ import java.util.Optional;
 
 public interface UserRepository {
 
+    List<User> findAll();
+
     List<User> findAll(String sortBy, String sortType, String countryId, String search, String page, String pageSize);
 
     User getById(Long id);

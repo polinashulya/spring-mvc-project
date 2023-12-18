@@ -9,14 +9,17 @@ import com.example.exception.DAOException;
 import com.example.service.impl.UserServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.stereotype.Component;
 
-import java.sql.*;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.example.dao.impl.DaoHelper.closeConnection;
-
+@Component
 public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 
     private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
@@ -41,7 +44,35 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
                     "WHERE u.deleted = 'false' ";
 
 
-    public UserDaoImpl() {
+    @Override
+    public List<User> findAll() {
+        ProxyConnection proxyConnection = null;
+        PreparedStatement statement = null;
+
+        List<User> users = new ArrayList<>();
+
+        try {
+            proxyConnection = CountryDaoImpl.ConnectionCreator.getProxyConnection();
+            ConnectionWrapper connectionWrapper = proxyConnection.getConnectionWrapper();
+
+            statement = connectionWrapper.prepareStatement(FIND_ALL_USERS);
+
+            ResultSet set = statement.executeQuery();
+            logger.debug("Executing query: {}", statement.toString());
+
+            while (set.next()) {
+                User user = getUser(set);
+
+                users.add(user);
+            }
+
+
+        } catch (SQLException ex) {
+            logger.error("An SQL exception occurred: {}", ex.getMessage(), ex);
+            throw new DAOException(ex);
+        }
+
+        return users;
     }
 
     @Override
@@ -84,8 +115,6 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
         } catch (SQLException ex) {
             logger.error("An SQL exception occurred: {}", ex.getMessage(), ex);
             throw new DAOException(ex);
-        } finally {
-            closeConnection(proxyConnection, statement);
         }
 
         return users;
@@ -145,7 +174,6 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
                     )
                     .build();
         } catch (SQLException e) {
-            // Handle the exception or rethrow as a runtime exception
             throw new RuntimeException("Error mapping User from ResultSet", e);
         }
     }
@@ -177,8 +205,6 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
         } catch (SQLException ex) {
             logger.error("An SQL exception occurred while executing query: {}", statement.toString(), ex);
             throw new DAOException("An SQL exception occurred while executing query", ex);
-        } finally {
-            closeConnection(proxyConnection, statement);
         }
 
     }
@@ -277,8 +303,6 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
         } catch (SQLException ex) {
             logger.error("An SQL exception occurred while executing query: {}", statement.toString(), ex);
             throw new DAOException("An SQL exception occurred while executing query", ex);
-        } finally {
-            closeConnection(proxyConnection, statement);
         }
 
         return totalResult;

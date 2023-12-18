@@ -7,17 +7,31 @@ import com.example.exception.DAOException;
 import com.example.exception.RepositoryException;
 import com.example.exception.ServiceException;
 import com.example.repository.UserRepository;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
+@Repository
+@AllArgsConstructor
 public class UserRepositoryImpl implements UserRepository {
 
     private final UserDao userDao;
 
-    public UserRepositoryImpl() {
-        userDao = new UserDaoImpl();
+//    public UserRepositoryImpl() {
+//        userDao = new UserDaoImpl();
+//    }
+
+    @Override
+    public List<User> findAll() {
+        try {
+            return userDao.findAll();
+        } catch (DAOException e) {
+            throw new RepositoryException(e);
+        }
     }
+
 
     @Override
     public List<User> findAll(String sortBy, String sortType, String countryId, String search, String page, String pageSize) {

@@ -35,9 +35,9 @@
 </head>
 <body>
 <div class="error-container">
-    <img src="pictures/error_page/404.png" alt=""/>
+    <img src="../../pictures/error_page/404.png" alt=""/>
     <p>
-        <a href="mainServlet?action=main_page">
+        <a href="/">
             Go back to main page
         </a>
     </p>
@@ -48,6 +48,6 @@
     </c:if>
 </div>
 
-<%@ include file="/WEB-INF/footer.jsp" %>
+<%@ include file="/WEB-INF/jsp/footer.jsp" %>
 </body>
 </html>

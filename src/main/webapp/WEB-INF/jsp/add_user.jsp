@@ -9,11 +9,11 @@
 </head>
 <body>
 <div>
-    <%@ include file="/WEB-INF/header.jsp" %>
+    <%@ include file="/WEB-INF/jsp/header.jsp" %>
 </div>
 <div id="container">
     <h1>Add new user</h1>
-    <form action="mainServlet?action=add_user" method="POST">
+    <form action="/users" method="POST">
         <table>
             <tr>
                 <td class="form-group">
@@ -67,6 +67,6 @@
         <input type="submit" value="Submit"/>
     </form>
 </div>
-<%@ include file="/WEB-INF/footer.jsp" %>
+<%@ include file="/WEB-INF/jsp/footer.jsp" %>
 </body>
 </html>

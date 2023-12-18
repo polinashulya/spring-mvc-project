@@ -5,13 +5,38 @@
     <style type="text/css">
         <%@ include file="/WEB-INF/css/table.css" %>
     </style>
+    <script>
+        function deleteUser(userId) {
+            console.log("deleteUser function called with userId:", userId);
+
+            var confirmation = confirm("Are you sure you want to delete this user?");
+            if (confirmation) {
+                var xhr = new XMLHttpRequest();
+                xhr.open("DELETE", "/users/" + userId, true);
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4) {
+                        if (xhr.status === 204) {
+                            // Успешное удаление
+                            alert("Пользователь успешно удален");
+                            // Можете также выполнить перенаправление или обновление страницы
+                            window.location.reload();
+                        } else {
+                            // Обработка ошибки удаления
+                            alert("Ошибка при удалении пользователя");
+                        }
+                    }
+                };
+                xhr.send();
+            }
+        }
+    </script>
 </head>
 <body>
 <div>
-    <%@ include file="/WEB-INF/header.jsp" %>
+    <%@ include file="/WEB-INF/jsp/header.jsp" %>
 </div>
 <div id="main">
-    <form action="mainServlet?action=users" method="get">
+    <form action="/users" method="get">
 
         <input type="hidden" name="page" value="${param.page == '' ? '1' : param.page}" />
 
@@ -94,17 +119,13 @@
                 <td>${user.country.name}</td>
                 <td>${user.birthDate}</td>
                 <td>
-                    <form action="mainServlet?action=delete_user" method="post">
-                        <input type="hidden" name="action" value="delete_user"/>
-                        <input type="hidden" name="userId" value="${user.id}"/>
-                        <button type="submit" class="delete-button">Delete</button>
-                    </form>
+                    <button type="button" onclick="deleteUser(${user.id})" class="delete-button">Delete</button>
                 </td>
             </tr>
         </c:forEach>
         </tbody>
     </table>
 </div>
-<%@ include file="/WEB-INF/footer.jsp" %>
+<%@ include file="/WEB-INF/jsp/footer.jsp" %>
 </body>
 </html>

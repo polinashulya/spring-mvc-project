@@ -8,14 +8,17 @@ import com.example.repository.UserRepository;
 import com.example.repository.impl.CountryRepositoryImpl;
 import com.example.repository.impl.UserRepositoryImpl;
 import com.example.service.UserService;
-import com.example.servlet.MainServlet;
 import com.example.validator.UserValidator;
 import com.example.validator.UserValidatorImpl;
+import lombok.AllArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
+@AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
@@ -26,15 +29,25 @@ public class UserServiceImpl implements UserService {
 
     private final UserValidator validator;
 
-    public UserServiceImpl() {
-        this.userRepository = new UserRepositoryImpl();
-        this.countryRepository = new CountryRepositoryImpl();
-        this.validator = new UserValidatorImpl();
-    }
+//    public UserServiceImpl() {
+//        this.userRepository = new UserRepositoryImpl();
+//        this.countryRepository = new CountryRepositoryImpl();
+//        this.validator = new UserValidatorImpl();
+//    }
 
     @Override
     public User getById(String userId) {
         return null;
+    }
+
+    @Override
+    public List<User> getAll() {
+        try {
+            return userRepository.findAll();
+        } catch (DAOException e) {
+            logger.error("Error while getting all users: {}", e.getMessage(), e);
+            throw new ServiceException(e);
+        }
     }
 
     @Override

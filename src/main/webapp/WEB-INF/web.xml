@@ -2,8 +2,15 @@
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xmlns="http://java.sun.com/xml/ns/javaee"
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
-         version="3.0">
-    <display-name>servlets project</display-name>
+         id="WebApp_ID" version="3.0">
+    <display-name>spring-mvc-project</display-name>
+
+    <!-- Add Spring MVC DispatcherServlet as front controller -->
+<!--    <servlet>-->
+<!--        <servlet-name>dispatcher</servlet-name>-->
+<!--        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>-->
+<!--        <load-on-startup>1</load-on-startup>-->
+<!--    </servlet>-->
 
     <context-param>
         <param-name>db.driver</param-name>
@@ -28,13 +35,19 @@
         <param-value>15</param-value>
     </context-param>
 
-    <servlet>
-        <servlet-name>MainServlet</servlet-name>
-        <servlet-class>com.example.servlet.MainServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>MainServlet</servlet-name>
-        <url-pattern>/</url-pattern>
-    </servlet-mapping>
+    <!--    <servlet>-->
+    <!--        <servlet-name>MainServlet</servlet-name>-->
+    <!--        <servlet-class>com.example.servlet.MainServlet</servlet-class>-->
+    <!--    </servlet>-->
+    <!--    <servlet-mapping>-->
+    <!--        <servlet-name>MainServlet</servlet-name>-->
+    <!--        <url-pattern>/</url-pattern>-->
+    <!--    </servlet-mapping>-->
+
+<!--    <servlet-mapping>-->
+<!--        <servlet-name>dispatcher</servlet-name>-->
+<!--        <url-pattern>/</url-pattern>-->
+<!--    </servlet-mapping>-->
+
 
 </web-app>

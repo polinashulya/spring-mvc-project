@@ -8,9 +8,9 @@
 <body>
 <header class="header">
     <div class="button-container">
-        <a class="button" href="mainServlet?action=main_page">Main page</a>
-        <a class="button" href="mainServlet?action=users">Show all users</a>
-        <a class="button" href="mainServlet?action=adding_form">Add new user</a>
+        <a class="button" href="/">Main page</a>
+        <a class="button" href="/users">Show all users</a>
+        <a class="button" href="/users/adding_form">Add new user</a>
     </div>
 </header>
 </body>

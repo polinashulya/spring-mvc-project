@@ -7,10 +7,10 @@
 </head>
 <body>
 <div>
-    <%@ include file="/WEB-INF/header.jsp" %>
+    <%@ include file="/WEB-INF/jsp/header.jsp" %>
 </div>
 <h1>Welcome to the main page</h1>
 <c:redirect url = "mainWindow?action=main"/>
-<%@ include file="/WEB-INF/footer.jsp" %>
+<%@ include file="/WEB-INF/jsp/footer.jsp" %>
 </body>
 </html>

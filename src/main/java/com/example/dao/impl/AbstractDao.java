@@ -12,15 +12,9 @@ import java.sql.SQLException;
 import java.util.Optional;
 import java.util.function.Function;
 
-import static com.example.dao.impl.DaoHelper.closeConnection;
-
 public abstract class AbstractDao<T> {
 
     private static final Logger logger = LogManager.getLogger(AbstractDao.class);
-
-    public AbstractDao() {
-
-    }
 
     public T getById(String sql, Long id, Function<ResultSet, T> function) {
         ProxyConnection proxyConnection = null;
@@ -32,7 +26,10 @@ public abstract class AbstractDao<T> {
             proxyConnection = CountryDaoImpl.ConnectionCreator.getProxyConnection();
             ConnectionWrapper connectionWrapper = proxyConnection.getConnectionWrapper();
 
-            statement = connectionWrapper.prepareStatement("SELECT c.id, c.name FROM countries c");
+            statement = connectionWrapper.prepareStatement(sql);
+
+            statement.setLong(1, id);
+
             ResultSet resultSet = statement.executeQuery();
 
             logger.info(resultSet);
@@ -46,8 +43,6 @@ public abstract class AbstractDao<T> {
         } catch (SQLException ex) {
             logger.error("An SQL exception occurred: {}", ex.getMessage(), ex);
             throw new DAOException(ex);
-        } finally {
-            closeConnection(proxyConnection, statement);
         }
 
         return t;
@@ -77,8 +72,6 @@ public abstract class AbstractDao<T> {
         } catch (SQLException ex) {
             logger.error("An SQL exception occurred: {}", ex.getMessage(), ex);
             throw new DAOException(ex);
-        } finally {
-            closeConnection(proxyConnection, statement);
         }
 
         return t;
@@ -117,8 +110,6 @@ public abstract class AbstractDao<T> {
             logger.error("An SQL exception occurred: {}", ex.getMessage(), ex);
             System.err.println();
             throw new DAOException(ex);
-        } finally {
-            closeConnection(proxyConnection, statement);
         }
 
     }

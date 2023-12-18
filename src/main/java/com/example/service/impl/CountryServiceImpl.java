@@ -6,19 +6,23 @@ import com.example.exception.ServiceException;
 import com.example.repository.CountryRepository;
 import com.example.repository.impl.CountryRepositoryImpl;
 import com.example.service.CountryService;
+import lombok.AllArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
+@AllArgsConstructor
 public class CountryServiceImpl implements CountryService {
 
     private static final Logger logger = LogManager.getLogger(CountryServiceImpl.class);
     private final CountryRepository countryRepository;
 
-    public CountryServiceImpl() {
-        countryRepository = new CountryRepositoryImpl();
-    }
+//    public CountryServiceImpl() {
+//        countryRepository = new CountryRepositoryImpl();
+//    }
 
 
     @Override

@@ -1,7 +1,10 @@
 package com.example.validator;
 
+import org.springframework.stereotype.Component;
+
 import java.time.LocalDate;
 
+@Component
 public class UserValidatorImpl implements UserValidator {
 
     private static final String LOGIN_FORMAT_REGEX = "^[a-zA-Z][a-zA-Z0-9-_.]{2,19}$";

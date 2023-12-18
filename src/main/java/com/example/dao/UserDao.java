@@ -1,11 +1,16 @@
 package com.example.dao;
 
 import com.example.entity.User;
+import org.springframework.context.annotation.Bean;
 
 import java.util.List;
 import java.util.Optional;
 
+
 public interface UserDao {
+
+    List<User> findAll();
+
     List<User> findAll(String filterAndSearchsql,String sortSql, String page, String pageSize);
 
     User getById(Long id);

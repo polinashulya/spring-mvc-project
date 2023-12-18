@@ -8,6 +8,7 @@ import com.example.entity.Country;
 import com.example.exception.DAOException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.stereotype.Component;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,13 +17,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.example.dao.impl.DaoHelper.closeConnection;
-
+@Component
 public class CountryDaoImpl extends AbstractDao<Country> implements CountryDao {
 
     private static final Logger logger = LogManager.getLogger(CountryDaoImpl.class);
-
-    public CountryDaoImpl() {}
 
     @Override
     public List<Country> findAll() {
@@ -35,8 +33,8 @@ public class CountryDaoImpl extends AbstractDao<Country> implements CountryDao {
             proxyConnection = CountryDaoImpl.ConnectionCreator.getProxyConnection();
             ConnectionWrapper connectionWrapper = proxyConnection.getConnectionWrapper();
 
-              statement = connectionWrapper.prepareStatement("SELECT c.id, c.name FROM countries c");
-             ResultSet resultSet = statement.executeQuery();
+            statement = connectionWrapper.prepareStatement("SELECT c.id, c.name FROM countries c");
+            ResultSet resultSet = statement.executeQuery();
 
             logger.debug("Executing query: {}", statement.toString());
 
@@ -48,9 +46,7 @@ public class CountryDaoImpl extends AbstractDao<Country> implements CountryDao {
         } catch (SQLException ex) {
             logger.error("An SQL exception occurred: {}", ex.getMessage(), ex);
             throw new DAOException(ex);
-            } finally {
-                closeConnection(proxyConnection, statement);
-            }
+        }
 
         return countries;
     }
