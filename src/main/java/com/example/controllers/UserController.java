@@ -37,29 +37,30 @@ public class UserController {
                                @RequestParam(name = "page", required = false) String page,
                                @RequestParam(name = "pageSize", required = false) String pageSize) {
 
-        int totalUsers = 0;
-
         List<User> users = userService.getAll(sortBy, sortType, countryId, search, page, pageSize);
 
-        totalUsers = userService.getTotalResult(sortBy, sortType, countryId, search);
+        int totalUsers = userService.getTotalResult(sortBy, sortType, countryId, search);
 
-        model.addAttribute("totalResult", totalUsers);
+        model.addAttribute("totalUsers", totalUsers);
         model.addAttribute("users", users);
         model.addAttribute("sortBy", sortBy);
         model.addAttribute("sortType", sortType);
         model.addAttribute("currentCountryId", countryId);
 
-        List<Country> countries = this.countryService.findAll();
-        model.addAttribute("countries", countries);
+        setCountriesToModel(model);
 
         return "users";
+    }
+
+    private void setCountriesToModel(Model model) {
+        List<Country> countries = this.countryService.findAll();
+        model.addAttribute("countries", countries);
     }
 
     @GetMapping("/adding_form")
     public String addingForm(Model model) {
 
-        List<Country> countries = this.countryService.findAll();
-        model.addAttribute("countries", countries);
+        setCountriesToModel(model);
 
         return "add_user";
     }
@@ -73,10 +74,7 @@ public class UserController {
                        @RequestParam(name = "countryId", required = false) String countryId,
                        @RequestParam(name = "birthDate", required = false) String birthDate) {
 
-        if (countryId == null) {
-            throw new ServletCustomException("Country ID is required.");
-        }
-
+        LocalDate parsedBirthDate = LocalDate.parse(birthDate);
         User user = User.builder()
                 .login(login.trim())
                 .password(password)
@@ -87,9 +85,7 @@ public class UserController {
                                 .id(Long.valueOf(countryId))
                                 .build()
                 )
-                .birthDate(LocalDate.parse(birthDate))
-                .banned(false)
-                .deleted(false)
+                .birthDate(parsedBirthDate)
                 .build();
 
 
@@ -107,14 +103,12 @@ public class UserController {
 
         try {
             userService.deleteById(Long.valueOf(userId));
-
         } catch (Exception e) {
             logger.error("Error while executing DeleteUserCommand", e);
             throw new ServletCustomException("Error while executing DeleteUserCommand", e);
         }
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-
     }
 
 }

@@ -5,31 +5,6 @@
     <style type="text/css">
         <%@ include file="/WEB-INF/css/table.css" %>
     </style>
-    <script>
-        function deleteUser(userId) {
-            console.log("deleteUser function called with userId:", userId);
-
-            var confirmation = confirm("Are you sure you want to delete this user?");
-            if (confirmation) {
-                var xhr = new XMLHttpRequest();
-                xhr.open("DELETE", "/users/" + userId, true);
-                xhr.onreadystatechange = function () {
-                    if (xhr.readyState === 4) {
-                        if (xhr.status === 204) {
-                            // Успешное удаление
-                            alert("Пользователь успешно удален");
-                            // Можете также выполнить перенаправление или обновление страницы
-                            window.location.reload();
-                        } else {
-                            // Обработка ошибки удаления
-                            alert("Ошибка при удалении пользователя");
-                        }
-                    }
-                };
-                xhr.send();
-            }
-        }
-    </script>
 </head>
 <body>
 <div>
@@ -90,7 +65,7 @@
         </script>
 
         <button type="button" onclick="goToPage(${param.page - 1})" ${param.page <= 1 ? 'disabled' : ''}>Previous</button>
-        <button type="button" onclick="goToPage(${param.page + 1})" ${param.page * param.pageSize >= totalResult ? 'disabled' : ''}>Next</button>
+        <button type="button" onclick="goToPage(${param.page + 1})" ${param.page * param.pageSize >= totalUsers ? 'disabled' : ''}>Next</button>
 
         <input type="submit" class="show-button" value="Show">
 
@@ -128,4 +103,26 @@
 </div>
 <%@ include file="/WEB-INF/jsp/footer.jsp" %>
 </body>
+<script>
+    function deleteUser(userId) {
+        console.log("deleteUser function called with userId:", userId);
+
+        var confirmation = confirm("Are you sure you want to delete this user?");
+        if (confirmation) {
+            var xhr = new XMLHttpRequest();
+            xhr.open("DELETE", "/users/" + userId, true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 204) {
+                        alert("Users is successfully deleted");
+                        window.location.reload();
+                    } else {
+                        alert("User deletion error");
+                    }
+                }
+            };
+            xhr.send();
+        }
+    }
+</script>
 </html>

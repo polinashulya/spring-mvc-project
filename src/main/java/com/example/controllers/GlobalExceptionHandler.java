@@ -10,7 +10,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public String handleException(Exception e, Model model) {
 
-        e.printStackTrace();
+        System.err.println(e.getCause());
 
         model.addAttribute("error", "An unexpected error occurred: " + e.getMessage());
 
