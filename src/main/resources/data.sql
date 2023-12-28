@@ -3,7 +3,7 @@ create table users
     id         serial,
     login      character(20) NOT NULL UNIQUE,
     password   character(20) NOT NULL,
-    firstname  character(20) NOT NULL,
+    name  character(20) NOT NULL,
     surname    character(20) NOT NULL,
     country_id int,
     birth_date date,

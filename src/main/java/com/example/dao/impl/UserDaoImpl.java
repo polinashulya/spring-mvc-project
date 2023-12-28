@@ -1,173 +1,163 @@
 package com.example.dao.impl;
 
 import com.example.dao.UserDao;
-import com.example.dao.core.pool.connection.ConnectionWrapper;
-import com.example.dao.core.pool.connection.ProxyConnection;
-import com.example.entity.Country;
-import com.example.entity.User;
+import com.example.entity.CountryEntity;
+import com.example.entity.UserEntity;
 import com.example.exception.DAOException;
 import com.example.service.impl.UserServiceImpl;
+import jakarta.persistence.TypedQuery;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.stereotype.Component;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Date;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Component
-public class UserDaoImpl extends AbstractDao<User> implements UserDao {
+@Repository
+public class UserDaoImpl implements UserDao {
 
     private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
-
-    private static final String FIND_ALL_USERS =
-            "SELECT u.id, u.login, u.firstname, u.surname, u.birth_date, u.banned, u.country_id, c.name " +
-                    "FROM users u " +
-                    "join countries c on u.country_id = c.id " +
-                    "WHERE u.deleted = 'false' ";
     private static final String SORT_TYPE_ASC = "ASC";
     private static final String SORT_USERS_BY_ID = "byId";
     private static final String SORT_USERS_BY_SURNAME = "bySurname";
     private static final String SORT_USERS_BY_LOGIN = "byLogin";
     private static final String SORT_USERS_BY_BIRTH_DATE = "byBirthDate";
 
-    private static final String PAGINATION_DEFAULT = " LIMIT " + 5 + " OFFSET " + 0;
+    private final SessionFactory sessionFactory;
 
-    private static final String TOTAL_COUNT_USERS =
-            "SELECT COUNT(*) AS totalUsers " +
-                    "FROM users u " +
-                    "join countries c on u.country_id = c.id " +
-                    "WHERE u.deleted = 'false' ";
+    public UserDaoImpl(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 
 
     @Override
-    public List<User> findAll() {
-        ProxyConnection proxyConnection = null;
-        PreparedStatement statement = null;
-
-        List<User> users = new ArrayList<>();
+    @Transactional(readOnly = true)
+    public List<UserEntity> findAll() {
+        Session session = null;
 
         try {
-            proxyConnection = CountryDaoImpl.ConnectionCreator.getProxyConnection();
-            ConnectionWrapper connectionWrapper = proxyConnection.getConnectionWrapper();
-
-            statement = connectionWrapper.prepareStatement(FIND_ALL_USERS);
-
-            ResultSet set = statement.executeQuery();
-            logger.debug("Executing query: {}", statement.toString());
-
-            while (set.next()) {
-                User user = getUser(set);
-
-                users.add(user);
+            session = sessionFactory.openSession();
+            return session.createQuery("FROM UserEntity u WHERE u.deleted = false", UserEntity.class)
+                    .getResultList();
+        } catch (Exception e) {
+            throw new DAOException("Error while finding all users", e);
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
             }
-
-
-        } catch (SQLException ex) {
-            logger.error("An SQL exception occurred: {}", ex.getMessage(), ex);
-            throw new DAOException(ex);
         }
 
+    }
+
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<UserEntity> findAll(String search, String countryId, String sortBy, String sortType, String page, String pageSize) {
+
+        Session session = null;
+        List<UserEntity> users = new ArrayList<>();
+
+        try {
+            session = sessionFactory.openSession();
+
+            int offset = Optional.ofNullable(page)
+                    .map(Integer::parseInt)
+                    .map(p -> (p - 1) * Optional.ofNullable(pageSize).map(Integer::parseInt).orElse(5))
+                    .orElse(0);
+
+
+            String filterAndSearchHql = getFilterAndSearchHql(countryId, search);
+            String sortSql = getSortingHql(sortBy, sortType);
+            String hql = "FROM UserEntity u JOIN FETCH u.country c " + filterAndSearchHql + sortSql;
+
+            TypedQuery<UserEntity> query = session.createQuery(hql, UserEntity.class)
+                    .setFirstResult(offset)
+                    .setMaxResults(Optional.ofNullable(pageSize).map(Integer::parseInt).orElse(5));
+
+            logger.debug(query.unwrap(org.hibernate.query.Query.class).getQueryString());
+
+            users = query.getResultList();
+
+        } catch (Exception e) {
+            throw new DAOException("Error while finding all users with pagination", e);
+        } finally {
+
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
         return users;
     }
 
+
     @Override
-    public List<User> findAll(String filterAndSearchsql, String sortSql, String page, String pageSize) {
-        ProxyConnection proxyConnection = null;
-        PreparedStatement statement = null;
-
-
-        String paginationSql;
-        int offset = 0;
-
-        if (page != null && !page.isEmpty() && pageSize != null && !pageSize.isEmpty()) {
-
-            offset = (Integer.parseInt(page) - 1) * Integer.parseInt(pageSize);
-            paginationSql = " LIMIT " + pageSize + " OFFSET " + offset;
-
-        } else {
-            paginationSql = PAGINATION_DEFAULT;
-        }
-
-
-        List<User> users = new ArrayList<>();
+    public UserEntity getById(Long id) {
+        Session session = null;
 
         try {
-            proxyConnection = CountryDaoImpl.ConnectionCreator.getProxyConnection();
-            ConnectionWrapper connectionWrapper = proxyConnection.getConnectionWrapper();
-
-            statement = connectionWrapper.prepareStatement(FIND_ALL_USERS + filterAndSearchsql + sortSql + paginationSql);
-
-            ResultSet set = statement.executeQuery();
-            logger.debug("Executing query: {}", statement.toString());
-
-            while (set.next()) {
-                User user = getUser(set);
-
-                users.add(user);
+            session = sessionFactory.openSession();
+            return session.createQuery("FROM UserEntity u JOIN FETCH u.country c WHERE u.id = :userId AND u.deleted = false", UserEntity.class)
+                    .setParameter("userId", id)
+                    .uniqueResult();
+        } catch (Exception e) {
+            throw new DAOException("Error while finding user by ID", e);
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
             }
-
-
-        } catch (SQLException ex) {
-            logger.error("An SQL exception occurred: {}", ex.getMessage(), ex);
-            throw new DAOException(ex);
         }
 
-        return users;
+    }
+
+
+    @Override
+    public Optional<UserEntity> findById(Long id) {
+        return Optional.ofNullable(getById(id));
     }
 
     @Override
-    public User getById(Long id) {
+    public UserEntity getByLogin(String login) {
+        Session session = null;
 
-        String sql = "SELECT u.id, u.login, u.firstname, u.surname, u.birth_date, u.banned, u.country_id, c.name " +
-                "FROM users u join countries c on u.country_id = c.id where u.id = ? ";
-
-        return super.getById(sql, id, UserDaoImpl::getUser);
-
-    }
-
-    @Override
-    public Optional<User> findById(Long id) {
-
-        String sql = "SELECT u.id, u.login, u.firstname, u.surname, u.birth_date, u.banned, u.country_id, c.name " +
-                "FROM users u join countries c on u.country_id = c.id where u.id = ?";
-
-        return super.findById(sql, id, UserDaoImpl::getUser);
-    }
-
-    @Override
-    public User getByLogin(String login) {
-
-        String sql = "SELECT u.id, u.login, u.firstname, u.surname, u.birth_date, u.banned, u.country_id, c.name " +
-                "FROM users u join countries c on u.country_id = c.id where u.login = ?";
-
-        return super.getByLogin(sql, login, UserDaoImpl::getUser);
-    }
-
-    @Override
-    public Optional<User> findByLogin(String login) {
-
-        String sql = "SELECT u.id, u.login, u.firstname, u.surname, u.birth_date, u.banned, u.country_id, c.name " +
-                "FROM users u join countries c on u.country_id = c.id where u.login = ?";
-
-        return super.findByLogin(sql, login, UserDaoImpl::getUser);
-    }
-
-    private static User getUser(ResultSet set) {
         try {
-            return User.builder()
+            session = sessionFactory.openSession();
+            return session.createQuery("FROM UserEntity u JOIN FETCH u.country c WHERE u.login = :login AND u.deleted = false", UserEntity.class)
+                    .setParameter("login", login)
+                    .uniqueResult();
+        } catch (Exception e) {
+            throw new DAOException("Error while finding user by login", e);
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
+
+    }
+
+
+    @Override
+    public Optional<UserEntity> findByLogin(String login) {
+        return Optional.ofNullable(getByLogin(login));
+    }
+
+    private static UserEntity getUser(ResultSet set) {
+        try {
+            return UserEntity.builder()
                     .id(set.getLong(1))
                     .login(set.getString(2))
-                    .firstname(set.getString(3))
+                    .name(set.getString(3))
                     .surname(set.getString(4))
                     .birthDate((set.getDate(5)).toLocalDate())
                     .banned(set.getBoolean(6))
                     .country(
-                            Country.builder()
+                            CountryEntity.builder()
                                     .id(set.getLong(7))
                                     .name(set.getString(8))
                                     .build()
@@ -180,45 +170,67 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 
 
     @Override
-    public void save(User user) {
-        ProxyConnection proxyConnection = null;
-        PreparedStatement statement = null;
+    @Transactional
+    public void save(UserEntity user) {
+        Session session = null;
 
         try {
-            proxyConnection = CountryDaoImpl.ConnectionCreator.getProxyConnection();
-            ConnectionWrapper connectionWrapper = proxyConnection.getConnectionWrapper();
-
-            statement = connectionWrapper.prepareStatement("INSERT INTO users (login, password, firstname, surname, birth_date, banned, deleted, country_id ) VALUES (?,?,?,?,?,?,?, ?);");
-
-            statement.setString(1, user.getLogin());
-            statement.setString(2, user.getPassword());
-            statement.setString(3, user.getFirstname());
-            statement.setString(4, user.getSurname());
-            statement.setDate(5, Date.valueOf(user.getBirthDate()));
-            statement.setBoolean(6, user.isBanned());
-            statement.setBoolean(7, user.isDeleted());
-            statement.setLong(8, user.getCountry().getId());
-
-            statement.executeUpdate();
-            logger.debug("Executing query: {}", statement.toString());
-
-        } catch (SQLException ex) {
-            logger.error("An SQL exception occurred while executing query: {}", statement.toString(), ex);
-            throw new DAOException("An SQL exception occurred while executing query", ex);
+            session = sessionFactory.openSession();
+            session.saveOrUpdate(user);
+            logger.debug("User saved successfully");
+        } catch (Exception e) {
+            logger.error("Error while saving user", e);
+            throw new DAOException("Error while saving user", e);
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
         }
-
     }
 
 
     @Override
+    @Transactional
     public void delete(Long id) {
 
-        String deleteSql = "UPDATE users u SET deleted=true where u.id = ?";
+        Session session = null;
+        Transaction transaction = null;
 
-        String findSql = "SELECT u.id, u.login, u.firstname, u.surname, u.birth_date, u.banned, u.country_id, c.name " +
-                "FROM users u join countries c on u.country_id = c.id where u.id = ? ";
+        try {
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
 
-        super.delete(deleteSql, findSql, id, UserDaoImpl::getUser);
+            UserEntity user = session.get(UserEntity.class, id);
+
+            if (user != null) {
+
+                user.setDeleted(true);
+
+                session.update(user);
+                session.flush();
+                transaction.commit();
+
+                logger.debug("User deleted successfully");
+
+            } else {
+                logger.warn("User with id {} not found", id);
+                throw new DAOException("User not found");
+            }
+        } catch (Exception e) {
+
+            if (transaction != null) {
+                transaction.rollback();
+            }
+
+            logger.error("Error while deleting user", e);
+            throw new DAOException("Error while deleting user", e);
+
+        } finally {
+
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
     }
 
     private static String getSortByOrDefault(String sortBy) {
@@ -226,86 +238,60 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
     }
 
     @Override
-    public String getFilterAndSearchSql(String countryId, String search) {
+    public String getFilterAndSearchHql(String countryId, String search) {
 
-        String sql = new String();
-        String filterSql = new String();
-        String searchSql = new String();
+        StringBuilder hql = new StringBuilder(" WHERE u.deleted = false ");
 
         if (countryId != null && !countryId.isEmpty()) {
-            filterSql = " AND u.country_id = " + countryId;
+            hql.append(" AND u.country.id = ").append(countryId);
         }
 
         if (search != null && !search.isEmpty()) {
-            searchSql = " AND (u.login LIKE '%" + search + "%'" +
-                    " OR u.firstname LIKE '%" + search + "%'" +
-                    " OR u.surname LIKE '%" + search + "%'" +
-                    " OR c.name LIKE '%" + search + "%')";
+            hql.append(" AND (u.login LIKE '%").append(search)
+                    .append("%' OR u.name LIKE '%").append(search)
+                    .append("%' OR u.surname LIKE '%")
+                    .append(search).append("%')");
         }
 
-        sql = filterSql + searchSql;
-
-        return sql;
+        return hql.toString();
     }
 
     @Override
-    public String getSortingSql(String sortBy, String sortType) {
+    public String getSortingHql(String sortBy, String sortType) {
+        String alias = "u"; // Alias for the UserEntity
 
         switch (getSortByOrDefault(sortBy)) {
-            case SORT_USERS_BY_LOGIN -> {
-                return SORT_TYPE_ASC.equals(sortType) ?
-                        " ORDER BY u.login ASC" :
-                        " ORDER BY u.login DESC";
-            }
-            case SORT_USERS_BY_SURNAME -> {
-                return SORT_TYPE_ASC.equals(sortType) ?
-                        " ORDER BY u.surname ASC" :
-                        " ORDER BY u.surname DESC";
-            }
-            case SORT_USERS_BY_BIRTH_DATE -> {
-                return SORT_TYPE_ASC.equals(sortType) ?
-                        " ORDER BY u.birth_date ASC" :
-                        " ORDER BY u.birth_date DESC";
-            }
-            case SORT_USERS_BY_ID -> {
-                return SORT_TYPE_ASC.equals(sortType) ?
-                        " ORDER BY u.id ASC" :
-                        " ORDER BY u.id DESC";
-            }
-            default -> {
-                return " ORDER BY u.id ASC";
-            }
+            case SORT_USERS_BY_LOGIN:
+                return " ORDER BY " + alias + ".login " + (SORT_TYPE_ASC.equals(sortType) ? "ASC" : "DESC");
+            case SORT_USERS_BY_SURNAME:
+                return " ORDER BY " + alias + ".surname " + (SORT_TYPE_ASC.equals(sortType) ? "ASC" : "DESC");
+            case SORT_USERS_BY_BIRTH_DATE:
+                return " ORDER BY " + alias + ".birthDate " + (SORT_TYPE_ASC.equals(sortType) ? "ASC" : "DESC");
+            case SORT_USERS_BY_ID:
+                return " ORDER BY " + alias + ".id " + (SORT_TYPE_ASC.equals(sortType) ? "ASC" : "DESC");
+            default:
+                return " ORDER BY " + alias + ".id ASC";
         }
     }
 
     @Override
-    public int getTotalResult(String filterAndSearchsql) {
-        ProxyConnection proxyConnection = null;
-        PreparedStatement statement = null;
+    public int getTotalResult(String filterAndSearchHql) {
+        String hql = "SELECT COUNT(u.id) FROM UserEntity u" + filterAndSearchHql;
 
-        int totalResult = 0;
+        Session session = null;
 
         try {
-            proxyConnection = CountryDaoImpl.ConnectionCreator.getProxyConnection();
-            ConnectionWrapper connectionWrapper = proxyConnection.getConnectionWrapper();
+            session = sessionFactory.openSession();
+            return Math.toIntExact((Long) session.createQuery(hql).uniqueResult());
 
-            statement = connectionWrapper.prepareStatement(TOTAL_COUNT_USERS + filterAndSearchsql);
-
-            ResultSet set = statement.executeQuery();
-            logger.debug("Executing query: {}", statement.toString());
-
-            if (set.next()) {
-                totalResult = set.getInt("totalUsers");
-            } else {
-                logger.warn("The total result of users is null");
+        } catch (Exception e) {
+            logger.error("An error occurred while executing query: {}", hql, e);
+            throw new DAOException("An error occurred while executing query", e);
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
             }
-
-        } catch (SQLException ex) {
-            logger.error("An SQL exception occurred while executing query: {}", statement.toString(), ex);
-            throw new DAOException("An SQL exception occurred while executing query", ex);
         }
-
-        return totalResult;
     }
 
 }

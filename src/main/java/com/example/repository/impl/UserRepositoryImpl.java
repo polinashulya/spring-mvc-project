@@ -1,11 +1,9 @@
 package com.example.repository.impl;
 
 import com.example.dao.UserDao;
-import com.example.dao.impl.UserDaoImpl;
-import com.example.entity.User;
+import com.example.entity.UserEntity;
 import com.example.exception.DAOException;
 import com.example.exception.RepositoryException;
-import com.example.exception.ServiceException;
 import com.example.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -19,12 +17,8 @@ public class UserRepositoryImpl implements UserRepository {
 
     private final UserDao userDao;
 
-//    public UserRepositoryImpl() {
-//        userDao = new UserDaoImpl();
-//    }
-
     @Override
-    public List<User> findAll() {
+    public List<UserEntity> findAll() {
         try {
             return userDao.findAll();
         } catch (DAOException e) {
@@ -34,18 +28,16 @@ public class UserRepositoryImpl implements UserRepository {
 
 
     @Override
-    public List<User> findAll(String sortBy, String sortType, String countryId, String search, String page, String pageSize) {
+    public List<UserEntity> findAll(String sortBy, String sortType, String countryId, String search, String page, String pageSize) {
         try {
-            final String filterAndSearchSql = userDao.getFilterAndSearchSql(countryId, search);
-            final String sortSql = userDao.getSortingSql(sortBy, sortType);
-            return userDao.findAll(filterAndSearchSql, sortSql, page, pageSize);
+            return userDao.findAll( search, countryId, sortBy, sortType, page, pageSize);
         } catch (DAOException e) {
             throw new RepositoryException(e);
         }
     }
 
     @Override
-    public User getById(Long id) {
+    public UserEntity getById(Long id) {
         try {
             return userDao.getById(id);
         } catch (DAOException e) {
@@ -54,7 +46,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void save(User user) {
+    public void save(UserEntity user) {
         try {
             userDao.save(user);
         } catch (DAOException e) {
@@ -74,7 +66,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public int getTotalResult(String sortBy, String sortType, String countryId, String search) {
         try {
-            final String filterAndSearchSql = userDao.getFilterAndSearchSql(countryId, search);
+            final String filterAndSearchSql = userDao.getFilterAndSearchHql(countryId, search);
             return userDao.getTotalResult(filterAndSearchSql);
         } catch (DAOException e) {
             throw new RepositoryException(e);
@@ -82,7 +74,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public Optional<User> findByLogin(String login) {
+    public Optional<UserEntity> findByLogin(String login) {
         try {
             return userDao.findByLogin(login);
         } catch (DAOException e) {

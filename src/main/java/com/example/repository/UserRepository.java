@@ -1,21 +1,22 @@
 package com.example.repository;
 
-import com.example.entity.User;
+import com.example.entity.UserEntity;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface UserRepository {
 
-    List<User> findAll();
+    List<UserEntity> findAll();
 
-    List<User> findAll(String sortBy, String sortType, String countryId, String search, String page, String pageSize);
+    List<UserEntity> findAll(String sortBy, String sortType, String countryId, String search, String page, String pageSize);
 
-    User getById(Long id);
+    UserEntity getById(Long id);
 
-    Optional<User> findByLogin(String login);
+    Optional<UserEntity> findByLogin(String login);
 
-    void save(User user);
+    void save(UserEntity user);
 
     void deleteById(Long id);
 

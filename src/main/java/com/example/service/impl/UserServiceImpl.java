@@ -1,16 +1,13 @@
 package com.example.service.impl;
 
-import com.example.entity.User;
+import com.example.entity.UserEntity;
 import com.example.exception.DAOException;
 import com.example.exception.ServiceException;
 import com.example.exception.ServletCustomException;
 import com.example.repository.CountryRepository;
 import com.example.repository.UserRepository;
-import com.example.repository.impl.CountryRepositoryImpl;
-import com.example.repository.impl.UserRepositoryImpl;
 import com.example.service.UserService;
 import com.example.validator.UserValidator;
-import com.example.validator.UserValidatorImpl;
 import lombok.AllArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -30,19 +27,8 @@ public class UserServiceImpl implements UserService {
 
     private final UserValidator validator;
 
-//    public UserServiceImpl() {
-//        this.userRepository = new UserRepositoryImpl();
-//        this.countryRepository = new CountryRepositoryImpl();
-//        this.validator = new UserValidatorImpl();
-//    }
-
     @Override
-    public User getById(String userId) {
-        return null;
-    }
-
-    @Override
-    public List<User> getAll() {
+    public List<UserEntity> getAll() {
         try {
             return userRepository.findAll();
         } catch (DAOException e) {
@@ -52,7 +38,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getAll(String sortBy, String sortType, String countryId, String search, String page, String pageSize) {
+    public List<UserEntity> getAll(String sortBy, String sortType, String countryId, String search, String page, String pageSize) {
         try {
             return userRepository.findAll(sortBy, sortType, countryId, search, page, pageSize);
         } catch (DAOException e) {
@@ -62,9 +48,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void add(User user) {
+    public void add(UserEntity user) {
         if (!validator.validate(user.getLogin(), user.getPassword(),
-                user.getFirstname(), user.getSurname(), user.getBirthDate())) {
+                user.getName(), user.getSurname(), user.getBirthDate())) {
             throw new ServiceException("Information is not valid!");
         }
         if (user.getCountry() == null || countryRepository.findById(user.getCountry().getId()).isEmpty()) {

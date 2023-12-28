@@ -32,9 +32,9 @@
 
             <tr>
                 <td rowspan="1" class="form-group ">
-                    <label for="firstname"><sup>*</sup> Firstname</label>
-                    <input id="firstname" pattern=".{2,30}"
-                           required type="text" placeholder="<c:out value='${user.firstname}'/>" name="firstname">
+                    <label for="name"><sup>*</sup> Name</label>
+                    <input id="name" pattern=".{2,30}"
+                           required type="text" placeholder="<c:out value='${user.name}'/>" name="name">
                 </td>
 
                 <td rowspan="1" class="form-group ">

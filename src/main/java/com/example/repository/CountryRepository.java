@@ -1,14 +1,14 @@
 package com.example.repository;
 
-import com.example.entity.Country;
+import com.example.entity.CountryEntity;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface CountryRepository {
 
-    List<Country> findAll();
+    List<CountryEntity> findAll();
 
-    Optional<Country> findById(Long id);
+    Optional<CountryEntity> findById(Long id);
 
 }

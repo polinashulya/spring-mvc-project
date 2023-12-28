@@ -78,7 +78,7 @@
         <tr>
             <th id="id">User`s id</th>
             <th id="login">Login</th>
-            <th id="firstName">Firstname</th>
+            <th id="name">name</th>
             <th id="secondName">Surname</th>
             <th id="country">Country</th>
             <th id="birthDate">Birth date</th>
@@ -89,7 +89,7 @@
             <tr>
                 <td>${user.id}</td>
                 <td>${user.login}</td>
-                <td>${user.firstname}</td>
+                <td>${user.name}</td>
                 <td>${user.surname}</td>
                 <td>${user.country.name}</td>
                 <td>${user.birthDate}</td>

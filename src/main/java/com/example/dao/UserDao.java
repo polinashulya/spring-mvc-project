@@ -1,33 +1,33 @@
 package com.example.dao;
 
-import com.example.entity.User;
-import org.springframework.context.annotation.Bean;
+import com.example.entity.UserEntity;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
 
 public interface UserDao {
 
-    List<User> findAll();
+    List<UserEntity> findAll();
 
-    List<User> findAll(String filterAndSearchsql,String sortSql, String page, String pageSize);
+    List<UserEntity> findAll( String  search, String countyId, String sortBy, String sortType, String page, String pageSize);
 
-    User getById(Long id);
+    UserEntity getById(Long id);
 
-    Optional<User> findById(Long id);
+    Optional<UserEntity> findById(Long id);
 
-    void save(User user);
+    void save(UserEntity user);
 
     void delete(Long id);
 
-    User getByLogin(String login);
+    UserEntity getByLogin(String login);
 
-    Optional<User> findByLogin(String login);
+    Optional<UserEntity> findByLogin(String login);
 
-    String getFilterAndSearchSql(String countryId, String search);
+    String getFilterAndSearchHql(String countryId, String search);
 
-    String getSortingSql(String sortBy, String sortType);
+    String getSortingHql(String sortBy, String sortType);
 
     int getTotalResult(String filterAndSearchsql);
 

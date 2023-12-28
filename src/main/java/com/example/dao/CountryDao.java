@@ -1,16 +1,16 @@
 package com.example.dao;
 
-import com.example.entity.Country;
-import com.example.entity.User;
+import com.example.entity.CountryEntity;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
 public interface CountryDao {
-    List<Country> findAll();
+    List<CountryEntity> findAll();
 
-    Country getById(Long id);
+    CountryEntity getById(Serializable id);
 
-    Optional<Country> findById(Long id);
+    Optional<CountryEntity> findById(Serializable id);
 
 }

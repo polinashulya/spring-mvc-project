@@ -1,95 +1,82 @@
 package com.example.dao.impl;
 
 import com.example.dao.CountryDao;
-import com.example.dao.core.pool.connection.ConnectionWrapper;
-import com.example.dao.core.pool.connection.ProxyConnection;
-import com.example.dao.core.pool.impl.DatabaseConnectionPool;
-import com.example.entity.Country;
+import com.example.entity.CountryEntity;
 import com.example.exception.DAOException;
+import jakarta.persistence.TypedQuery;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.stereotype.Component;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Component
-public class CountryDaoImpl extends AbstractDao<Country> implements CountryDao {
+@Repository
+public class CountryDaoImpl implements CountryDao {
 
     private static final Logger logger = LogManager.getLogger(CountryDaoImpl.class);
 
-    @Override
-    public List<Country> findAll() {
-        ProxyConnection proxyConnection = null;
-        PreparedStatement statement = null;
+    private final SessionFactory sessionFactory;
 
-        List<Country> countries = new ArrayList<>();
+    @Autowired
+    public CountryDaoImpl(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
+
+    @Override
+    public List<CountryEntity> findAll() {
+
+        Session session = null;
+        List<CountryEntity> countries = new ArrayList<>();
 
         try {
-            proxyConnection = CountryDaoImpl.ConnectionCreator.getProxyConnection();
-            ConnectionWrapper connectionWrapper = proxyConnection.getConnectionWrapper();
+            session = sessionFactory.openSession();
 
-            statement = connectionWrapper.prepareStatement("SELECT c.id, c.name FROM countries c");
-            ResultSet resultSet = statement.executeQuery();
+            String hql = "FROM CountryEntity";
+            TypedQuery<CountryEntity> query = session.createQuery(hql, CountryEntity.class);
 
-            logger.debug("Executing query: {}", statement.toString());
+            countries = query.getResultList();
 
-            while (resultSet.next()) {
-                Country country = getCountry(resultSet);
-                countries.add(country);
+        } catch (Exception e) {
+            throw new DAOException("Error occurred while retrieving all countries", e);
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
             }
-
-        } catch (SQLException ex) {
-            logger.error("An SQL exception occurred: {}", ex.getMessage(), ex);
-            throw new DAOException(ex);
+            return countries;
         }
-
-        return countries;
     }
 
-    private static Country getCountry(ResultSet set) {
+    @Override
+    public CountryEntity getById(Serializable id) {
+        Session session = null;
+
         try {
-            return Country.builder()
-                    .id(set.getLong(1))
-                    .name(set.getString(2))
-                    .build();
-        } catch (SQLException e) {
-            throw new RuntimeException("Error mapping Country from ResultSet", e);
+            session = sessionFactory.openSession();
+
+            String hql = "FROM CountryEntity c WHERE c.id = :countryId";
+
+            return session.createQuery(hql, CountryEntity.class)
+                    .setParameter("countryId", id)
+                    .uniqueResult();
+
+        } catch (Exception e) {
+            throw new DAOException("Error occurred while retrieving entity by ID", e);
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
         }
-    }
-
-
-    @Override
-    public Country getById(Long id) {
-
-        String sql = "SELECT c.id, c.name FROM countries c where c.id = ? ";
-
-        return super.getById(sql, id, CountryDaoImpl::getCountry);
-
     }
 
     @Override
-    public Optional<Country> findById(Long id) {
-
-        String sql = "SELECT c.id, c.name FROM countries c where c.id = ? ";
-
-        return super.findById(sql, id, CountryDaoImpl::getCountry);
-    }
-
-    static class ConnectionCreator {
-
-        private static final DatabaseConnectionPool pool = DatabaseConnectionPool.getInstance();
-
-        static ProxyConnection getProxyConnection() {
-            return pool.getConnection();
-        }
-
-        private ConnectionCreator() {
-        }
+    public Optional<CountryEntity> findById(Serializable id) {
+        return Optional.ofNullable(getById(id));
     }
 
 }

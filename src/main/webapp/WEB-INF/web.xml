@@ -35,19 +35,4 @@
         <param-value>15</param-value>
     </context-param>
 
-    <!--    <servlet>-->
-    <!--        <servlet-name>MainServlet</servlet-name>-->
-    <!--        <servlet-class>com.example.servlet.MainServlet</servlet-class>-->
-    <!--    </servlet>-->
-    <!--    <servlet-mapping>-->
-    <!--        <servlet-name>MainServlet</servlet-name>-->
-    <!--        <url-pattern>/</url-pattern>-->
-    <!--    </servlet-mapping>-->
-
-<!--    <servlet-mapping>-->
-<!--        <servlet-name>dispatcher</servlet-name>-->
-<!--        <url-pattern>/</url-pattern>-->
-<!--    </servlet-mapping>-->
-
-
 </web-app>

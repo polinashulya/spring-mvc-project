@@ -1,6 +1,6 @@
 package com.example.service.impl;
 
-import com.example.entity.Country;
+import com.example.entity.CountryEntity;
 import com.example.exception.DAOException;
 import com.example.exception.ServiceException;
 import com.example.repository.CountryRepository;
@@ -20,13 +20,8 @@ public class CountryServiceImpl implements CountryService {
     private static final Logger logger = LogManager.getLogger(CountryServiceImpl.class);
     private final CountryRepository countryRepository;
 
-//    public CountryServiceImpl() {
-//        countryRepository = new CountryRepositoryImpl();
-//    }
-
-
     @Override
-    public List<Country> findAll() {
+    public List<CountryEntity> findAll() {
         try {
             return countryRepository.findAll();
         } catch (DAOException e) {

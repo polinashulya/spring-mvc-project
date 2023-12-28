@@ -1,16 +1,21 @@
-insert into users(firstname)
+insert into users(name)
 values ('test');
 insert into users(login, password)
 values ('test', 'test');
 
-insert into users(firstname)
+insert into users(name)
 values ('test');
 
+insert into countries(name)
+values ('France');
 
-insert into users(login, firstname)
+insert into countries(name)
+values ('Italy');
+
+insert into users(login, name)
 values ('login', 'polya');
 
-insert into users(login, firstname, surname, birth_date)
+insert into users(login, name, surname, birthdate)
 values ('login', 'polya', 'busya', '1999-02-08');
 
 select *
@@ -20,12 +25,12 @@ where id = 2;
 select *
 from users;
 
-SELECT u.id, u.login, u.firstname, u.surname, u.birth_date, u.banned
+SELECT u.id, u.login, u.name, u.surname, u.birthdate, u.banned
 FROM users u
 ORDER BY id ASC;
 
 
-select id, firstname
+select id, name
 from users
 where id = 6;
 UPDATE users
@@ -35,7 +40,7 @@ where id = 6;
 
 select *
 from users
-where firstname like 'P%'
+where name like 'P%'
 order by id DESC;
 
 ALTER TABLE users
@@ -63,24 +68,24 @@ from users u
          join countries c on u.country_id = c.id
 where u.id = 1;
 
-SELECT u.id, u.login, u.firstname, u.surname, u.country_id, u.birth_date, u.banned
+SELECT u.id, u.login, u.name, u.surname, u.country_id, u.birthdate, u.banned
 FROM users u
          join countries c on u.country_id = c.id
 WHERE u.deleted = 'false';
 
 UPDATE users u
 SET deleted= false
-where u.id = 10
+where u.id = 10;
 
-select u.firstname, u.surname, u.login
+select u.name, u.surname, u.login
 from users u
-where u.firstname like '%' + + '%'
+where u.name like '%' + + '%';
 
 SELECT u.id,
        u.login,
-       u.firstname,
+       u.name,
        u.surname,
-       u.birth_date,
+       u.birthdate,
        u.banned,
        u.country_id,
        c.name
@@ -88,10 +93,10 @@ FROM users u
          join countries c on u.country_id = c.id
 WHERE u.deleted = 'false'
   AND (u.login LIKE '%%'
-    OR u.firstname LIKE '%%'
+    OR u.name LIKE '%%'
     OR u.surname LIKE '%%'
     OR c.name LIKE '%%')
-group by u.id, u.login, u.firstname, u.surname, u.birth_date, u.banned, u.country_id, c.name
+group by u.id, u.login, u.name, u.surname, u.birthdate, u.banned, u.country_id, c.name
 ORDER BY u.login ASC
 LIMIT 5 OFFSET 0;
 
@@ -100,21 +105,21 @@ FROM users u
          join countries c on u.country_id = c.id
 WHERE u.deleted = 'false'
   AND (u.login LIKE '%%'
-    OR u.firstname LIKE '%%'
+    OR u.name LIKE '%%'
     OR u.surname LIKE '%%'
     OR c.name LIKE '%%');
 
 SELECT COUNT(*) AS totalUsers
 FROM users
 WHERE country_id = 1
-  AND (login LIKE '%%' OR firstname LIKE '%%' OR surname LIKE '%%');
+  AND (login LIKE '%%' OR name LIKE '%%' OR surname LIKE '%%');
 
 SELECT COUNT(*) AS totalUsers
 FROM users u
          join countries c on u.country_id = c.id
 WHERE u.deleted = 'false'
   AND (u.login LIKE '%%'
-    OR u.firstname LIKE '%%'
+    OR u.name LIKE '%%'
     OR u.surname LIKE '%%'
     OR c.name LIKE '%%')
 order by u.id asc;

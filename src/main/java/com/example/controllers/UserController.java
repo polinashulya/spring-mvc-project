@@ -1,8 +1,9 @@
 package com.example.controllers;
 
-import com.example.entity.Country;
-import com.example.entity.User;
+import com.example.entity.CountryEntity;
+import com.example.entity.UserEntity;
 import com.example.exception.ServletCustomException;
+import com.example.service.dto.UserDto;
 import com.example.service.impl.CountryServiceImpl;
 import com.example.service.impl.UserServiceImpl;
 import lombok.AllArgsConstructor;
@@ -37,7 +38,7 @@ public class UserController {
                                @RequestParam(name = "page", required = false) String page,
                                @RequestParam(name = "pageSize", required = false) String pageSize) {
 
-        List<User> users = userService.getAll(sortBy, sortType, countryId, search, page, pageSize);
+        List<UserEntity> users = userService.getAll(sortBy, sortType, countryId, search, page, pageSize);
 
         int totalUsers = userService.getTotalResult(sortBy, sortType, countryId, search);
 
@@ -53,7 +54,7 @@ public class UserController {
     }
 
     private void setCountriesToModel(Model model) {
-        List<Country> countries = this.countryService.findAll();
+        List<CountryEntity> countries = this.countryService.findAll();
         model.addAttribute("countries", countries);
     }
 
@@ -66,23 +67,22 @@ public class UserController {
     }
 
     @PostMapping
-    public String save(Model model,
-                       @RequestParam(name = "login", required = false) String login,
-                       @RequestParam(name = "password", required = false) String password,
-                       @RequestParam(name = "firstname", required = false) String firstname,
-                       @RequestParam(name = "surname", required = false) String surname,
-                       @RequestParam(name = "countryId", required = false) String countryId,
-                       @RequestParam(name = "birthDate", required = false) String birthDate) {
-
-        LocalDate parsedBirthDate = LocalDate.parse(birthDate);
-        User user = User.builder()
-                .login(login.trim())
-                .password(password)
-                .firstname(firstname.trim())
-                .surname(surname.trim())
+    public String save(Model model, UserDto userDto) {
+//@RequestParam(name = "login", required = false) String login,
+//                       @RequestParam(name = "password", required = false) String password,
+//                       @RequestParam(name = "name", required = false) String name,
+//                       @RequestParam(name = "surname", required = false) String surname,
+//                       @RequestParam(name = "countryId", required = false) String countryId,
+//                       @RequestParam(name = "birthDate", required = false) String birthDate
+        LocalDate parsedBirthDate = LocalDate.parse(userDto.getBirthDate());
+        UserEntity user = UserEntity.builder()
+                .login(userDto.getLogin().trim())
+                .password(userDto.getPassword())
+                .name(userDto.getName().trim())
+                .surname(userDto.getSurname().trim())
                 .country(
-                        Country.builder()
-                                .id(Long.valueOf(countryId))
+                        CountryEntity.builder()
+                                .id(Long.valueOf(userDto.getCountryId()))
                                 .build()
                 )
                 .birthDate(parsedBirthDate)
