@@ -4,6 +4,7 @@ import com.example.entity.CountryEntity;
 import com.example.entity.UserEntity;
 import com.example.exception.ServletCustomException;
 import com.example.service.dto.UserDto;
+import com.example.service.dto.search.UserSearchCriteriaDto;
 import com.example.service.impl.CountryServiceImpl;
 import com.example.service.impl.UserServiceImpl;
 import lombok.AllArgsConstructor;
@@ -30,23 +31,20 @@ public class UserController {
     private final CountryServiceImpl countryService;
 
     @GetMapping
-    public String findAllUsers(Model model,
-                               @RequestParam(name = "sortBy", required = false) String sortBy,
-                               @RequestParam(name = "sortType", required = false) String sortType,
-                               @RequestParam(name = "countryId", required = false) String countryId,
-                               @RequestParam(name = "searchText", required = false) String search,
-                               @RequestParam(name = "page", required = false) String page,
-                               @RequestParam(name = "pageSize", required = false) String pageSize) {
+    public String findAllUsers(Model model, @ModelAttribute UserSearchCriteriaDto userSearchCriteriaDto) {
 
-        List<UserEntity> users = userService.getAll(sortBy, sortType, countryId, search, page, pageSize);
+        List<UserEntity> users = userService.getAll(userSearchCriteriaDto.getSortBy(), userSearchCriteriaDto.getSortType(),
+                userSearchCriteriaDto.getCountryId(), userSearchCriteriaDto.getSearch(),
+                userSearchCriteriaDto.getPage(), userSearchCriteriaDto.getPageSize());
 
-        int totalUsers = userService.getTotalResult(sortBy, sortType, countryId, search);
+        int totalUsers = userService.getTotalResult(userSearchCriteriaDto.getSortBy(), userSearchCriteriaDto.getSortType(),
+                userSearchCriteriaDto.getCountryId(), userSearchCriteriaDto.getSearch());
 
         model.addAttribute("totalUsers", totalUsers);
         model.addAttribute("users", users);
-        model.addAttribute("sortBy", sortBy);
-        model.addAttribute("sortType", sortType);
-        model.addAttribute("currentCountryId", countryId);
+        model.addAttribute("sortBy", userSearchCriteriaDto.getSortBy());
+        model.addAttribute("sortType", userSearchCriteriaDto.getSortType());
+        model.addAttribute("currentCountryId", userSearchCriteriaDto.getCountryId());
 
         setCountriesToModel(model);
 
@@ -67,13 +65,8 @@ public class UserController {
     }
 
     @PostMapping
-    public String save(Model model, UserDto userDto) {
-//@RequestParam(name = "login", required = false) String login,
-//                       @RequestParam(name = "password", required = false) String password,
-//                       @RequestParam(name = "name", required = false) String name,
-//                       @RequestParam(name = "surname", required = false) String surname,
-//                       @RequestParam(name = "countryId", required = false) String countryId,
-//                       @RequestParam(name = "birthDate", required = false) String birthDate
+    public String save(Model model, @ModelAttribute UserDto userDto) {
+
         LocalDate parsedBirthDate = LocalDate.parse(userDto.getBirthDate());
         UserEntity user = UserEntity.builder()
                 .login(userDto.getLogin().trim())

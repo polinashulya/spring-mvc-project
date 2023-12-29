@@ -46,7 +46,7 @@
         </select>
 
         <label for="searchText">Search:</label>
-        <input type="text" id="searchText" name="searchText" value="${param.searchText}" placeholder="Search text">
+        <input type="text" id="searchText" name="search" value="${param.search}" placeholder="Search text">
 
         <!-- Поле для указания количества элементов на странице -->
         <select name="pageSize" onchange="this.form.submit()">
@@ -64,7 +64,7 @@
             }
         </script>
 
-        <button type="button" onclick="goToPage(${param.page - 1})" ${param.page <= 1 ? 'disabled' : ''}>Previous</button>
+        <button type="button" onclick="goToPage(${param.page - 1})" ${param.page <= 1 || param.page==null  ? 'disabled' : ''}>Previous</button>
         <button type="button" onclick="goToPage(${param.page + 1})" ${param.page * param.pageSize >= totalUsers ? 'disabled' : ''}>Next</button>
 
         <input type="submit" class="show-button" value="Show">

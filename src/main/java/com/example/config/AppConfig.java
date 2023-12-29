@@ -22,12 +22,7 @@ import java.util.Properties;
 })
 public class AppConfig {
 
-    @Autowired
     private Environment environment;
-
-//    public AppConfig(Environment environment) {
-//        this.environment = environment;
-//    }
 
     @Bean
     public LocalSessionFactoryBean sessionFactory() {

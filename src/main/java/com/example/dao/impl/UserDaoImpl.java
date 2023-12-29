@@ -68,6 +68,7 @@ public class UserDaoImpl implements UserDao {
             session = sessionFactory.openSession();
 
             int offset = Optional.ofNullable(page)
+                    .filter(p -> !p.isEmpty())
                     .map(Integer::parseInt)
                     .map(p -> (p - 1) * Optional.ofNullable(pageSize).map(Integer::parseInt).orElse(5))
                     .orElse(0);
@@ -81,7 +82,7 @@ public class UserDaoImpl implements UserDao {
                     .setFirstResult(offset)
                     .setMaxResults(Optional.ofNullable(pageSize).map(Integer::parseInt).orElse(5));
 
-            logger.debug(query.unwrap(org.hibernate.query.Query.class).getQueryString());
+            String myHQL =query.unwrap(org.hibernate.query.Query.class).getQueryString();
 
             users = query.getResultList();
 
