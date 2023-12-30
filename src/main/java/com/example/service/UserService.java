@@ -3,6 +3,7 @@ package com.example.service;
 import com.example.entity.UserEntity;
 import com.example.exception.DAOException;
 import com.example.exception.ServiceException;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;

@@ -148,26 +148,26 @@ public class UserDaoImpl implements UserDao {
         return Optional.ofNullable(getByLogin(login));
     }
 
-    private static UserEntity getUser(ResultSet set) {
-        try {
-            return UserEntity.builder()
-                    .id(set.getLong(1))
-                    .login(set.getString(2))
-                    .name(set.getString(3))
-                    .surname(set.getString(4))
-                    .birthDate((set.getDate(5)).toLocalDate())
-                    .banned(set.getBoolean(6))
-                    .country(
-                            CountryEntity.builder()
-                                    .id(set.getLong(7))
-                                    .name(set.getString(8))
-                                    .build()
-                    )
-                    .build();
-        } catch (SQLException e) {
-            throw new RuntimeException("Error mapping User from ResultSet", e);
-        }
-    }
+//    private static UserEntity getUser(ResultSet set) {
+//        try {
+//            return UserEntity.builder()
+//                    .id(set.getLong(1))
+//                    .login(set.getString(2))
+//                    .name(set.getString(3))
+//                    .surname(set.getString(4))
+//                    .birthDate((set.getDate(5)).toLocalDate())
+//                    .banned(set.getBoolean(6))
+//                    .country(
+//                            CountryEntity.builder()
+//                                    .id(set.getLong(7))
+//                                    .name(set.getString(8))
+//                                    .build()
+//                    )
+//                    .build();
+//        } catch (SQLException e) {
+//            throw new RuntimeException("Error mapping User from ResultSet", e);
+//        }
+//    }
 
 
     @Override

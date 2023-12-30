@@ -15,7 +15,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class UserRepositoryImpl implements UserRepository {
 
-    private final UserDao userDao;
+    private UserDao userDao;
 
     @Override
     public List<UserEntity> findAll() {

@@ -7,6 +7,7 @@ import com.example.service.dto.UserDto;
 import com.example.service.dto.search.UserSearchCriteriaDto;
 import com.example.service.impl.CountryServiceImpl;
 import com.example.service.impl.UserServiceImpl;
+import com.example.service.mapper.UserMapper;
 import lombok.AllArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -29,6 +30,7 @@ public class UserController {
 
     private final UserServiceImpl userService;
     private final CountryServiceImpl countryService;
+    private final UserMapper userMapper;
 
     @GetMapping
     public String findAllUsers(Model model, @ModelAttribute UserSearchCriteriaDto userSearchCriteriaDto) {
@@ -67,20 +69,7 @@ public class UserController {
     @PostMapping
     public String save(Model model, @ModelAttribute UserDto userDto) {
 
-        LocalDate parsedBirthDate = LocalDate.parse(userDto.getBirthDate());
-        UserEntity user = UserEntity.builder()
-                .login(userDto.getLogin().trim())
-                .password(userDto.getPassword())
-                .name(userDto.getName().trim())
-                .surname(userDto.getSurname().trim())
-                .country(
-                        CountryEntity.builder()
-                                .id(Long.valueOf(userDto.getCountryId()))
-                                .build()
-                )
-                .birthDate(parsedBirthDate)
-                .build();
-
+        UserEntity user = userMapper.toEntity(userDto);
 
         userService.add(user);
 

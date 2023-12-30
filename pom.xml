@@ -86,6 +86,19 @@
             <version>3.0.1</version>
         </dependency>
 
+<!--        <dependency>-->
+<!--            <groupId>org.mapstruct</groupId>-->
+<!--            <artifactId>mapstruct</artifactId>-->
+<!--            <version>1.4.2.Final</version> &lt;!&ndash; Use the latest version &ndash;&gt;-->
+<!--        </dependency>-->
+
+<!--        <dependency>-->
+<!--            <groupId>org.mapstruct</groupId>-->
+<!--            <artifactId>mapstruct-processor</artifactId>-->
+<!--            <version>1.4.2.Final</version> &lt;!&ndash; Use the same version as mapstruct &ndash;&gt;-->
+<!--            <scope>provided</scope>-->
+<!--        </dependency>-->
+
         <!--Log4j 2-->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
@@ -128,6 +141,22 @@
                         </annotationProcessorPaths>
                     </configuration>
                 </plugin>
+<!--                <plugin>-->
+<!--                    <groupId>org.apache.maven.plugins</groupId>-->
+<!--                    <artifactId>maven-compiler-plugin</artifactId>-->
+<!--                    <version>3.8.0</version> &lt;!&ndash; Use the latest version &ndash;&gt;-->
+<!--                    <configuration>-->
+<!--                        <source>1.8</source> &lt;!&ndash; Use your Java version &ndash;&gt;-->
+<!--                        <target>1.8</target> &lt;!&ndash; Use your Java version &ndash;&gt;-->
+<!--                        <annotationProcessorPaths>-->
+<!--                            <path>-->
+<!--                                <groupId>org.mapstruct</groupId>-->
+<!--                                <artifactId>mapstruct-processor</artifactId>-->
+<!--                                <version>1.4.2.Final</version> &lt;!&ndash; Use the same version as mapstruct &ndash;&gt;-->
+<!--                            </path>-->
+<!--                        </annotationProcessorPaths>-->
+<!--                    </configuration>-->
+<!--                </plugin>-->
             </plugins>
         </pluginManagement>
     </build>

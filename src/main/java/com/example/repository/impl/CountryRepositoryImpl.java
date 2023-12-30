@@ -7,6 +7,7 @@ import com.example.exception.RepositoryException;
 import com.example.exception.ServiceException;
 import com.example.repository.CountryRepository;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class CountryRepositoryImpl implements CountryRepository {
 
-    private final CountryDao countryDao;
+    private  CountryDao countryDao;
 
     @Override
     public List<CountryEntity> findAll() {
