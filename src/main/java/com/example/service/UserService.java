@@ -1,12 +1,8 @@
 package com.example.service;
 
 import com.example.entity.UserEntity;
-import com.example.exception.DAOException;
-import com.example.exception.ServiceException;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
+import com.example.service.dto.UserDto;
 
-import java.sql.Date;
 import java.util.List;
 
 public interface UserService {
@@ -15,7 +11,7 @@ public interface UserService {
 
     List<UserEntity> getAll(String sortBy, String sortType, String countryId, String search, String page, String pageSize);
 
-    void add(UserEntity user);
+    void add(UserDto userDto);
 
     void deleteById(Long userId);
 

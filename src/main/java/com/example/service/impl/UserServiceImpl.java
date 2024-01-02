@@ -6,6 +6,8 @@ import com.example.exception.ServiceException;
 import com.example.repository.CountryRepository;
 import com.example.repository.UserRepository;
 import com.example.service.UserService;
+import com.example.service.dto.UserDto;
+import com.example.service.mapper.UserMapper;
 import com.example.validator.UserValidator;
 import lombok.AllArgsConstructor;
 import org.apache.logging.log4j.LogManager;
@@ -47,7 +49,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void add(UserEntity user) {
+    public void add(UserDto userDto) {
+        UserEntity user = UserMapper.toEntity(userDto);
         if (!validator.validate(user.getLogin(), user.getPassword(),
                 user.getName(), user.getSurname(), user.getBirthDate())) {
             throw new ServiceException("Information is not valid!");
@@ -56,7 +59,7 @@ public class UserServiceImpl implements UserService {
             throw new ServiceException("Country is null or did not find!");
         }
 
-        if ( userRepository.findByLogin(user.getLogin()).isPresent()) {
+        if (userRepository.findByLogin(user.getLogin()).isPresent()) {
             throw new ServiceException("Login is already in use!");
         }
 

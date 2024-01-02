@@ -7,7 +7,6 @@ import com.example.service.dto.UserDto;
 import com.example.service.dto.search.UserSearchCriteriaDto;
 import com.example.service.impl.CountryServiceImpl;
 import com.example.service.impl.UserServiceImpl;
-import com.example.service.mapper.UserMapper;
 import lombok.AllArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -29,7 +28,6 @@ public class UserController {
 
     private final UserServiceImpl userService;
     private final CountryServiceImpl countryService;
-    private final UserMapper userMapper;
 
     @GetMapping
     public String findAllUsers(Model model, @ModelAttribute UserSearchCriteriaDto userSearchCriteriaDto) {
@@ -65,6 +63,7 @@ public class UserController {
     public String addingForm(Model model) {
         try {
             setCountriesToModel(model);
+
             return "add_user";
         } catch (Exception e) {
             logger.error("Error while executing DeleteUserCommand", e);
@@ -73,14 +72,11 @@ public class UserController {
     }
 
     @PostMapping
-    public String save(Model model, @ModelAttribute UserDto userDto) {
+    public String save(@ModelAttribute UserDto userDto) {
         try {
-            UserEntity user = userMapper.toEntity(userDto);
-            userService.add(user);
-            model.addAttribute("user", user);
+            userService.add(userDto);
 
             return "redirect:/users";
-
         } catch (Exception e) {
             logger.error("Error while executing DeleteUserCommand", e);
             throw new ControllerCustomException("Error while executing DeleteUserCommand", e);
@@ -88,8 +84,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(Model model,
-                                       @PathVariable(name = "id") String userId) {
+    public ResponseEntity<Void> delete(@PathVariable(name = "id") String userId) {
         try {
             userService.deleteById(Long.valueOf(userId));
 
