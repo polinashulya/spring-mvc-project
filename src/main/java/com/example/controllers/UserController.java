@@ -2,7 +2,7 @@ package com.example.controllers;
 
 import com.example.entity.CountryEntity;
 import com.example.entity.UserEntity;
-import com.example.exception.ServletCustomException;
+import com.example.exception.ControllerCustomException;
 import com.example.service.dto.UserDto;
 import com.example.service.dto.search.UserSearchCriteriaDto;
 import com.example.service.impl.CountryServiceImpl;
@@ -17,7 +17,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 
@@ -34,23 +33,27 @@ public class UserController {
 
     @GetMapping
     public String findAllUsers(Model model, @ModelAttribute UserSearchCriteriaDto userSearchCriteriaDto) {
+        try {
+            List<UserEntity> users = userService.getAll(userSearchCriteriaDto.getSortBy(), userSearchCriteriaDto.getSortType(),
+                    userSearchCriteriaDto.getCountryId(), userSearchCriteriaDto.getSearch(),
+                    userSearchCriteriaDto.getPage(), userSearchCriteriaDto.getPageSize());
 
-        List<UserEntity> users = userService.getAll(userSearchCriteriaDto.getSortBy(), userSearchCriteriaDto.getSortType(),
-                userSearchCriteriaDto.getCountryId(), userSearchCriteriaDto.getSearch(),
-                userSearchCriteriaDto.getPage(), userSearchCriteriaDto.getPageSize());
+            int totalUsers = userService.getTotalResult(userSearchCriteriaDto.getSortBy(), userSearchCriteriaDto.getSortType(),
+                    userSearchCriteriaDto.getCountryId(), userSearchCriteriaDto.getSearch());
 
-        int totalUsers = userService.getTotalResult(userSearchCriteriaDto.getSortBy(), userSearchCriteriaDto.getSortType(),
-                userSearchCriteriaDto.getCountryId(), userSearchCriteriaDto.getSearch());
+            model.addAttribute("totalUsers", totalUsers);
+            model.addAttribute("users", users);
+            model.addAttribute("sortBy", userSearchCriteriaDto.getSortBy());
+            model.addAttribute("sortType", userSearchCriteriaDto.getSortType());
+            model.addAttribute("currentCountryId", userSearchCriteriaDto.getCountryId());
 
-        model.addAttribute("totalUsers", totalUsers);
-        model.addAttribute("users", users);
-        model.addAttribute("sortBy", userSearchCriteriaDto.getSortBy());
-        model.addAttribute("sortType", userSearchCriteriaDto.getSortType());
-        model.addAttribute("currentCountryId", userSearchCriteriaDto.getCountryId());
+            setCountriesToModel(model);
 
-        setCountriesToModel(model);
-
-        return "users";
+            return "users";
+        } catch (Exception e) {
+            logger.error("Error while executing DeleteUserCommand", e);
+            throw new ControllerCustomException("Error while executing DeleteUserCommand", e);
+        }
     }
 
     private void setCountriesToModel(Model model) {
@@ -60,37 +63,41 @@ public class UserController {
 
     @GetMapping("/adding_form")
     public String addingForm(Model model) {
-
-        setCountriesToModel(model);
-
-        return "add_user";
+        try {
+            setCountriesToModel(model);
+            return "add_user";
+        } catch (Exception e) {
+            logger.error("Error while executing DeleteUserCommand", e);
+            throw new ControllerCustomException("Error while executing DeleteUserCommand", e);
+        }
     }
 
     @PostMapping
     public String save(Model model, @ModelAttribute UserDto userDto) {
+        try {
+            UserEntity user = userMapper.toEntity(userDto);
+            userService.add(user);
+            model.addAttribute("user", user);
 
-        UserEntity user = userMapper.toEntity(userDto);
+            return "redirect:/users";
 
-        userService.add(user);
-
-        model.addAttribute("user", user);
-
-        return "redirect:/users";
-
+        } catch (Exception e) {
+            logger.error("Error while executing DeleteUserCommand", e);
+            throw new ControllerCustomException("Error while executing DeleteUserCommand", e);
+        }
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(Model model,
                                        @PathVariable(name = "id") String userId) {
-
         try {
             userService.deleteById(Long.valueOf(userId));
+
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             logger.error("Error while executing DeleteUserCommand", e);
-            throw new ServletCustomException("Error while executing DeleteUserCommand", e);
+            throw new ControllerCustomException("Error while executing DeleteUserCommand", e);
         }
-
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }

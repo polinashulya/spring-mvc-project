@@ -3,7 +3,6 @@ package com.example.service.impl;
 import com.example.entity.UserEntity;
 import com.example.exception.DAOException;
 import com.example.exception.ServiceException;
-import com.example.exception.ServletCustomException;
 import com.example.repository.CountryRepository;
 import com.example.repository.UserRepository;
 import com.example.service.UserService;
