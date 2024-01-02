@@ -35,7 +35,6 @@
 </head>
 <body>
 <div class="error-container">
-    <img src="../../pictures/error_page/404.png" alt=""/>
     <p>
         <a href="/">
             Go back to main page

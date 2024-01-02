@@ -1,7 +1,6 @@
 package com.example.dao.impl;
 
 import com.example.dao.UserDao;
-import com.example.entity.CountryEntity;
 import com.example.entity.UserEntity;
 import com.example.exception.DAOException;
 import com.example.service.impl.UserServiceImpl;
@@ -14,13 +13,12 @@ import org.hibernate.Transaction;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
+@Transactional
 public class UserDaoImpl implements UserDao {
 
     private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
@@ -38,7 +36,6 @@ public class UserDaoImpl implements UserDao {
 
 
     @Override
-    @Transactional(readOnly = true)
     public List<UserEntity> findAll() {
         Session session = null;
 
@@ -58,7 +55,6 @@ public class UserDaoImpl implements UserDao {
 
 
     @Override
-    @Transactional(readOnly = true)
     public List<UserEntity> findAll(String search, String countryId, String sortBy, String sortType, String page, String pageSize) {
 
         Session session = null;
@@ -82,7 +78,7 @@ public class UserDaoImpl implements UserDao {
                     .setFirstResult(offset)
                     .setMaxResults(Optional.ofNullable(pageSize).map(Integer::parseInt).orElse(5));
 
-            String myHQL =query.unwrap(org.hibernate.query.Query.class).getQueryString();
+            String myHQL = query.unwrap(org.hibernate.query.Query.class).getQueryString();
 
             users = query.getResultList();
 
@@ -148,30 +144,7 @@ public class UserDaoImpl implements UserDao {
         return Optional.ofNullable(getByLogin(login));
     }
 
-//    private static UserEntity getUser(ResultSet set) {
-//        try {
-//            return UserEntity.builder()
-//                    .id(set.getLong(1))
-//                    .login(set.getString(2))
-//                    .name(set.getString(3))
-//                    .surname(set.getString(4))
-//                    .birthDate((set.getDate(5)).toLocalDate())
-//                    .banned(set.getBoolean(6))
-//                    .country(
-//                            CountryEntity.builder()
-//                                    .id(set.getLong(7))
-//                                    .name(set.getString(8))
-//                                    .build()
-//                    )
-//                    .build();
-//        } catch (SQLException e) {
-//            throw new RuntimeException("Error mapping User from ResultSet", e);
-//        }
-//    }
-
-
     @Override
-    @Transactional
     public void save(UserEntity user) {
         Session session = null;
 
@@ -191,7 +164,6 @@ public class UserDaoImpl implements UserDao {
 
 
     @Override
-    @Transactional
     public void delete(Long id) {
 
         Session session = null;
@@ -289,6 +261,7 @@ public class UserDaoImpl implements UserDao {
             logger.error("An error occurred while executing query: {}", hql, e);
             throw new DAOException("An error occurred while executing query", e);
         } finally {
+
             if (session != null && session.isOpen()) {
                 session.close();
             }

@@ -5,13 +5,6 @@
          id="WebApp_ID" version="3.0">
     <display-name>spring-mvc-project</display-name>
 
-    <!-- Add Spring MVC DispatcherServlet as front controller -->
-<!--    <servlet>-->
-<!--        <servlet-name>dispatcher</servlet-name>-->
-<!--        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>-->
-<!--        <load-on-startup>1</load-on-startup>-->
-<!--    </servlet>-->
-
     <context-param>
         <param-name>db.driver</param-name>
         <param-value>org.postgresql.Driver</param-value>

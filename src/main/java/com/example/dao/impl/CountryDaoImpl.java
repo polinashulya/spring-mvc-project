@@ -10,13 +10,14 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
+@Transactional
 public class CountryDaoImpl implements CountryDao {
 
     private static final Logger logger = LogManager.getLogger(CountryDaoImpl.class);
@@ -32,7 +33,6 @@ public class CountryDaoImpl implements CountryDao {
     public List<CountryEntity> findAll() {
 
         Session session = null;
-        List<CountryEntity> countries = new ArrayList<>();
 
         try {
             session = sessionFactory.openSession();
@@ -40,15 +40,14 @@ public class CountryDaoImpl implements CountryDao {
             String hql = "FROM CountryEntity";
             TypedQuery<CountryEntity> query = session.createQuery(hql, CountryEntity.class);
 
-            countries = query.getResultList();
-
+            return query.getResultList();
         } catch (Exception e) {
+            logger.error("Error occurred while retrieving all countries", e);
             throw new DAOException("Error occurred while retrieving all countries", e);
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
             }
-            return countries;
         }
     }
 
@@ -66,6 +65,7 @@ public class CountryDaoImpl implements CountryDao {
                     .uniqueResult();
 
         } catch (Exception e) {
+            logger.error("Error occurred while retrieving entity by ID", e);
             throw new DAOException("Error occurred while retrieving entity by ID", e);
         } finally {
             if (session != null && session.isOpen()) {

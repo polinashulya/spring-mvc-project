@@ -15,22 +15,19 @@ import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
-@PropertySource("classpath:application.yml")
+@PropertySource("classpath:database.properties")
 @EnableTransactionManagement
-@ComponentScan(basePackages = {
-        "com.example"
-})
+@ComponentScan(basePackages = {"com.example"})
 public class AppConfig {
 
+    @Autowired
     private Environment environment;
 
     @Bean
     public LocalSessionFactoryBean sessionFactory() {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(dataSource());
-        sessionFactory.setPackagesToScan(new String[] {
-                "com.example.entity"
-        });
+        sessionFactory.setPackagesToScan("com.example.entity");
         sessionFactory.setHibernateProperties(hibernateProperties());
         return sessionFactory;
     }
@@ -39,20 +36,26 @@ public class AppConfig {
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
 
-            dataSource.setDriverClassName("org.postgresql.Driver");
-            dataSource.setUrl("jdbc:postgresql://localhost:5432/servlets-project");
-            dataSource.setUsername("postgres");
-            dataSource.setPassword("1234");
+        dataSource.setDriverClassName(environment.getRequiredProperty("jdbc.driverClassName"));
+        dataSource.setUrl(environment.getRequiredProperty("jdbc.url"));
+        dataSource.setUsername(environment.getRequiredProperty("jdbc.username"));
+        dataSource.setPassword(environment.getRequiredProperty("jdbc.password"));
 
         return dataSource;
     }
 
     private Properties hibernateProperties() {
         Properties properties = new Properties();
-        properties.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
-        properties.put("hibernate.show_sql", "true");
-        properties.put("hibernate.format_sql", "true");
-        properties.put("hibernate.hbm2ddl.auto","update");
+        properties.put("hibernate.dialect", environment.getRequiredProperty("hibernate.dialect"));
+        properties.put("hibernate.show_sql", environment.getRequiredProperty("hibernate.show_sql"));
+        properties.put("hibernate.format_sql", environment.getRequiredProperty("hibernate.format_sql"));
+        properties.put("hibernate.hbm2ddl.auto", environment.getRequiredProperty("hibernate.hbm2ddl.auto"));
+
+        // C3P0 Connection Pool settings
+        properties.put("hibernate.c3p0.min_size", environment.getRequiredProperty("hibernate.c3p0.min_size"));
+        properties.put("hibernate.c3p0.max_size", environment.getRequiredProperty("hibernate.c3p0.max_size"));
+        properties.put("hibernate.c3p0.timeout", environment.getRequiredProperty("hibernate.c3p0.timeout"));
+        properties.put("hibernate.c3p0.max_statements", environment.getRequiredProperty("hibernate.c3p0.max_statements"));
 
         return properties;
     }
