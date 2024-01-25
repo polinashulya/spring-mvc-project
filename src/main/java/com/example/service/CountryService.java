@@ -1,11 +1,10 @@
 package com.example.service;
 
-import com.example.entity.CountryEntity;
-import org.springframework.stereotype.Service;
+import com.example.service.dto.CountryDto;
 
 import java.util.List;
 
 public interface CountryService {
 
-    List<CountryEntity> findAll();
+    List<CountryDto> findAll();
 }

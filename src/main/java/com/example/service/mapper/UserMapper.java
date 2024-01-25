@@ -2,55 +2,44 @@ package com.example.service.mapper;
 
 import com.example.entity.CountryEntity;
 import com.example.entity.UserEntity;
+import com.example.exception.MapperException;
+import com.example.exception.ServiceException;
 import com.example.service.dto.UserDto;
+import com.example.service.impl.UserServiceImpl;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.modelmapper.ModelMapper;
 
 import java.time.LocalDate;
 
 @Component
 public class UserMapper {
 
-    public static UserDto toDto(UserEntity userEntity) {
-        if (userEntity == null) {
-            return null;
-        }
-
-        UserDto userDto = new UserDto();
-        userDto.setLogin(userEntity.getLogin());
-        userDto.setPassword(userEntity.getPassword());
-        userDto.setName(userEntity.getName());
-        userDto.setSurname(userEntity.getSurname());
-        userDto.setBirthDate(String.valueOf(userEntity.getBirthDate()));
-        userDto.setBanned(userEntity.isBanned());
-        userDto.setDeleted(userEntity.isDeleted());
-
-        if (userEntity.getCountry() != null) {
-            userDto.setCountryId(String.valueOf(userEntity.getCountry().getId()));
-        }
-
-        return userDto;
+    private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
+    private final ModelMapper modelMapper;
+    @Autowired
+    public UserMapper(ModelMapper modelMapper) {
+        this.modelMapper = modelMapper;
     }
 
-    public static UserEntity toEntity(UserDto userDto) {
-        if (userDto == null) {
-            return null;
+    public  UserDto toDto(UserEntity entity) {
+        try {
+            return modelMapper.map(entity, UserDto.class);
+        } catch (MapperException e) {
+            logger.error("Error while mapping UserEntity to UserDto: {}", e.getMessage(), e);
+            throw new MapperException(e);
         }
+    }
 
-        UserEntity userEntity = new UserEntity();
-        userEntity.setLogin(userDto.getLogin());
-        userEntity.setPassword(userDto.getPassword());
-        userEntity.setName(userDto.getName());
-        userEntity.setSurname(userDto.getSurname());
-        userEntity.setBirthDate(LocalDate.parse(userDto.getBirthDate()));
-        userEntity.setBanned(userDto.isBanned());
-        userEntity.setDeleted(userDto.isDeleted());
-
-        if (userDto.getCountryId() != null) {
-            CountryEntity countryEntity = new CountryEntity();
-            countryEntity.setId(Long.valueOf(userDto.getCountryId()));
-            userEntity.setCountry(countryEntity);
+    public  UserEntity toEntity(UserDto dto) {
+        try {
+            return modelMapper.map(dto, UserEntity.class);
+        } catch (MapperException e) {
+            logger.error("Error while mapping UserDto to UserEntity: {}", e.getMessage(), e);
+            throw new MapperException(e);
         }
-
-        return userEntity;
     }
 }
+

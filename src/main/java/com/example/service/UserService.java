@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface UserService {
 
-    List<UserEntity> getAll();
+    List<UserDto> getAll();
 
     List<UserEntity> getAll(String sortBy, String sortType, String countryId, String search, String page, String pageSize);
 

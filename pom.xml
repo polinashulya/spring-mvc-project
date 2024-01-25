@@ -15,11 +15,11 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <postgresql.version>42.5.4</postgresql.version>
-        <org.mapstruct.version>1.5.3.Final</org.mapstruct.version>
+        <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
         <lombok-mapstruct-binding>0.2.0</lombok-mapstruct-binding>
         <spring.version>6.1.0</spring.version>
-        <hibernate.version>5.5.6.Final</hibernate.version>
-        <postgresql.version>42.5.1</postgresql.version>
+        <hibernate.version>6.3.1.Final</hibernate.version>
+        <modelmapper.version>2.4.3</modelmapper.version>
     </properties>
 
     <dependencies>
@@ -43,7 +43,7 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
-            <version>6.3.1.Final</version>
+            <version>${hibernate.version}</version>
         </dependency>
 
         <dependency>
@@ -55,7 +55,7 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-c3p0</artifactId>
-            <version>6.3.0.Final</version>
+            <version>${hibernate.version}</version>
         </dependency>
 
         <!-- Tomcat JDBC Connection Pool -->
@@ -95,18 +95,11 @@
             <version>3.0.1</version>
         </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>org.mapstruct</groupId>-->
-<!--            <artifactId>mapstruct</artifactId>-->
-<!--            <version>1.4.2.Final</version> &lt;!&ndash; Use the latest version &ndash;&gt;-->
-<!--        </dependency>-->
-
-<!--        <dependency>-->
-<!--            <groupId>org.mapstruct</groupId>-->
-<!--            <artifactId>mapstruct-processor</artifactId>-->
-<!--            <version>1.4.2.Final</version> &lt;!&ndash; Use the same version as mapstruct &ndash;&gt;-->
-<!--            <scope>provided</scope>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>org.modelmapper</groupId>
+            <artifactId>modelmapper</artifactId>
+            <version>${modelmapper.version}</version>
+        </dependency>
 
         <!--Log4j 2-->
         <dependency>
@@ -150,22 +143,6 @@
                         </annotationProcessorPaths>
                     </configuration>
                 </plugin>
-<!--                <plugin>-->
-<!--                    <groupId>org.apache.maven.plugins</groupId>-->
-<!--                    <artifactId>maven-compiler-plugin</artifactId>-->
-<!--                    <version>3.8.0</version> &lt;!&ndash; Use the latest version &ndash;&gt;-->
-<!--                    <configuration>-->
-<!--                        <source>1.8</source> &lt;!&ndash; Use your Java version &ndash;&gt;-->
-<!--                        <target>1.8</target> &lt;!&ndash; Use your Java version &ndash;&gt;-->
-<!--                        <annotationProcessorPaths>-->
-<!--                            <path>-->
-<!--                                <groupId>org.mapstruct</groupId>-->
-<!--                                <artifactId>mapstruct-processor</artifactId>-->
-<!--                                <version>1.4.2.Final</version> &lt;!&ndash; Use the same version as mapstruct &ndash;&gt;-->
-<!--                            </path>-->
-<!--                        </annotationProcessorPaths>-->
-<!--                    </configuration>-->
-<!--                </plugin>-->
             </plugins>
         </pluginManagement>
     </build>

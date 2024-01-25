@@ -3,6 +3,7 @@ package com.example.controllers;
 import com.example.entity.CountryEntity;
 import com.example.entity.UserEntity;
 import com.example.exception.ControllerCustomException;
+import com.example.service.dto.CountryDto;
 import com.example.service.dto.UserDto;
 import com.example.service.dto.search.UserSearchCriteriaDto;
 import com.example.service.impl.CountryServiceImpl;
@@ -55,7 +56,7 @@ public class UserController {
     }
 
     private void setCountriesToModel(Model model) {
-        List<CountryEntity> countries = this.countryService.findAll();
+        List<CountryDto> countries = this.countryService.findAll();
         model.addAttribute("countries", countries);
     }
 
@@ -63,7 +64,6 @@ public class UserController {
     public String addingForm(Model model) {
         try {
             setCountriesToModel(model);
-
             return "add_user";
         } catch (Exception e) {
             logger.error("Error while executing DeleteUserCommand", e);
@@ -75,7 +75,6 @@ public class UserController {
     public String save(@ModelAttribute UserDto userDto) {
         try {
             userService.add(userDto);
-
             return "redirect:/users";
         } catch (Exception e) {
             logger.error("Error while executing DeleteUserCommand", e);
@@ -87,7 +86,6 @@ public class UserController {
     public ResponseEntity<Void> delete(@PathVariable(name = "id") String userId) {
         try {
             userService.deleteById(Long.valueOf(userId));
-
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             logger.error("Error while executing DeleteUserCommand", e);
