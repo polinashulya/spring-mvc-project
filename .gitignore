@@ -38,6 +38,3 @@ build/
 .DS_Store
 
 .idea/
-
-# Igore UserMapperConfig.java
-src/main/java/com/example/service/mapper/config/UserMapperConfig.java
