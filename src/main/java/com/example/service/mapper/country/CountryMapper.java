@@ -10,8 +10,4 @@ import org.mapstruct.Mapper;
 @Mapper
 public interface CountryMapper extends AbstractMapper<CountryDto, CountryEntity> {
 
-    UserEntity toEntity(UserDto userDto);
-
-    UserDto toDto(UserEntity userEntity);
-
 }

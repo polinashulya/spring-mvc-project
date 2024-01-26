@@ -11,6 +11,4 @@ public interface AbstractMapper<D extends AbstractBaseDto, E extends AbstractBas
 
     E toEntity(D dto);
 
-    List<D> toDtoList(List<E> entities);
-
 }

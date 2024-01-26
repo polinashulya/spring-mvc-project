@@ -1,8 +1,6 @@
 package com.example.service.dto;
 
 import com.example.service.dto.core.AbstractBaseDto;
-import com.example.service.dto.core.AbstractCoreDto;
-import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
