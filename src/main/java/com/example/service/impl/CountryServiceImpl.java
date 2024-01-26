@@ -6,7 +6,7 @@ import com.example.exception.ServiceException;
 import com.example.repository.CountryRepository;
 import com.example.service.CountryService;
 import com.example.service.dto.CountryDto;
-import com.example.service.mapper.CountryMapper;
+import com.example.service.mapper.country.CountryMapper;
 import lombok.AllArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -34,6 +34,22 @@ public class CountryServiceImpl implements CountryService {
                     .collect(Collectors.toList());
         } catch (DAOException e) {
             logger.error("Error while getting all countries: {}", e.getMessage(), e);
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public CountryDto findById(String id) {
+        try {
+            Long countryId = Long.parseLong(id);
+            return countryRepository.findById(countryId)
+                    .map(countryMapper::toDto)
+                    .orElse(null);
+        } catch (NumberFormatException e) {
+            logger.error("Error parsing country ID: {}", e.getMessage(), e);
+            throw new ServiceException("Invalid country ID format", e);
+        } catch (DAOException e) {
+            logger.error("Error while finding country by ID: {}", e.getMessage(), e);
             throw new ServiceException(e);
         }
     }

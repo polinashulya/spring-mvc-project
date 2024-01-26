@@ -1,5 +1,6 @@
 package com.example.service.dto;
 
+import com.example.service.dto.core.AbstractBaseDto;
 import com.example.service.dto.core.AbstractCoreDto;
 import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
@@ -13,7 +14,9 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
-public class UserDto extends AbstractCoreDto {
+public class UserDto extends AbstractBaseDto {
+
+    private Long id;
 
     private String login;
 
@@ -22,6 +25,8 @@ public class UserDto extends AbstractCoreDto {
     private String name;
 
     private String surname;
+
+    private CountryDto country;
 
     private String countryId;
 

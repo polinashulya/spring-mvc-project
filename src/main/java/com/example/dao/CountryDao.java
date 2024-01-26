@@ -9,8 +9,12 @@ import java.util.Optional;
 public interface CountryDao {
     List<CountryEntity> findAll();
 
-    CountryEntity getById(Serializable id);
+    CountryEntity getById(Long id);
 
-    Optional<CountryEntity> findById(Serializable id);
+    Optional<CountryEntity> findById(Long id);
+
+    CountryEntity getByName(String name);
+
+    Optional<CountryEntity> findByName(String name);
 
 }

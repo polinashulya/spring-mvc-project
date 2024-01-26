@@ -7,7 +7,7 @@ import com.example.repository.CountryRepository;
 import com.example.repository.UserRepository;
 import com.example.service.UserService;
 import com.example.service.dto.UserDto;
-import com.example.service.mapper.UserMapper;
+import com.example.service.mapper.user.UserMapper;
 import com.example.validator.UserValidator;
 import lombok.AllArgsConstructor;
 import org.apache.logging.log4j.LogManager;
@@ -46,9 +46,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserEntity> getAll(String sortBy, String sortType, String countryId, String search, String page, String pageSize) {
+    public List<UserDto> getAll(String sortBy, String sortType, String countryId, String search, String page, String pageSize) {
         try {
-            return userRepository.findAll(sortBy, sortType, countryId, search, page, pageSize);
+            List<UserEntity> entities = userRepository.findAll(sortBy, sortType, countryId, search, page, pageSize);
+            return entities.stream()
+                    .map(userMapper::toDto)
+                    .collect(Collectors.toList());
         } catch (DAOException e) {
             logger.error("Error while getting all users: {}", e.getMessage(), e);
             throw new ServiceException(e);
@@ -75,7 +78,7 @@ public class UserServiceImpl implements UserService {
 
         try {
             userRepository.save(user);
-        } catch (DAOException e) {
+        } catch (DAOException | ServiceException e) {
             logger.error("Error while adding a user: {}", e.getMessage(), e);
             throw new ServiceException(e);
         }
@@ -89,7 +92,7 @@ public class UserServiceImpl implements UserService {
                 throw new ServiceException("User ID is required.");
             }
             userRepository.deleteById(userId);
-        } catch (DAOException e) {
+        } catch (DAOException | ServiceException e) {
             logger.error("Error while deleting a user: {}", e.getMessage(), e);
             throw new ServiceException(e);
         }
@@ -99,7 +102,7 @@ public class UserServiceImpl implements UserService {
     public int getTotalResult(String sortBy, String sortType, String countryId, String search) {
         try {
             return userRepository.getTotalResult(sortBy, sortType, countryId, search);
-        } catch (DAOException e) {
+        } catch (DAOException | ServiceException e) {
             logger.error("Error while getting a total result of users: {}", e.getMessage(), e);
             throw new ServiceException(e);
         }

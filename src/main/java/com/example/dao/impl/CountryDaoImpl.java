@@ -52,7 +52,7 @@ public class CountryDaoImpl implements CountryDao {
     }
 
     @Override
-    public CountryEntity getById(Serializable id) {
+    public CountryEntity getById(Long id) {
         Session session = null;
 
         try {
@@ -65,8 +65,8 @@ public class CountryDaoImpl implements CountryDao {
                     .uniqueResult();
 
         } catch (Exception e) {
-            logger.error("Error occurred while retrieving entity by ID", e);
-            throw new DAOException("Error occurred while retrieving entity by ID", e);
+            logger.error("Error occurred while retrieving entity by county ID", e);
+            throw new DAOException("Error occurred while retrieving entity by county ID", e);
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
@@ -75,8 +75,36 @@ public class CountryDaoImpl implements CountryDao {
     }
 
     @Override
-    public Optional<CountryEntity> findById(Serializable id) {
+    public Optional<CountryEntity> findById(Long id) {
         return Optional.ofNullable(getById(id));
+    }
+
+    @Override
+    public CountryEntity getByName(String name) {
+        Session session = null;
+
+        try {
+            session = sessionFactory.openSession();
+
+            String hql = "FROM CountryEntity c WHERE c.name = :name";
+
+            return session.createQuery(hql, CountryEntity.class)
+                    .setParameter("name", name)
+                    .uniqueResult();
+
+        } catch (Exception e) {
+            logger.error("Error occurred while retrieving entity by county name", e);
+            throw new DAOException("Error occurred while retrieving entity by county name", e);
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
+    }
+
+    @Override
+    public Optional<CountryEntity> findByName(String name) {
+        return  Optional.ofNullable(getByName(name));
     }
 
 }

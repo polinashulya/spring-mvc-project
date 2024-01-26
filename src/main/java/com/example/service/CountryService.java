@@ -7,4 +7,7 @@ import java.util.List;
 public interface CountryService {
 
     List<CountryDto> findAll();
+
+    CountryDto findById(String id);
+
 }

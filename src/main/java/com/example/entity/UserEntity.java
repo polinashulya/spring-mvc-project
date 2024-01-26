@@ -43,6 +43,4 @@ public class UserEntity extends AbstractCoreEntity {
     @Column(name = "deleted")
     private boolean deleted;
 
-
-
 }

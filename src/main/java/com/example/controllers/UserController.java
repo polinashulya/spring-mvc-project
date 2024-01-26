@@ -1,7 +1,5 @@
 package com.example.controllers;
 
-import com.example.entity.CountryEntity;
-import com.example.entity.UserEntity;
 import com.example.exception.ControllerCustomException;
 import com.example.service.dto.CountryDto;
 import com.example.service.dto.UserDto;
@@ -33,7 +31,7 @@ public class UserController {
     @GetMapping
     public String findAllUsers(Model model, @ModelAttribute UserSearchCriteriaDto userSearchCriteriaDto) {
         try {
-            List<UserEntity> users = userService.getAll(userSearchCriteriaDto.getSortBy(), userSearchCriteriaDto.getSortType(),
+            List<UserDto> users = userService.getAll(userSearchCriteriaDto.getSortBy(), userSearchCriteriaDto.getSortType(),
                     userSearchCriteriaDto.getCountryId(), userSearchCriteriaDto.getSearch(),
                     userSearchCriteriaDto.getPage(), userSearchCriteriaDto.getPageSize());
 
@@ -50,8 +48,8 @@ public class UserController {
 
             return "users";
         } catch (Exception e) {
-            logger.error("Error while executing DeleteUserCommand", e);
-            throw new ControllerCustomException("Error while executing DeleteUserCommand", e);
+            logger.error("Error while executing find all users", e);
+            throw new ControllerCustomException("Error while executing find all users", e);
         }
     }
 
@@ -66,8 +64,8 @@ public class UserController {
             setCountriesToModel(model);
             return "add_user";
         } catch (Exception e) {
-            logger.error("Error while executing DeleteUserCommand", e);
-            throw new ControllerCustomException("Error while executing DeleteUserCommand", e);
+            logger.error("Error while executing adding form", e);
+            throw new ControllerCustomException("Error while executing adding form", e);
         }
     }
 
@@ -77,8 +75,8 @@ public class UserController {
             userService.add(userDto);
             return "redirect:/users";
         } catch (Exception e) {
-            logger.error("Error while executing DeleteUserCommand", e);
-            throw new ControllerCustomException("Error while executing DeleteUserCommand", e);
+            logger.error("Error while executing saving", e);
+            throw new ControllerCustomException("Error while executing saving", e);
         }
     }
 
@@ -88,8 +86,8 @@ public class UserController {
             userService.deleteById(Long.valueOf(userId));
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
-            logger.error("Error while executing DeleteUserCommand", e);
-            throw new ControllerCustomException("Error while executing DeleteUserCommand", e);
+            logger.error("Error while executing deleting", e);
+            throw new ControllerCustomException("Error while executing deleting", e);
         }
     }
 
