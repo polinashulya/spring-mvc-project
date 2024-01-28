@@ -1,4 +1,4 @@
-package com.example.controllers;
+package com.example.controller;
 
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;

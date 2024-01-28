@@ -15,7 +15,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class UserRepositoryImpl implements UserRepository {
 
-    private UserDao userDao;
+    private final UserDao userDao;
 
     @Override
     public List<UserEntity> findAll() {
@@ -25,7 +25,6 @@ public class UserRepositoryImpl implements UserRepository {
             throw new RepositoryException(e);
         }
     }
-
 
     @Override
     public List<UserEntity> findAll(String sortBy, String sortType, String countryId, String search, String page, String pageSize) {

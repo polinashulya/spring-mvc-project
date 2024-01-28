@@ -15,7 +15,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class CountryRepositoryImpl implements CountryRepository {
 
-    private CountryDao countryDao;
+    private final CountryDao countryDao;
 
     @Override
     public List<CountryEntity> findAll() {

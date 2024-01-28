@@ -11,6 +11,7 @@ create table users
     deleted    bool
 );
 
+
 create table countries
 (
     id   serial,
@@ -19,3 +20,13 @@ create table countries
 
 ALTER TABLE users
     ADD FOREIGN KEY (country_id) REFERENCES countries (id);
+
+create table user_roles
+(
+    id   serial,
+    name character(10) NOT NULL UNIQUE
+);
+
+INSERT INTO user_roles (name) VALUES ('CLIENT');
+INSERT INTO user_roles (name) VALUES ('EMPLOYEE');
+INSERT INTO user_roles (name) VALUES ('ADMIN');

@@ -1,4 +1,4 @@
-package com.example.controllers;
+package com.example.controller;
 
 import com.example.exception.ControllerCustomException;
 import org.apache.logging.log4j.LogManager;

@@ -1,4 +1,4 @@
-package com.example.controllers;
+package com.example.controller;
 
 import com.example.exception.ControllerCustomException;
 import com.example.service.dto.CountryDto;
