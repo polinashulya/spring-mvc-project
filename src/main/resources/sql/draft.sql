@@ -125,4 +125,5 @@ WHERE u.deleted = 'false'
 order by u.id asc;
 
 
-
+insert into clients()
+values ('login', 'polya', 'busya', '1999-02-08');

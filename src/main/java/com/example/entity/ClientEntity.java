@@ -1,5 +1,6 @@
 package com.example.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -14,4 +15,7 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @NoArgsConstructor
 public class ClientEntity extends UserEntity {
+
+    @Column(name = "loyaltyPoints")
+    private int loyaltyPoints;
 }
