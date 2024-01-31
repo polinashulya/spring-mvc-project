@@ -10,6 +10,7 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "users")
+@Inheritance(strategy = InheritanceType.JOINED)
 @SuperBuilder(toBuilder = true)
 @Setter
 @Getter
