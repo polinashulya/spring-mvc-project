@@ -7,6 +7,8 @@ import lombok.experimental.SuperBuilder;
 
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -18,13 +20,13 @@ import java.time.LocalDate;
 public class UserEntity extends AbstractCoreEntity {
 
     @ManyToOne
-    private CountryEntity country;
+    private CountryEntity country; //пока как пример для фильтра потом вообще удалить
 
-    @ManyToOne
-    private UserRoleEntity userRole;
+    @Column(name = "email", unique = true)
+    private String email;
 
-    @Column(name = "login", unique = true)
-    private String login;
+    @Column(name = "phoneNumber", unique = true)
+    private String phoneNumber;
 
     @Column(name = "password")
     private String password;
@@ -38,10 +40,19 @@ public class UserEntity extends AbstractCoreEntity {
     @Column(name = "birthDate")
     private LocalDate birthDate;
 
+    @Column(name = "registationDate")
+    private LocalDate registationDate;
+
     @Column(name = "banned")
     private boolean banned;
 
     @Column(name = "deleted")
     private boolean deleted;
+
+    @ManyToMany
+    @JoinTable(name = "users_userRoles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "userRole_id"))
+    private Set<UserRoleEntity> userRoles = new HashSet<>();
 
 }

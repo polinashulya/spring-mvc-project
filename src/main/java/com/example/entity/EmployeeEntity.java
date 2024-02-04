@@ -12,7 +12,7 @@ import java.util.Set;
 
 
 @Entity
-@Table(name = "employes")
+@Table(name = "employees")
 @SuperBuilder(toBuilder = true)
 @Setter
 @Getter
@@ -23,11 +23,15 @@ public class EmployeeEntity extends UserEntity {
     private LocalDate hireDate;
 
     @ManyToMany
-    @JoinTable(name = "employees_positions",
+    @JoinTable(name = "employees_employeePositions",
             joinColumns = @JoinColumn(name = "employee_id"),
-            inverseJoinColumns = @JoinColumn(name = "position_id")
-
-    )
+            inverseJoinColumns = @JoinColumn(name = "employeePosition_id"))
     private Set<EmployeePositionEntity> positions = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(name = "employees_procedures",
+            joinColumns = @JoinColumn(name = "employee_id"),
+            inverseJoinColumns = @JoinColumn(name = "procedure_id"))
+    private Set<ProcedureEntity> procedures = new HashSet<>();
 
 }

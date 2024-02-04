@@ -16,6 +16,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 public class ClientEntity extends UserEntity {
 
-    @Column(name = "loyaltyPoints")
-    private int loyaltyPoints;
+    @Column(name = "note")
+    private String note;
+
 }

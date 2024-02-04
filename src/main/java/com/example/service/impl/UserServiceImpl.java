@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -85,7 +86,7 @@ public class UserServiceImpl implements UserService {
         UserRoleEntity clientRole = userRoleRepository.findByName(UserRoles.CLIENT.name())
                 .orElseThrow(() -> new ServiceException("Default role 'CLIENT' not found"));
 
-        userEntity.setUserRole(clientRole);
+        userEntity.setUserRoles((Set<UserRoleEntity>) clientRole);
 
 
         try {

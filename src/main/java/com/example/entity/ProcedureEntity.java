@@ -9,7 +9,7 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Entity
 @Table(name = "procedures")
@@ -24,9 +24,16 @@ public class ProcedureEntity extends AbstractCoreEntity {
     private String name;
 
     @Column(name = "duration")
-    private String duration;
+    private LocalTime duration;
+
+    @Column(name = "description")
+    private String description;
 
     @Column(name = "price")
     private BigDecimal price;
+
+    @ManyToOne
+    @JoinColumn(name = "procedureCategories_id")
+    private ProcedureCategoryEntity procedureCategory;
 
 }
