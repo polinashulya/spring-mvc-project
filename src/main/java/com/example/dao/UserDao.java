@@ -21,9 +21,9 @@ public interface UserDao {
 
     void delete(Long id);
 
-    UserEntity getByLogin(String login);
+    UserEntity getByEmail(String email);
 
-    Optional<UserEntity> findByLogin(String login);
+    Optional<UserEntity> findByEmail(String email);
 
     String getFilterAndSearchHql(String countryId, String search);
 

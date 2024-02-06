@@ -5,7 +5,7 @@ import java.time.LocalDate;
 
 public interface UserValidator {
 
-    boolean validate(String login, String password, String name, String surname,
+    boolean validate(String email, String password, String name, String surname,
                      LocalDate birthDate);
 
 }

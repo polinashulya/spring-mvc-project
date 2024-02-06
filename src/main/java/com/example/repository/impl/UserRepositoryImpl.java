@@ -73,9 +73,9 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public Optional<UserEntity> findByLogin(String login) {
+    public Optional<UserEntity> findByEmail(String email) {
         try {
-            return userDao.findByLogin(login);
+            return userDao.findByEmail(email);
         } catch (DAOException e) {
             throw new RepositoryException(e);
         }

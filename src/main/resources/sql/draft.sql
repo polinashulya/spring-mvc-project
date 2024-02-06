@@ -1,6 +1,6 @@
 insert into users(name)
 values ('test');
-insert into users(login, password)
+insert into users(email, password)
 values ('test', 'test');
 
 insert into users(name)
@@ -12,11 +12,11 @@ values ('France');
 insert into countries(name)
 values ('Italy');
 
-insert into users(login, name)
-values ('login', 'polya');
+insert into users(email, name)
+values ('email', 'polya');
 
-insert into users(login, name, surname, birthdate)
-values ('login', 'polya', 'busya', '1999-02-08');
+insert into employees(birthDate, email, name, password, phonenumber, surname, hiredate)
+values ('1999-02-08','email', 'polya', 'busya', '19292929', 'shulya','1999-02-08');
 
 select *
 from users
@@ -25,7 +25,7 @@ where id = 2;
 select *
 from users;
 
-SELECT u.id, u.login, u.name, u.surname, u.birthdate, u.banned
+SELECT u.id, u.email, u.name, u.surname, u.birthdate, u.banned
 FROM users u
 ORDER BY id ASC;
 
@@ -68,7 +68,7 @@ from users u
          join countries c on u.country_id = c.id
 where u.id = 1;
 
-SELECT u.id, u.login, u.name, u.surname, u.country_id, u.birthdate, u.banned
+SELECT u.id, u.email, u.name, u.surname, u.country_id, u.birthdate, u.banned
 FROM users u
          join countries c on u.country_id = c.id
 WHERE u.deleted = 'false';
@@ -77,12 +77,12 @@ UPDATE users u
 SET deleted= false
 where u.id = 10;
 
-select u.name, u.surname, u.login
+select u.name, u.surname, u.email
 from users u
 where u.name like '%' + + '%';
 
 SELECT u.id,
-       u.login,
+       u.email,
        u.name,
        u.surname,
        u.birthdate,
@@ -92,19 +92,19 @@ SELECT u.id,
 FROM users u
          join countries c on u.country_id = c.id
 WHERE u.deleted = 'false'
-  AND (u.login LIKE '%%'
+  AND (u.email LIKE '%%'
     OR u.name LIKE '%%'
     OR u.surname LIKE '%%'
     OR c.name LIKE '%%')
-group by u.id, u.login, u.name, u.surname, u.birthdate, u.banned, u.country_id, c.name
-ORDER BY u.login ASC
+group by u.id, u.email, u.name, u.surname, u.birthdate, u.banned, u.country_id, c.name
+ORDER BY u.email ASC
 LIMIT 5 OFFSET 0;
 
 SELECT COUNT(*)
 FROM users u
          join countries c on u.country_id = c.id
 WHERE u.deleted = 'false'
-  AND (u.login LIKE '%%'
+  AND (u.email LIKE '%%'
     OR u.name LIKE '%%'
     OR u.surname LIKE '%%'
     OR c.name LIKE '%%');
@@ -112,18 +112,19 @@ WHERE u.deleted = 'false'
 SELECT COUNT(*) AS totalUsers
 FROM users
 WHERE country_id = 1
-  AND (login LIKE '%%' OR name LIKE '%%' OR surname LIKE '%%');
+  AND (email LIKE '%%' OR name LIKE '%%' OR surname LIKE '%%');
 
 SELECT COUNT(*) AS totalUsers
 FROM users u
          join countries c on u.country_id = c.id
 WHERE u.deleted = 'false'
-  AND (u.login LIKE '%%'
+  AND (u.email LIKE '%%'
     OR u.name LIKE '%%'
     OR u.surname LIKE '%%'
     OR c.name LIKE '%%')
 order by u.id asc;
 
 
-insert into clients()
-values ('login', 'polya', 'busya', '1999-02-08');
+INSERT INTO clients (country_id, email, phoneNumber, password, name, surname, birthDate, banned, deleted, note)
+VALUES (1, 'user@example.com', '+1234567890', 'hashedPassword', 'FirstName', 'LastName', '2000-01-01',  false, false, 'Заметка о клиенте');
+

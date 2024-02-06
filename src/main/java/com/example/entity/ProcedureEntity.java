@@ -24,7 +24,7 @@ public class ProcedureEntity extends AbstractCoreEntity {
     private String name;
 
     @Column(name = "duration")
-    private LocalTime duration;
+    private String duration;
 
     @Column(name = "description")
     private String description;

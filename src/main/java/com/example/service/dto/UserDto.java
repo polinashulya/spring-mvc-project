@@ -21,7 +21,7 @@ public class UserDto extends AbstractBaseDto {
 
 //    @NotBlank(message = "Email is mandatory")
 //    @Email(message = "Email must be valid")
-    private String login;
+    private String email;
 
  //   @NotBlank(message = "Password is mandatory")
     private String password;

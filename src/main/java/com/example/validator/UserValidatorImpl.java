@@ -14,9 +14,9 @@ public class UserValidatorImpl implements UserValidator {
     private static final String NAME_FORMAT_REGEX = ".{2,19}";
 
     @Override
-    public boolean validate(String login, String password, String name, String surname,
+    public boolean validate(String email, String password, String name, String surname,
                             LocalDate birthDate) {
-        return login.matches(LOGIN_FORMAT_REGEX)
+        return email.matches(LOGIN_FORMAT_REGEX)
                 && password.matches(PASSWORD_FORMAT_REGEX)
                 && name.matches(NAME_FORMAT_REGEX)
                 && surname.matches(NAME_FORMAT_REGEX)

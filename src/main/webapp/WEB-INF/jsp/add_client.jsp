@@ -17,10 +17,10 @@
         <table>
             <tr>
                 <td class="form-group">
-                    <label for="login"><sup>*</sup> Login</label>
-                    <input id="login" pattern="^[a-zA-Z][a-zA-Z0-9-_.]{4,19}$"
-                           required type="text" placeholder="<c:out value='${client.login}'/>" name="login"
-                           title="Login must start with a letter, be between 4 and 19 characters, and should not contain spaces.">
+                    <label for="email"><sup>*</sup> Email</label>
+                    <input id="email" pattern="^[a-zA-Z][a-zA-Z0-9-_.]{4,19}$"
+                           required type="text" placeholder="<c:out value='${client.email}'/>" name="email"
+                           title="Email must start with a letter, be between 4 and 19 characters, and should not contain spaces.">
                 </td>
 
                 <td rowspan="1" class="form-group">

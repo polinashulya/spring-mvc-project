@@ -14,7 +14,7 @@ public interface ClientRepository {
 
     ClientEntity getById(Long id);
 
-    Optional<ClientEntity> findByLogin(String login);
+    Optional<ClientEntity> findByEmail(String email);
 
     void save(ClientEntity user);
 

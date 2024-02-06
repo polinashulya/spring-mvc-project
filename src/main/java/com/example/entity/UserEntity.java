@@ -10,9 +10,7 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
-@Table(name = "users")
-@Inheritance(strategy = InheritanceType.JOINED)
+@MappedSuperclass
 @SuperBuilder(toBuilder = true)
 @Setter
 @Getter

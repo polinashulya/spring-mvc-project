@@ -1,8 +1,6 @@
 package com.example.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,6 +12,7 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @Getter
 @NoArgsConstructor
+//@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class ClientEntity extends UserEntity {
 
     @Column(name = "note")

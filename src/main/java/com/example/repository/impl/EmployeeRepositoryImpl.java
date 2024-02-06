@@ -1,10 +1,10 @@
 package com.example.repository.impl;
 
-import com.example.dao.ClientDao;
-import com.example.entity.ClientEntity;
+import com.example.dao.EmployeeDao;
+import com.example.entity.EmployeeEntity;
 import com.example.exception.DAOException;
 import com.example.exception.RepositoryException;
-import com.example.repository.ClientRepository;
+import com.example.repository.EmployeeRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -13,41 +13,41 @@ import java.util.Optional;
 
 @Repository
 @AllArgsConstructor
-public class ClientRepositoryImpl implements ClientRepository {
+public class EmployeeRepositoryImpl implements EmployeeRepository {
 
-    private final ClientDao clientDao;
+    private final EmployeeDao employeeDao;
 
     @Override
-    public List<ClientEntity> findAll() {
+    public List<EmployeeEntity> findAll() {
         try {
-            return clientDao.findAll();
+            return employeeDao.findAll();
         } catch (DAOException e) {
             throw new RepositoryException(e);
         }
     }
 
     @Override
-    public List<ClientEntity> findAll(String sortBy, String sortType, String countryId, String search, String page, String pageSize) {
+    public List<EmployeeEntity> findAll(String sortBy, String sortType, String countryId, String search, String page, String pageSize) {
         try {
-            return clientDao.findAll( search, countryId, sortBy, sortType, page, pageSize);
+            return employeeDao.findAll( search, countryId, sortBy, sortType, page, pageSize);
         } catch (DAOException e) {
             throw new RepositoryException(e);
         }
     }
 
     @Override
-    public ClientEntity getById(Long id) {
+    public EmployeeEntity getById(Long id) {
         try {
-            return clientDao.getById(id);
+            return employeeDao.getById(id);
         } catch (DAOException e) {
             throw new RepositoryException(e);
         }
     }
 
     @Override
-    public void save(ClientEntity client) {
+    public void save(EmployeeEntity employee) {
         try {
-            clientDao.save(client);
+            employeeDao.save(employee);
         } catch (DAOException e) {
             throw new RepositoryException(e);
         }
@@ -56,7 +56,7 @@ public class ClientRepositoryImpl implements ClientRepository {
     @Override
     public void deleteById(Long id) {
         try {
-            clientDao.delete(id);
+            employeeDao.delete(id);
         } catch (DAOException e) {
             throw new RepositoryException(e);
         }
@@ -65,17 +65,17 @@ public class ClientRepositoryImpl implements ClientRepository {
     @Override
     public int getTotalResult(String sortBy, String sortType, String countryId, String search) {
         try {
-            final String filterAndSearchSql = clientDao.getFilterAndSearchHql(countryId, search);
-            return clientDao.getTotalResult(filterAndSearchSql);
+            final String filterAndSearchSql = employeeDao.getFilterAndSearchHql(countryId, search);
+            return employeeDao.getTotalResult(filterAndSearchSql);
         } catch (DAOException e) {
             throw new RepositoryException(e);
         }
     }
 
     @Override
-    public Optional<ClientEntity> findByEmail(String email) {
+    public Optional<EmployeeEntity> findByEmail(String email) {
         try {
-            return clientDao.findByEmail(email);
+            return employeeDao.findByEmail(email);
         } catch (DAOException e) {
             throw new RepositoryException(e);
         }

@@ -1,16 +1,16 @@
 package com.example.service.impl;
 
-import com.example.entity.ClientEntity;
+import com.example.entity.EmployeeEntity;
 import com.example.entity.UserRoleEntity;
 import com.example.entity.UserRoles;
 import com.example.exception.DAOException;
 import com.example.exception.ServiceException;
 import com.example.repository.CountryRepository;
-import com.example.repository.ClientRepository;
+import com.example.repository.EmployeeRepository;
 import com.example.repository.UserRoleRepository;
-import com.example.service.ClientService;
-import com.example.service.dto.ClientDto;
-import com.example.service.mapper.user.client.ClientMapper;
+import com.example.service.EmployeeService;
+import com.example.service.dto.EmployeeDto;
+import com.example.service.mapper.user.employee.EmployeeMapper;
 import com.example.validator.UserValidator;
 import lombok.AllArgsConstructor;
 import org.apache.logging.log4j.LogManager;
@@ -24,11 +24,11 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-public class ClientServiceImpl implements ClientService {
+public class EmployeeServiceImpl implements EmployeeService {
 
-    private static final Logger logger = LogManager.getLogger(ClientServiceImpl.class);
+    private static final Logger logger = LogManager.getLogger(EmployeeServiceImpl.class);
 
-    private final ClientRepository userRepository;
+    private final EmployeeRepository userRepository;
 
     private final UserRoleRepository userRoleRepository;
 
@@ -36,14 +36,14 @@ public class ClientServiceImpl implements ClientService {
 
     private final UserValidator validator;
 
-    private final ClientMapper clientMapper;
+    private final EmployeeMapper employeeMapper;
 
     @Override
-    public List<ClientDto> getAll(String sortBy, String sortType, String countryId, String search, String page, String pageSize) {
+    public List<EmployeeDto> getAll(String sortBy, String sortType, String countryId, String search, String page, String pageSize) {
         try {
-            List<ClientEntity> entities = userRepository.findAll(sortBy, sortType, countryId, search, page, pageSize);
+            List<EmployeeEntity> entities = userRepository.findAll(sortBy, sortType, countryId, search, page, pageSize);
             return entities.stream()
-                    .map(clientMapper::toDto)
+                    .map(employeeMapper::toDto)
                     .collect(Collectors.toList());
         } catch (DAOException e) {
             logger.error("Error while getting all users: {}", e.getMessage(), e);
@@ -52,30 +52,30 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public void add(ClientDto clientDto) {
+    public void add(EmployeeDto employeeDto) {
 
-        if (!validator.validate(clientDto.getEmail(), clientDto.getPassword(),
-                clientDto.getName(), clientDto.getSurname(), LocalDate.parse(clientDto.getBirthDate()))) {
+        if (!validator.validate(employeeDto.getEmail(), employeeDto.getPassword(),
+                employeeDto.getName(), employeeDto.getSurname(), LocalDate.parse(employeeDto.getBirthDate()))) {
             throw new ServiceException("Information is not valid!");
         }
 
-//        if (clientDto.getCountry().getId() == null || countryRepository.findById(clientDto.getCountry().getId()).isEmpty()) {
+//        if (employeeDto.getCountry().getId() == null || countryRepository.findById(employeeDto.getCountry().getId()).isEmpty()) {
 //            throw new ServiceException("Country is null or did not find!");
 //        }
 
-        if (userRepository.findByEmail(clientDto.getEmail()).isPresent()) {
+        if (userRepository.findByEmail(employeeDto.getEmail()).isPresent()) {
             throw new ServiceException("Email is already in use!");
         }
 
-        ClientEntity clientEntity = clientMapper.toEntity(clientDto);
+        EmployeeEntity employeeEntity = employeeMapper.toEntity(employeeDto);
 
-        UserRoleEntity clientRole = userRoleRepository.findByName(UserRoles.CLIENT.name())
+        UserRoleEntity employeeRole = userRoleRepository.findByName(UserRoles.CLIENT.name())
                 .orElseThrow(() -> new ServiceException("Default role 'CLIENT' not found"));
 
-        clientEntity.setUserRoles((Set<UserRoleEntity>) clientRole);
+        employeeEntity.setUserRoles((Set<UserRoleEntity>) employeeRole);
 
         try {
-            userRepository.save(clientEntity);
+            userRepository.save(employeeEntity);
         } catch (DAOException | ServiceException e) {
             logger.error("Error while adding a user: {}", e.getMessage(), e);
             throw new ServiceException(e);
@@ -87,7 +87,7 @@ public class ClientServiceImpl implements ClientService {
     public void deleteById(Long userId) {
         try {
             if (userId == null) {
-                throw new ServiceException("Client ID is required.");
+                throw new ServiceException("Employee ID is required.");
             }
             userRepository.deleteById(userId);
         } catch (DAOException | ServiceException e) {

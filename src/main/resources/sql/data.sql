@@ -1,7 +1,7 @@
 create table users
 (
     id         serial,
-    login      character(20) NOT NULL UNIQUE,
+    email      character(20) NOT NULL UNIQUE,
     password   character(20) NOT NULL,
     name  character(20) NOT NULL,
     surname    character(20) NOT NULL,

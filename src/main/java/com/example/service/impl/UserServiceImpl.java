@@ -68,7 +68,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void add(UserDto userDto) {
 
-        if (!validator.validate(userDto.getLogin(), userDto.getPassword(),
+        if (!validator.validate(userDto.getEmail(), userDto.getPassword(),
                 userDto.getName(), userDto.getSurname(), LocalDate.parse(userDto.getBirthDate()))) {
             throw new ServiceException("Information is not valid!");
         }
@@ -77,8 +77,8 @@ public class UserServiceImpl implements UserService {
             throw new ServiceException("Country is null or did not find!");
         }
 
-        if (userRepository.findByLogin(userDto.getLogin()).isPresent()) {
-            throw new ServiceException("Login is already in use!");
+        if (userRepository.findByEmail(userDto.getEmail()).isPresent()) {
+            throw new ServiceException("Email is already in use!");
         }
 
         UserEntity userEntity = userMapper.toEntity(userDto);

@@ -25,7 +25,7 @@ public class UserDaoImpl implements UserDao {
     private static final String SORT_TYPE_ASC = "ASC";
     private static final String SORT_USERS_BY_ID = "byId";
     private static final String SORT_USERS_BY_SURNAME = "bySurname";
-    private static final String SORT_USERS_BY_LOGIN = "byLogin";
+    private static final String SORT_USERS_BY_LOGIN = "byEmail";
     private static final String SORT_USERS_BY_BIRTH_DATE = "byBirthDate";
 
     private final SessionFactory sessionFactory;
@@ -120,16 +120,16 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public UserEntity getByLogin(String login) {
+    public UserEntity getByEmail(String email) {
         Session session = null;
 
         try {
             session = sessionFactory.openSession();
-            return session.createQuery("FROM UserEntity u JOIN FETCH u.country c WHERE u.login = :login AND u.deleted = false", UserEntity.class)
-                    .setParameter("login", login)
+            return session.createQuery("FROM UserEntity u JOIN FETCH u.country c WHERE u.email = :email AND u.deleted = false", UserEntity.class)
+                    .setParameter("email", email)
                     .uniqueResult();
         } catch (Exception e) {
-            throw new DAOException("Error while finding user by login", e);
+            throw new DAOException("Error while finding user by email", e);
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
@@ -140,8 +140,8 @@ public class UserDaoImpl implements UserDao {
 
 
     @Override
-    public Optional<UserEntity> findByLogin(String login) {
-        return Optional.ofNullable(getByLogin(login));
+    public Optional<UserEntity> findByEmail(String email) {
+        return Optional.ofNullable(getByEmail(email));
     }
 
     @Override
@@ -220,7 +220,7 @@ public class UserDaoImpl implements UserDao {
         }
 
         if (search != null && !search.isEmpty()) {
-            hql.append(" AND (u.login LIKE '%").append(search)
+            hql.append(" AND (u.email LIKE '%").append(search)
                     .append("%' OR u.name LIKE '%").append(search)
                     .append("%' OR u.surname LIKE '%")
                     .append(search).append("%')");
@@ -235,7 +235,7 @@ public class UserDaoImpl implements UserDao {
 
         switch (getSortByOrDefault(sortBy)) {
             case SORT_USERS_BY_LOGIN:
-                return " ORDER BY " + alias + ".login " + (SORT_TYPE_ASC.equals(sortType) ? "ASC" : "DESC");
+                return " ORDER BY " + alias + ".email " + (SORT_TYPE_ASC.equals(sortType) ? "ASC" : "DESC");
             case SORT_USERS_BY_SURNAME:
                 return " ORDER BY " + alias + ".surname " + (SORT_TYPE_ASC.equals(sortType) ? "ASC" : "DESC");
             case SORT_USERS_BY_BIRTH_DATE:

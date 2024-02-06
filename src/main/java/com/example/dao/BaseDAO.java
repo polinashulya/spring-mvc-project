@@ -17,9 +17,9 @@ public interface BaseDAO <T>{
 
     void delete(Long id);
 
-    T getByLogin(String login);
+    T getByEmail(String email);
 
-    Optional<T> findByLogin(String login);
+    Optional<T> findByEmail(String email);
 
     String getFilterAndSearchHql(String countryId, String search);
 

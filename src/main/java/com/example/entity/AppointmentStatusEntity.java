@@ -23,28 +23,4 @@ public class AppointmentStatusEntity extends AbstractCoreEntity {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "appointmentDate")
-    private LocalDate appointmentDate;
-
-    @Column(name = "startTime")
-    private LocalTime startTime;
-
-    @Column(name = "endTime")
-    private LocalTime endTime;
-
-    @ManyToOne
-    @JoinColumn(name = "client_id")
-    private ClientEntity client;
-
-    @ManyToOne
-    @JoinColumn(name = "employee_id")
-    private EmployeeEntity employee;
-
-    @ManyToOne
-    @JoinColumn(name = "procedure_id")
-    private ProcedureEntity procedure;
-
-
-
-
 }

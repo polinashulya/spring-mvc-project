@@ -18,7 +18,7 @@
         <label for="sortBy">Sort By:</label>
         <select name="sortBy" id="sortBy">
             <option value="byId" <c:if test="${sortType == 'byId'}">selected</c:if>>ID</option>
-            <option value="byLogin" <c:if test="${sortType == 'byLogin'}">selected</c:if>>Login</option>
+            <option value="byEmail" <c:if test="${sortType == 'byEmail'}">selected</c:if>>Email</option>
             <option value="bySurname" <c:if test="${sortType == 'bySurname'}">selected</c:if>>Surname</option>
             <option value="byBirthDate" <c:if test="${sortType == 'byBirthDate'}">selected</c:if>>Birth Date</option>
         </select>
@@ -77,7 +77,7 @@
         <thead>
         <tr>
             <th id="id">User`s id</th>
-            <th id="login">Login</th>
+            <th id="email">Email</th>
             <th id="name">name</th>
             <th id="secondName">Surname</th>
             <th id="country">Country</th>
@@ -88,7 +88,7 @@
         <c:forEach items="${users}" var="user">
             <tr>
                 <td>${user.id}</td>
-                <td>${user.login}</td>
+                <td>${user.email}</td>
                 <td>${user.name}</td>
                 <td>${user.surname}</td>
                 <td>${user.country.name}</td>

@@ -11,6 +11,6 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder(toBuilder = true)
 public class ClientDto extends UserDto {
 
-    private int loyaltyPoints;
+    private String note;
 
 }

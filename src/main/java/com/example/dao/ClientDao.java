@@ -20,9 +20,9 @@ public interface ClientDao {
 
     void delete(Long id);
 
-    ClientEntity getByLogin(String login);
+    ClientEntity getByEmail(String email);
 
-    Optional<ClientEntity> findByLogin(String login);
+    Optional<ClientEntity> findByEmail(String email);
 
     String getFilterAndSearchHql(String countryId, String search);
 

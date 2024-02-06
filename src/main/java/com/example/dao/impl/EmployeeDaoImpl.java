@@ -1,10 +1,9 @@
 package com.example.dao.impl;
 
-import com.example.dao.ClientDao;
-import com.example.entity.ClientEntity;
-import com.example.entity.ClientEntity;
+import com.example.dao.EmployeeDao;
+import com.example.entity.EmployeeEntity;
+import com.example.entity.EmployeeEntity;
 import com.example.exception.DAOException;
-
 import jakarta.persistence.TypedQuery;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,9 +19,9 @@ import java.util.Optional;
 
 @Repository
 @Transactional
-public class ClientDaoImpl implements ClientDao {
+public class EmployeeDaoImpl implements EmployeeDao {
 
-    private static final Logger logger = LogManager.getLogger(ClientDaoImpl.class);
+    private static final Logger logger = LogManager.getLogger(EmployeeDaoImpl.class);
     private static final String SORT_TYPE_ASC = "ASC";
     private static final String SORT_USERS_BY_ID = "byId";
     private static final String SORT_USERS_BY_SURNAME = "bySurname";
@@ -31,21 +30,21 @@ public class ClientDaoImpl implements ClientDao {
 
     private final SessionFactory sessionFactory;
 
-    public ClientDaoImpl(SessionFactory sessionFactory) {
+    public EmployeeDaoImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 
 
     @Override
-    public List<ClientEntity> findAll() {
+    public List<EmployeeEntity> findAll() {
         Session session = null;
 
         try {
             session = sessionFactory.openSession();
-            return session.createQuery("FROM ClientEntity u WHERE u.deleted = false", ClientEntity.class)
+            return session.createQuery("FROM EmployeeEntity u WHERE u.deleted = false", EmployeeEntity.class)
                     .getResultList();
         } catch (Exception e) {
-            throw new DAOException("Error while finding all clients", e);
+            throw new DAOException("Error while finding all employees", e);
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
@@ -56,10 +55,10 @@ public class ClientDaoImpl implements ClientDao {
 
 
     @Override
-    public List<ClientEntity> findAll(String search, String countryId, String sortBy, String sortType, String page, String pageSize) {
+    public List<EmployeeEntity> findAll(String search, String countryId, String sortBy, String sortType, String page, String pageSize) {
 
         Session session = null;
-        List<ClientEntity> clients = new ArrayList<>();
+        List<EmployeeEntity> employees = new ArrayList<>();
 
         try {
             session = sessionFactory.openSession();
@@ -73,39 +72,39 @@ public class ClientDaoImpl implements ClientDao {
 
             String filterAndSearchHql = getFilterAndSearchHql(countryId, search);
             String sortSql = getSortingHql(sortBy, sortType);
-            String hql = "FROM ClientEntity u JOIN FETCH u.country c " + filterAndSearchHql + sortSql;
+            String hql = "FROM EmployeeEntity u JOIN FETCH u.country c " + filterAndSearchHql + sortSql;
 
-            TypedQuery<ClientEntity> query = session.createQuery(hql, ClientEntity.class)
+            TypedQuery<EmployeeEntity> query = session.createQuery(hql, EmployeeEntity.class)
                     .setFirstResult(offset)
                     .setMaxResults(Optional.ofNullable(pageSize).map(Integer::parseInt).orElse(5));
 
             String myHQL = query.unwrap(org.hibernate.query.Query.class).getQueryString();
 
-            clients = query.getResultList();
+            employees = query.getResultList();
 
         } catch (Exception e) {
-            throw new DAOException("Error while finding all clients with pagination", e);
+            throw new DAOException("Error while finding all employees with pagination", e);
         } finally {
 
             if (session != null && session.isOpen()) {
                 session.close();
             }
         }
-        return clients;
+        return employees;
     }
 
 
     @Override
-    public ClientEntity getById(Long id) {
+    public EmployeeEntity getById(Long id) {
         Session session = null;
 
         try {
             session = sessionFactory.openSession();
-            return session.createQuery("FROM ClientEntity u JOIN FETCH u.country c WHERE u.id = :clientId AND u.deleted = false", ClientEntity.class)
-                    .setParameter("clientId", id)
+            return session.createQuery("FROM EmployeeEntity u JOIN FETCH u.country c WHERE u.id = :employeeId AND u.deleted = false", EmployeeEntity.class)
+                    .setParameter("employeeId", id)
                     .uniqueResult();
         } catch (Exception e) {
-            throw new DAOException("Error while finding client by ID", e);
+            throw new DAOException("Error while finding employee by ID", e);
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
@@ -116,21 +115,21 @@ public class ClientDaoImpl implements ClientDao {
 
 
     @Override
-    public Optional<ClientEntity> findById(Long id) {
+    public Optional<EmployeeEntity> findById(Long id) {
         return Optional.ofNullable(getById(id));
     }
 
     @Override
-    public ClientEntity getByEmail(String email) {
+    public EmployeeEntity getByEmail(String email) {
         Session session = null;
 
         try {
             session = sessionFactory.openSession();
-            return session.createQuery("FROM ClientEntity u JOIN FETCH u.country c WHERE u.email = :email AND u.deleted = false", ClientEntity.class)
+            return session.createQuery("FROM EmployeeEntity u JOIN FETCH u.country c WHERE u.email = :email AND u.deleted = false", EmployeeEntity.class)
                     .setParameter("email", email)
                     .uniqueResult();
         } catch (Exception e) {
-            throw new DAOException("Error while finding client by email", e);
+            throw new DAOException("Error while finding employee by email", e);
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
@@ -141,21 +140,21 @@ public class ClientDaoImpl implements ClientDao {
 
 
     @Override
-    public Optional<ClientEntity> findByEmail(String email) {
+    public Optional<EmployeeEntity> findByEmail(String email) {
         return Optional.ofNullable(getByEmail(email));
     }
 
     @Override
-    public void save(ClientEntity client) {
+    public void save(EmployeeEntity employee) {
         Session session = null;
 
         try {
             session = sessionFactory.openSession();
-            session.saveOrUpdate(client);
+            session.saveOrUpdate(employee);
             logger.debug("User saved successfully");
         } catch (Exception e) {
-            logger.error("Error while saving client", e);
-            throw new DAOException("Error while saving client", e);
+            logger.error("Error while saving employee", e);
+            throw new DAOException("Error while saving employee", e);
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
@@ -174,13 +173,13 @@ public class ClientDaoImpl implements ClientDao {
             session = sessionFactory.openSession();
             transaction = session.beginTransaction();
 
-            ClientEntity client = session.get(ClientEntity.class, id);
+            EmployeeEntity employee = session.get(EmployeeEntity.class, id);
 
-            if (client != null) {
+            if (employee != null) {
 
-                client.setDeleted(true);
+                employee.setDeleted(true);
 
-                session.update(client);
+                session.update(employee);
                 session.flush();
                 transaction.commit();
 
@@ -196,8 +195,8 @@ public class ClientDaoImpl implements ClientDao {
                 transaction.rollback();
             }
 
-            logger.error("Error while deleting client", e);
-            throw new DAOException("Error while deleting client", e);
+            logger.error("Error while deleting employee", e);
+            throw new DAOException("Error while deleting employee", e);
 
         } finally {
 
@@ -232,7 +231,7 @@ public class ClientDaoImpl implements ClientDao {
 
     @Override
     public String getSortingHql(String sortBy, String sortType) {
-        String alias = "u"; // Alias for the ClientEntity
+        String alias = "u"; // Alias for the EmployeeEntity
 
         switch (getSortByOrDefault(sortBy)) {
             case SORT_USERS_BY_LOGIN:
@@ -250,7 +249,7 @@ public class ClientDaoImpl implements ClientDao {
 
     @Override
     public int getTotalResult(String filterAndSearchHql) {
-        String hql = "SELECT COUNT(u.id) FROM ClientEntity u" + filterAndSearchHql;
+        String hql = "SELECT COUNT(u.id) FROM EmployeeEntity u" + filterAndSearchHql;
 
         Session session = null;
 
