@@ -2,9 +2,8 @@ package com.example.dao.impl;
 
 import com.example.dao.ClientDao;
 import com.example.entity.ClientEntity;
-import com.example.entity.ClientEntity;
+import com.example.entity.CountryEntity;
 import com.example.exception.DAOException;
-
 import jakarta.persistence.TypedQuery;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,7 +19,7 @@ import java.util.Optional;
 
 @Repository
 @Transactional
-public class ClientDaoImpl implements ClientDao {
+public class ClientDaoImpl extends AbstractDaoImpl<ClientEntity> implements ClientDao {
 
     private static final Logger logger = LogManager.getLogger(ClientDaoImpl.class);
     private static final String SORT_TYPE_ASC = "ASC";
@@ -28,32 +27,7 @@ public class ClientDaoImpl implements ClientDao {
     private static final String SORT_USERS_BY_SURNAME = "bySurname";
     private static final String SORT_USERS_BY_LOGIN = "byEmail";
     private static final String SORT_USERS_BY_BIRTH_DATE = "byBirthDate";
-
-    private final SessionFactory sessionFactory;
-
-    public ClientDaoImpl(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
-
-
-    @Override
-    public List<ClientEntity> findAll() {
-        Session session = null;
-
-        try {
-            session = sessionFactory.openSession();
-            return session.createQuery("FROM ClientEntity u WHERE u.deleted = false", ClientEntity.class)
-                    .getResultList();
-        } catch (Exception e) {
-            throw new DAOException("Error while finding all clients", e);
-        } finally {
-            if (session != null && session.isOpen()) {
-                session.close();
-            }
-        }
-
-    }
-
+    private static final String GET_CLIENT_BY_ID = "FROM ClientEntity c WHERE c.id = :id";
 
     @Override
     public List<ClientEntity> findAll(String search, String countryId, String sortBy, String sortType, String page, String pageSize) {
@@ -79,8 +53,6 @@ public class ClientDaoImpl implements ClientDao {
                     .setFirstResult(offset)
                     .setMaxResults(Optional.ofNullable(pageSize).map(Integer::parseInt).orElse(5));
 
-            String myHQL = query.unwrap(org.hibernate.query.Query.class).getQueryString();
-
             clients = query.getResultList();
 
         } catch (Exception e) {
@@ -94,30 +66,11 @@ public class ClientDaoImpl implements ClientDao {
         return clients;
     }
 
-
-    @Override
-    public ClientEntity getById(Long id) {
-        Session session = null;
-
-        try {
-            session = sessionFactory.openSession();
-            return session.createQuery("FROM ClientEntity u JOIN FETCH u.country c WHERE u.id = :clientId AND u.deleted = false", ClientEntity.class)
-                    .setParameter("clientId", id)
-                    .uniqueResult();
-        } catch (Exception e) {
-            throw new DAOException("Error while finding client by ID", e);
-        } finally {
-            if (session != null && session.isOpen()) {
-                session.close();
-            }
-        }
-
-    }
-
-
     @Override
     public Optional<ClientEntity> findById(Long id) {
-        return Optional.ofNullable(getById(id));
+        return Optional.ofNullable(
+                getById(GET_CLIENT_BY_ID, id)
+        );
     }
 
     @Override

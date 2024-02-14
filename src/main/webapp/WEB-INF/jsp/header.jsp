@@ -9,8 +9,10 @@
 <header class="header">
     <div class="button-container">
         <a class="button" href="/">Main page</a>
-        <a class="button" href="/users">Show all users</a>
-        <a class="button" href="/users/adding_form">Add new user</a>
+        <a class="button" href="/employees">Employees</a>
+        <a class="button" href="/clients">Clients</a>
+        <a class="button" href="/employees/adding_form">Add new employee</a>
+        <a class="button" href="/clients/adding_form">Add new client</a>
     </div>
 </header>
 </body>

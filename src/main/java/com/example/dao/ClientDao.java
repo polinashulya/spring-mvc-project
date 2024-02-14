@@ -8,11 +8,7 @@ import java.util.Optional;
 
 public interface ClientDao {
 
-    List<ClientEntity> findAll();
-
     List<ClientEntity> findAll( String  search, String countyId, String sortBy, String sortType, String page, String pageSize);
-
-    ClientEntity getById(Long id);
 
     Optional<ClientEntity> findById(Long id);
 

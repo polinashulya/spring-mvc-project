@@ -25,8 +25,8 @@ public class EmployeeDto extends UserDto {
 
     private LocalDate hireDate;
 
-    private Set<EmployeePositionEntity> positions = new HashSet<>();
+    private Set<EmployeePositionDto> positions = new HashSet<>();
 
-    private Set<ProcedureEntity> procedures = new HashSet<>();
+    private Set<ProcedureDto> procedures = new HashSet<>();
 
 }

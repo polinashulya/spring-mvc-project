@@ -18,15 +18,6 @@ public class ClientRepositoryImpl implements ClientRepository {
     private final ClientDao clientDao;
 
     @Override
-    public List<ClientEntity> findAll() {
-        try {
-            return clientDao.findAll();
-        } catch (DAOException e) {
-            throw new RepositoryException(e);
-        }
-    }
-
-    @Override
     public List<ClientEntity> findAll(String sortBy, String sortType, String countryId, String search, String page, String pageSize) {
         try {
             return clientDao.findAll( search, countryId, sortBy, sortType, page, pageSize);
@@ -35,14 +26,14 @@ public class ClientRepositoryImpl implements ClientRepository {
         }
     }
 
-    @Override
-    public ClientEntity getById(Long id) {
-        try {
-            return clientDao.getById(id);
-        } catch (DAOException e) {
-            throw new RepositoryException(e);
-        }
-    }
+//    @Override
+//    public ClientEntity getById(Long id) {
+//        try {
+//            return clientDao.getById(id);
+//        } catch (DAOException e) {
+//            throw new RepositoryException(e);
+//        }
+//    }
 
     @Override
     public void save(ClientEntity client) {

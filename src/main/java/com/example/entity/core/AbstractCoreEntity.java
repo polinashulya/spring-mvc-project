@@ -11,7 +11,7 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @Setter
 @NoArgsConstructor
-public abstract class AbstractCoreEntity extends AbstractBaseBean {
+public abstract class AbstractCoreEntity extends AbstractBaseEntity {
 
     @Id
     @Column(name = "id", nullable = false, unique = true)

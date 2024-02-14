@@ -22,7 +22,6 @@ header{
     justify-content: center;
 }
 
-/* Style for the button container */
 .button-container {
     display: flex;
     justify-content: center;
@@ -30,7 +29,6 @@ header{
     white-space: nowrap;
 }
 
- Style for the buttons
 .button-container button {
     background: none;
     border: none;

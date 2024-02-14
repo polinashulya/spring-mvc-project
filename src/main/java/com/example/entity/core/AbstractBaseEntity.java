@@ -13,5 +13,5 @@ import java.io.Serializable;
 @Getter
 @Setter
 @NoArgsConstructor
-public abstract class AbstractBaseBean implements Serializable {
+public abstract class AbstractBaseEntity implements Serializable {
 }

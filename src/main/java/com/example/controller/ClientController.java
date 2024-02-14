@@ -1,6 +1,8 @@
 package com.example.controller;
 
 import com.example.exception.ControllerCustomException;
+import com.example.service.ClientService;
+import com.example.service.CountryService;
 import com.example.service.dto.ClientDto;
 import com.example.service.dto.CountryDto;
 import com.example.service.dto.search.UserSearchCriteriaDto;
@@ -22,32 +24,27 @@ import java.util.List;
 @AllArgsConstructor
 public class ClientController {
 
-    private static final Logger logger = LogManager.getLogger(ClientController.class);
-
-    private final ClientServiceImpl clientService;
-    private final CountryServiceImpl countryService;
+    private final ClientService clientService;
+    private final CountryService countryService;
 
     @GetMapping
     public String findAllClients(Model model, @ModelAttribute UserSearchCriteriaDto clientSearchCriteriaDto) {
         try {
-            List<ClientDto> clients = clientService.getAll(clientSearchCriteriaDto.getSortBy(), clientSearchCriteriaDto.getSortType(),
-                    clientSearchCriteriaDto.getCountryId(), clientSearchCriteriaDto.getSearch(),
-                    clientSearchCriteriaDto.getPage(), clientSearchCriteriaDto.getPageSize());
+            List<ClientDto> clients = clientService.getAll(clientSearchCriteriaDto);
 
             int totalClients = clientService.getTotalResult(clientSearchCriteriaDto.getSortBy(), clientSearchCriteriaDto.getSortType(),
                     clientSearchCriteriaDto.getCountryId(), clientSearchCriteriaDto.getSearch());
 
             model.addAttribute("totalUsers", totalClients);
-            model.addAttribute("users", clients);
+            model.addAttribute("clients", clients);
             model.addAttribute("sortBy", clientSearchCriteriaDto.getSortBy());
             model.addAttribute("sortType", clientSearchCriteriaDto.getSortType());
             model.addAttribute("currentCountryId", clientSearchCriteriaDto.getCountryId());
 
             setCountriesToModel(model);
 
-            return "users";
+            return "clients";
         } catch (Exception e) {
-            logger.error("Error while executing find all clients", e);
             throw new ControllerCustomException("Error while executing find all clients", e);
         }
     }
@@ -63,7 +60,6 @@ public class ClientController {
             setCountriesToModel(model);
             return "add_client";
         } catch (Exception e) {
-            logger.error("Error while executing adding form", e);
             throw new ControllerCustomException("Error while executing adding form", e);
         }
     }
@@ -72,20 +68,17 @@ public class ClientController {
     public String save(@ModelAttribute ClientDto clientDto) {
         try {
             clientService.add(clientDto);
-            return "redirect:/users";
+            return "redirect:/clients";
         } catch (Exception e) {
-            logger.error("Error while executing saving", e);
             throw new ControllerCustomException("Error while executing saving", e);
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable(name = "id") String clientId) {
+    public void delete(@PathVariable(name = "id") String clientId) {
         try {
             clientService.deleteById(Long.valueOf(clientId));
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
-            logger.error("Error while executing deleting", e);
             throw new ControllerCustomException("Error while executing deleting", e);
         }
     }

@@ -128,3 +128,7 @@ order by u.id asc;
 INSERT INTO clients (country_id, email, phoneNumber, password, name, surname, birthDate, banned, deleted, note)
 VALUES (1, 'user@example.com', '+1234567890', 'hashedPassword', 'FirstName', 'LastName', '2000-01-01',  false, false, 'Заметка о клиенте');
 
+SELECT *
+FROM employees e
+         join countries c on e.country_id = c.id
+WHERE e.deleted = 'false';

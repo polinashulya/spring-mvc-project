@@ -1,8 +1,8 @@
 package com.example.controller;
 
 import com.example.exception.ControllerCustomException;
-import com.example.service.dto.EmployeeDto;
 import com.example.service.dto.CountryDto;
+import com.example.service.dto.EmployeeDto;
 import com.example.service.dto.search.UserSearchCriteriaDto;
 import com.example.service.impl.CountryServiceImpl;
 import com.example.service.impl.EmployeeServiceImpl;
@@ -28,24 +28,23 @@ public class EmployeeController {
     private final CountryServiceImpl countryService;
 
     @GetMapping
-    public List<EmployeeDto> findAllEmployees(Model model, @ModelAttribute UserSearchCriteriaDto employeeSearchCriteriaDto) {
+    public String findAllEmployees(Model model,
+                                   @ModelAttribute UserSearchCriteriaDto employeeSearchCriteriaDto) {
         try {
-            List<EmployeeDto> employees = employeeService.getAll(employeeSearchCriteriaDto.getSortBy(), employeeSearchCriteriaDto.getSortType(),
-                    employeeSearchCriteriaDto.getCountryId(), employeeSearchCriteriaDto.getSearch(),
-                    employeeSearchCriteriaDto.getPage(), employeeSearchCriteriaDto.getPageSize());
+            List<EmployeeDto> employees = employeeService.getAll(employeeSearchCriteriaDto);
 
             int totalEmployees = employeeService.getTotalResult(employeeSearchCriteriaDto.getSortBy(), employeeSearchCriteriaDto.getSortType(),
                     employeeSearchCriteriaDto.getCountryId(), employeeSearchCriteriaDto.getSearch());
 
             model.addAttribute("totalUsers", totalEmployees);
-            model.addAttribute("users", employees);
+            model.addAttribute("employees", employees);
             model.addAttribute("sortBy", employeeSearchCriteriaDto.getSortBy());
             model.addAttribute("sortType", employeeSearchCriteriaDto.getSortType());
             model.addAttribute("currentCountryId", employeeSearchCriteriaDto.getCountryId());
 
             setCountriesToModel(model);
 
-            return employees;
+            return "employees";
         } catch (Exception e) {
             logger.error("Error while executing find all employees", e);
             throw new ControllerCustomException("Error while executing find all employees", e);
@@ -80,10 +79,9 @@ public class EmployeeController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable(name = "id") String employeeId) {
+    public void delete(@PathVariable(name = "id") String employeeId) {
         try {
             employeeService.deleteById(Long.valueOf(employeeId));
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             logger.error("Error while executing deleting", e);
             throw new ControllerCustomException("Error while executing deleting", e);

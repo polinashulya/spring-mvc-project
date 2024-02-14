@@ -41,7 +41,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
         try {
             session = sessionFactory.openSession();
-            return session.createQuery("FROM EmployeeEntity u WHERE u.deleted = false", EmployeeEntity.class)
+            return session.createQuery("FROM EmployeeEntity e WHERE e.deleted = false", EmployeeEntity.class)
                     .getResultList();
         } catch (Exception e) {
             throw new DAOException("Error while finding all employees", e);
@@ -72,13 +72,14 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
             String filterAndSearchHql = getFilterAndSearchHql(countryId, search);
             String sortSql = getSortingHql(sortBy, sortType);
-            String hql = "FROM EmployeeEntity u JOIN FETCH u.country c " + filterAndSearchHql + sortSql;
+            String hql = "FROM EmployeeEntity e JOIN FETCH e.positions JOIN FETCH e.procedures " + filterAndSearchHql + sortSql;
 
             TypedQuery<EmployeeEntity> query = session.createQuery(hql, EmployeeEntity.class)
                     .setFirstResult(offset)
                     .setMaxResults(Optional.ofNullable(pageSize).map(Integer::parseInt).orElse(5));
 
             String myHQL = query.unwrap(org.hibernate.query.Query.class).getQueryString();
+            System.out.println(myHQL);
 
             employees = query.getResultList();
 
@@ -100,7 +101,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
         try {
             session = sessionFactory.openSession();
-            return session.createQuery("FROM EmployeeEntity u JOIN FETCH u.country c WHERE u.id = :employeeId AND u.deleted = false", EmployeeEntity.class)
+            return session.createQuery("FROM EmployeeEntity e JOIN FETCH e.positions WHERE e.id = :employeeId AND e.deleted = false", EmployeeEntity.class)
                     .setParameter("employeeId", id)
                     .uniqueResult();
         } catch (Exception e) {
@@ -125,7 +126,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
         try {
             session = sessionFactory.openSession();
-            return session.createQuery("FROM EmployeeEntity u JOIN FETCH u.country c WHERE u.email = :email AND u.deleted = false", EmployeeEntity.class)
+            return session.createQuery("FROM EmployeeEntity e WHERE e.email = :email AND e.deleted = false", EmployeeEntity.class)
                     .setParameter("email", email)
                     .uniqueResult();
         } catch (Exception e) {
@@ -213,16 +214,16 @@ public class EmployeeDaoImpl implements EmployeeDao {
     @Override
     public String getFilterAndSearchHql(String countryId, String search) {
 
-        StringBuilder hql = new StringBuilder(" WHERE u.deleted = false ");
+        StringBuilder hql = new StringBuilder(" WHERE e.deleted = false ");
 
-        if (countryId != null && !countryId.isEmpty()) {
-            hql.append(" AND u.country.id = ").append(countryId);
-        }
+//        if (countryId != null && !countryId.isEmpty()) {
+//            hql.append(" AND e.country.id = ").append(countryId);
+//        }
 
         if (search != null && !search.isEmpty()) {
-            hql.append(" AND (u.email LIKE '%").append(search)
-                    .append("%' OR u.name LIKE '%").append(search)
-                    .append("%' OR u.surname LIKE '%")
+            hql.append(" AND (e.email LIKE '%").append(search)
+                    .append("%' OR e.name LIKE '%").append(search)
+                    .append("%' OR e.surname LIKE '%")
                     .append(search).append("%')");
         }
 
@@ -231,7 +232,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
     @Override
     public String getSortingHql(String sortBy, String sortType) {
-        String alias = "u"; // Alias for the EmployeeEntity
+        String alias = "e"; // Alias for the EmployeeEntity
 
         switch (getSortByOrDefault(sortBy)) {
             case SORT_USERS_BY_LOGIN:
@@ -249,7 +250,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
     @Override
     public int getTotalResult(String filterAndSearchHql) {
-        String hql = "SELECT COUNT(u.id) FROM EmployeeEntity u" + filterAndSearchHql;
+        String hql = "SELECT COUNT(e.id) FROM EmployeeEntity e" + filterAndSearchHql;
 
         Session session = null;
 

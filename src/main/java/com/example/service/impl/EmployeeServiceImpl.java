@@ -10,6 +10,7 @@ import com.example.repository.EmployeeRepository;
 import com.example.repository.UserRoleRepository;
 import com.example.service.EmployeeService;
 import com.example.service.dto.EmployeeDto;
+import com.example.service.dto.search.UserSearchCriteriaDto;
 import com.example.service.mapper.user.employee.EmployeeMapper;
 import com.example.validator.UserValidator;
 import lombok.AllArgsConstructor;
@@ -20,7 +21,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -39,12 +39,17 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeMapper employeeMapper;
 
     @Override
-    public List<EmployeeDto> getAll(String sortBy, String sortType, String countryId, String search, String page, String pageSize) {
+    public List<EmployeeDto> getAll(UserSearchCriteriaDto employeeSearchCriteriaDto) {
         try {
-            List<EmployeeEntity> entities = userRepository.findAll(sortBy, sortType, countryId, search, page, pageSize);
-            return entities.stream()
-                    .map(employeeMapper::toDto)
-                    .collect(Collectors.toList());
+            List<EmployeeEntity> entities = userRepository.findAll(
+                    employeeSearchCriteriaDto.getSortBy()
+                    , employeeSearchCriteriaDto.getSortType(),
+                    employeeSearchCriteriaDto.getCountryId(),
+                    employeeSearchCriteriaDto.getSearch(),
+                    employeeSearchCriteriaDto.getPage(),
+                    employeeSearchCriteriaDto.getPageSize());
+
+            return employeeMapper.toDtoList(entities);
         } catch (DAOException e) {
             logger.error("Error while getting all users: {}", e.getMessage(), e);
             throw new ServiceException(e);

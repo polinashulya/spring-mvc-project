@@ -5,11 +5,12 @@ import com.example.entity.UserRoleEntity;
 import com.example.entity.UserRoles;
 import com.example.exception.DAOException;
 import com.example.exception.ServiceException;
-import com.example.repository.CountryRepository;
 import com.example.repository.ClientRepository;
+import com.example.repository.CountryRepository;
 import com.example.repository.UserRoleRepository;
 import com.example.service.ClientService;
 import com.example.service.dto.ClientDto;
+import com.example.service.dto.search.UserSearchCriteriaDto;
 import com.example.service.mapper.user.client.ClientMapper;
 import com.example.validator.UserValidator;
 import lombok.AllArgsConstructor;
@@ -18,6 +19,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -39,9 +41,13 @@ public class ClientServiceImpl implements ClientService {
     private final ClientMapper clientMapper;
 
     @Override
-    public List<ClientDto> getAll(String sortBy, String sortType, String countryId, String search, String page, String pageSize) {
+    public List<ClientDto> getAll(UserSearchCriteriaDto clientSearchCriteriaDto) {
         try {
-            List<ClientEntity> entities = userRepository.findAll(sortBy, sortType, countryId, search, page, pageSize);
+            List<ClientEntity> entities = userRepository.findAll(clientSearchCriteriaDto.getSortBy(),
+                    clientSearchCriteriaDto.getSortType(), clientSearchCriteriaDto.getCountryId(),
+                    clientSearchCriteriaDto.getSearch(), clientSearchCriteriaDto.getPage(),
+                    clientSearchCriteriaDto.getPageSize());
+
             return entities.stream()
                     .map(clientMapper::toDto)
                     .collect(Collectors.toList());
@@ -54,13 +60,9 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public void add(ClientDto clientDto) {
 
-        if (!validator.validate(clientDto.getEmail(), clientDto.getPassword(),
-                clientDto.getName(), clientDto.getSurname(), LocalDate.parse(clientDto.getBirthDate()))) {
-            throw new ServiceException("Information is not valid!");
-        }
-
-//        if (clientDto.getCountry().getId() == null || countryRepository.findById(clientDto.getCountry().getId()).isEmpty()) {
-//            throw new ServiceException("Country is null or did not find!");
+//        if (!validator.validate(clientDto.getEmail(), clientDto.getPassword(),
+//                clientDto.getName(), clientDto.getSurname(), LocalDate.parse(clientDto.getBirthDate()))) {
+//            throw new ServiceException("Information is not valid!");
 //        }
 
         if (userRepository.findByEmail(clientDto.getEmail()).isPresent()) {
@@ -72,12 +74,17 @@ public class ClientServiceImpl implements ClientService {
         UserRoleEntity clientRole = userRoleRepository.findByName(UserRoles.CLIENT.name())
                 .orElseThrow(() -> new ServiceException("Default role 'CLIENT' not found"));
 
-        clientEntity.setUserRoles((Set<UserRoleEntity>) clientRole);
+        Set<UserRoleEntity> roles = new HashSet<>();
+        roles.add(clientRole);
+
+        clientEntity.setRegistationDate(LocalDate.now());
+
+        clientEntity.setUserRoles(roles);
 
         try {
             userRepository.save(clientEntity);
         } catch (DAOException | ServiceException e) {
-            logger.error("Error while adding a user: {}", e.getMessage(), e);
+            logger.error("Error while adding a client: {}", e.getMessage(), e);
             throw new ServiceException(e);
         }
     }
