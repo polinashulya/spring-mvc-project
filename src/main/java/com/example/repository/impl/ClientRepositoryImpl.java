@@ -56,8 +56,7 @@ public class ClientRepositoryImpl implements ClientRepository {
     @Override
     public int getTotalResult(String sortBy, String sortType, String countryId, String search) {
         try {
-            final String filterAndSearchSql = clientDao.getFilterAndSearchHql(countryId, search);
-            return clientDao.getTotalResult(filterAndSearchSql);
+            return clientDao.getTotalResult(search,countryId);
         } catch (DAOException e) {
             throw new RepositoryException(e);
         }

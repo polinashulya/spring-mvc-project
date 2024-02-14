@@ -1,6 +1,7 @@
 package com.example.dao;
 
-import com.example.entity.ClientEntity;
+import com.example.dao.impl.ClientDaoImpl;
+import com.example.dao.impl.DeletionStatus;
 import com.example.entity.ClientEntity;
 
 import java.util.List;
@@ -14,16 +15,12 @@ public interface ClientDao {
 
     void save(ClientEntity client);
 
-    void delete(Long id);
+    DeletionStatus delete(Long id);
 
     ClientEntity getByEmail(String email);
 
     Optional<ClientEntity> findByEmail(String email);
 
-    String getFilterAndSearchHql(String countryId, String search);
-
-   // String getSortingHql(String sortBy, String sortType);
-
-    int getTotalResult(String filterAndSearchsql);
+    int getTotalResult(String search, String countryId);
 
 }

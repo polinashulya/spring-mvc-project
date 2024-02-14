@@ -12,5 +12,5 @@ public interface AbstractDao<E extends AbstractBaseEntity> {
 
     <E> void save(E clazz);
 
-    void applyPagination(TypedQuery<?> query, String page, String pageSize);
+ //   void applyPagination(TypedQuery<?> query, String page, String pageSize);
 }
