@@ -11,6 +11,4 @@ public interface CountryRepository {
 
     Optional<CountryEntity> findById(Long id);
 
-    Optional<CountryEntity> findByName(String name);
-
 }

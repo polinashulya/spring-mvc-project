@@ -30,11 +30,9 @@ public class ClientServiceImpl implements ClientService {
 
     private static final Logger logger = LogManager.getLogger(ClientServiceImpl.class);
 
-    private final ClientRepository userRepository;
+    private final ClientRepository clientRepository;
 
     private final UserRoleRepository userRoleRepository;
-
-    private final CountryRepository countryRepository;
 
     private final UserValidator validator;
 
@@ -43,16 +41,17 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public List<ClientDto> getAll(UserSearchCriteriaDto clientSearchCriteriaDto) {
         try {
-            List<ClientEntity> entities = userRepository.findAll(clientSearchCriteriaDto.getSortBy(),
-                    clientSearchCriteriaDto.getSortType(), clientSearchCriteriaDto.getCountryId(),
-                    clientSearchCriteriaDto.getSearch(), clientSearchCriteriaDto.getPage(),
+            List<ClientEntity> entities = clientRepository.findAll(
+                    clientSearchCriteriaDto.getSortBy(),
+                    clientSearchCriteriaDto.getSortType(),
+                    clientSearchCriteriaDto.getCountryId(),
+                    clientSearchCriteriaDto.getSearch(),
+                    clientSearchCriteriaDto.getPage(),
                     clientSearchCriteriaDto.getPageSize());
 
-            return entities.stream()
-                    .map(clientMapper::toDto)
-                    .collect(Collectors.toList());
+            return clientMapper.toDtoList(entities);
         } catch (DAOException e) {
-            logger.error("Error while getting all users: {}", e.getMessage(), e);
+            logger.error("Error while getting all clients: {}", e.getMessage(), e);
             throw new ServiceException(e);
         }
     }
@@ -60,12 +59,12 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public void add(ClientDto clientDto) {
 
-//        if (!validator.validate(clientDto.getEmail(), clientDto.getPassword(),
-//                clientDto.getName(), clientDto.getSurname(), LocalDate.parse(clientDto.getBirthDate()))) {
-//            throw new ServiceException("Information is not valid!");
-//        }
+        if (!validator.validate(clientDto.getEmail(), clientDto.getPassword(),
+                clientDto.getName(), clientDto.getSurname(), LocalDate.parse(clientDto.getBirthDate()))) {
+            throw new ServiceException("Information is not valid!");
+        }
 
-        if (userRepository.findByEmail(clientDto.getEmail()).isPresent()) {
+        if (clientRepository.findByEmail(clientDto.getEmail()).isPresent()) {
             throw new ServiceException("Email is already in use!");
         }
 
@@ -73,7 +72,6 @@ public class ClientServiceImpl implements ClientService {
 
         UserRoleEntity clientRole = userRoleRepository.findByName(UserRoles.CLIENT.name())
                 .orElseThrow(() -> new ServiceException("Default role 'CLIENT' not found"));
-
         Set<UserRoleEntity> roles = new HashSet<>();
         roles.add(clientRole);
 
@@ -82,7 +80,7 @@ public class ClientServiceImpl implements ClientService {
         clientEntity.setUserRoles(roles);
 
         try {
-            userRepository.save(clientEntity);
+            clientRepository.save(clientEntity);
         } catch (DAOException | ServiceException e) {
             logger.error("Error while adding a client: {}", e.getMessage(), e);
             throw new ServiceException(e);
@@ -96,7 +94,7 @@ public class ClientServiceImpl implements ClientService {
             if (userId == null) {
                 throw new ServiceException("Client ID is required.");
             }
-            userRepository.deleteById(userId);
+            clientRepository.deleteById(userId);
         } catch (DAOException | ServiceException e) {
             logger.error("Error while deleting a user: {}", e.getMessage(), e);
             throw new ServiceException(e);
@@ -106,7 +104,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public int getTotalResult(String sortBy, String sortType, String countryId, String search) {
         try {
-            return userRepository.getTotalResult(sortBy, sortType, countryId, search);
+            return clientRepository.getTotalResult(sortBy, sortType, countryId, search);
         } catch (DAOException | ServiceException e) {
             logger.error("Error while getting a total result of users: {}", e.getMessage(), e);
             throw new ServiceException(e);

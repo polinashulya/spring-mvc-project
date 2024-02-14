@@ -22,7 +22,7 @@ public interface ClientDao {
 
     String getFilterAndSearchHql(String countryId, String search);
 
-    String getSortingHql(String sortBy, String sortType);
+   // String getSortingHql(String sortBy, String sortType);
 
     int getTotalResult(String filterAndSearchsql);
 

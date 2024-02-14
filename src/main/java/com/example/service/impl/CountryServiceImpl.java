@@ -29,9 +29,7 @@ public class CountryServiceImpl implements CountryService {
     public List<CountryDto> findAll() {
         try {
             List<CountryEntity> entities = countryRepository.findAll();
-            return entities.stream()
-                    .map(countryMapper::toDto)
-                    .collect(Collectors.toList());
+            return countryMapper.toDtoList(entities);
         } catch (DAOException e) {
             logger.error("Error while getting all countries: {}", e.getMessage(), e);
             throw new ServiceException(e);

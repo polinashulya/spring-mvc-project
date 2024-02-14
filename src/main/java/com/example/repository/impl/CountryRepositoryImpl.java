@@ -31,12 +31,12 @@ public class CountryRepositoryImpl implements CountryRepository {
         }
     }
 
-    @Override
-    public Optional<CountryEntity> findByName(String name) {
-        try {
-            return countryDao.findByName(name);
-        } catch (DAOException e) {
-            throw new RepositoryException(e);
-        }
-    }
+//    @Override
+//    public Optional<CountryEntity> findByName(String name) {
+//        try {
+//            return countryDao.findByName(name);
+//        } catch (DAOException e) {
+//            throw new RepositoryException(e);
+//        }
+//    }
 }

@@ -10,8 +10,8 @@ public interface CountryDao extends AbstractDao<CountryEntity> {
 
     Optional<CountryEntity> findById(Long id);
 
-    CountryEntity getByName(String name);
+//    CountryEntity getByName(String name);
 
-    Optional<CountryEntity> findByName(String name);
+  //  Optional<CountryEntity> findByName(String name);
 
 }

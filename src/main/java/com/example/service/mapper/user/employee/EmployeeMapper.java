@@ -17,6 +17,6 @@ public interface EmployeeMapper extends AbstractMapper<EmployeeDto, EmployeeEnti
     @Mapping(target = "country", ignore = true)
     EmployeeEntity toEntity(EmployeeDto dto);
 
-    List<EmployeeDto> toDtoList(List<EmployeeEntity> employees);
+    List<EmployeeDto> toDtoList(List<EmployeeEntity> employeeEntities);
 
 }

@@ -3,7 +3,6 @@ package com.example.dao.impl;
 import com.example.dao.UserDao;
 import com.example.entity.UserEntity;
 import com.example.exception.DAOException;
-import com.example.service.impl.UserServiceImpl;
 import jakarta.persistence.TypedQuery;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,7 +20,7 @@ import java.util.Optional;
 @Transactional
 public class UserDaoImpl implements UserDao {
 
-    private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
+    private static final Logger logger = LogManager.getLogger(UserDaoImpl.class);
     private static final String SORT_TYPE_ASC = "ASC";
     private static final String SORT_USERS_BY_ID = "byId";
     private static final String SORT_USERS_BY_SURNAME = "bySurname";

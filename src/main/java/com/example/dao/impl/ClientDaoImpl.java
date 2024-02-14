@@ -2,18 +2,16 @@ package com.example.dao.impl;
 
 import com.example.dao.ClientDao;
 import com.example.entity.ClientEntity;
-import com.example.entity.CountryEntity;
 import com.example.exception.DAOException;
 import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,39 +29,65 @@ public class ClientDaoImpl extends AbstractDaoImpl<ClientEntity> implements Clie
 
     @Override
     public List<ClientEntity> findAll(String search, String countryId, String sortBy, String sortType, String page, String pageSize) {
+        return executeQuery(session -> {
+            CriteriaQuery<ClientEntity> criteriaQuery = buildCriteriaQuery(session, search, countryId, sortBy, sortType);
+            TypedQuery<ClientEntity> query = session.createQuery(criteriaQuery);
+            applyPagination(query, page, pageSize);
+            return query.getResultList();
+        });
+    }
 
-        Session session = null;
-        List<ClientEntity> clients = new ArrayList<>();
+    private CriteriaQuery<ClientEntity> buildCriteriaQuery(Session session, String search, String countryId, String sortBy, String sortType) {
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<ClientEntity> criteriaQuery = builder.createQuery(ClientEntity.class);
+        Root<ClientEntity> root = criteriaQuery.from(ClientEntity.class);
 
-        try {
-            session = sessionFactory.openSession();
+        Predicate predicate = buildPredicate(builder, root, search, countryId);
+        criteriaQuery.where(predicate);
 
-            int offset = Optional.ofNullable(page)
-                    .filter(p -> !p.isEmpty())
-                    .map(Integer::parseInt)
-                    .map(p -> (p - 1) * Optional.ofNullable(pageSize).map(Integer::parseInt).orElse(5))
-                    .orElse(0);
+        applySorting(builder, criteriaQuery, root, sortBy, sortType);
 
+        return criteriaQuery;
+    }
 
-            String filterAndSearchHql = getFilterAndSearchHql(countryId, search);
-            String sortSql = getSortingHql(sortBy, sortType);
-            String hql = "FROM ClientEntity u JOIN FETCH u.country c " + filterAndSearchHql + sortSql;
-
-            TypedQuery<ClientEntity> query = session.createQuery(hql, ClientEntity.class)
-                    .setFirstResult(offset)
-                    .setMaxResults(Optional.ofNullable(pageSize).map(Integer::parseInt).orElse(5));
-
-            clients = query.getResultList();
-
-        } catch (Exception e) {
-            throw new DAOException("Error while finding all clients with pagination", e);
-        } finally {
-
-            if (session != null && session.isOpen()) {
-                session.close();
-            }
+    private Predicate buildPredicate(CriteriaBuilder builder, Root<ClientEntity> root, String search, String countryId) {
+        Predicate predicate = builder.conjunction();
+        if (countryId != null && !countryId.isEmpty()) {
+            predicate = builder.and(predicate, builder.equal(root.get("country").get("id"), Long.parseLong(countryId)));
         }
-        return clients;
+        if (search != null && !search.isEmpty()) {
+            predicate = builder.and(predicate,
+                    builder.or(
+                            builder.like(root.get("email"), "%" + search + "%"),
+                            builder.like(root.get("name"), "%" + search + "%"),
+                            builder.like(root.get("surname"), "%" + search + "%")
+                    )
+            );
+        }
+        predicate = builder.and(predicate, builder.equal(root.get("deleted"), false));
+        return predicate;
+    }
+
+    private void applySorting(CriteriaBuilder builder, CriteriaQuery<ClientEntity> criteriaQuery, Root<ClientEntity> root, String sortBy, String sortType) {
+        if (sortBy != null && !sortBy.isEmpty()) {
+            Expression<?> orderByExpression;
+            switch (sortBy) {
+                case SORT_USERS_BY_LOGIN:
+                    orderByExpression = root.get("email");
+                    break;
+                case SORT_USERS_BY_SURNAME:
+                    orderByExpression = root.get("surname");
+                    break;
+                case SORT_USERS_BY_BIRTH_DATE:
+                    orderByExpression = root.get("birthDate");
+                    break;
+                case SORT_USERS_BY_ID:
+                default:
+                    orderByExpression = root.get("id");
+                    break;
+            }
+            criteriaQuery.orderBy(sortType.equals(SORT_TYPE_ASC) ? builder.asc(orderByExpression) : builder.desc(orderByExpression));
+        }
     }
 
     @Override
@@ -75,20 +99,11 @@ public class ClientDaoImpl extends AbstractDaoImpl<ClientEntity> implements Clie
 
     @Override
     public ClientEntity getByEmail(String email) {
-        Session session = null;
-
-        try {
-            session = sessionFactory.openSession();
-            return session.createQuery("FROM ClientEntity u JOIN FETCH u.country c WHERE u.email = :email AND u.deleted = false", ClientEntity.class)
-                    .setParameter("email", email)
-                    .uniqueResult();
-        } catch (Exception e) {
-            throw new DAOException("Error while finding client by email", e);
-        } finally {
-            if (session != null && session.isOpen()) {
-                session.close();
-            }
-        }
+        return executeQuery(session -> session.createQuery(
+                        "FROM ClientEntity u JOIN FETCH u.country c WHERE u.email = :email AND u.deleted = false",
+                        ClientEntity.class)
+                .setParameter("email", email)
+                .uniqueResult());
 
     }
 
@@ -100,20 +115,7 @@ public class ClientDaoImpl extends AbstractDaoImpl<ClientEntity> implements Clie
 
     @Override
     public void save(ClientEntity client) {
-        Session session = null;
-
-        try {
-            session = sessionFactory.openSession();
-            session.saveOrUpdate(client);
-            logger.debug("User saved successfully");
-        } catch (Exception e) {
-            logger.error("Error while saving client", e);
-            throw new DAOException("Error while saving client", e);
-        } finally {
-            if (session != null && session.isOpen()) {
-                session.close();
-            }
-        }
+        super.save(client);
     }
 
 
@@ -160,23 +162,20 @@ public class ClientDaoImpl extends AbstractDaoImpl<ClientEntity> implements Clie
         }
     }
 
-    private static String getSortByOrDefault(String sortBy) {
-        return sortBy == null ? "default" : sortBy;
-    }
 
     @Override
     public String getFilterAndSearchHql(String countryId, String search) {
 
-        StringBuilder hql = new StringBuilder(" WHERE u.deleted = false ");
+        StringBuilder hql = new StringBuilder(" WHERE c.deleted = false ");
 
         if (countryId != null && !countryId.isEmpty()) {
-            hql.append(" AND u.country.id = ").append(countryId);
+            hql.append(" AND c.country.id = ").append(countryId);
         }
 
         if (search != null && !search.isEmpty()) {
-            hql.append(" AND (u.email LIKE '%").append(search)
-                    .append("%' OR u.name LIKE '%").append(search)
-                    .append("%' OR u.surname LIKE '%")
+            hql.append(" AND (c.email LIKE '%").append(search)
+                    .append("%' OR c.name LIKE '%").append(search)
+                    .append("%' OR c.surname LIKE '%")
                     .append(search).append("%')");
         }
 
@@ -184,42 +183,11 @@ public class ClientDaoImpl extends AbstractDaoImpl<ClientEntity> implements Clie
     }
 
     @Override
-    public String getSortingHql(String sortBy, String sortType) {
-        String alias = "u"; // Alias for the ClientEntity
-
-        switch (getSortByOrDefault(sortBy)) {
-            case SORT_USERS_BY_LOGIN:
-                return " ORDER BY " + alias + ".email " + (SORT_TYPE_ASC.equals(sortType) ? "ASC" : "DESC");
-            case SORT_USERS_BY_SURNAME:
-                return " ORDER BY " + alias + ".surname " + (SORT_TYPE_ASC.equals(sortType) ? "ASC" : "DESC");
-            case SORT_USERS_BY_BIRTH_DATE:
-                return " ORDER BY " + alias + ".birthDate " + (SORT_TYPE_ASC.equals(sortType) ? "ASC" : "DESC");
-            case SORT_USERS_BY_ID:
-                return " ORDER BY " + alias + ".id " + (SORT_TYPE_ASC.equals(sortType) ? "ASC" : "DESC");
-            default:
-                return " ORDER BY " + alias + ".id ASC";
-        }
-    }
-
-    @Override
     public int getTotalResult(String filterAndSearchHql) {
-        String hql = "SELECT COUNT(u.id) FROM ClientEntity u" + filterAndSearchHql;
-
-        Session session = null;
-
-        try {
-            session = sessionFactory.openSession();
+        return executeQuery(session -> {
+            String hql = "SELECT COUNT(c.id) FROM ClientEntity c" + filterAndSearchHql;
             return Math.toIntExact((Long) session.createQuery(hql).uniqueResult());
-
-        } catch (Exception e) {
-            logger.error("An error occurred while executing query: {}", hql, e);
-            throw new DAOException("An error occurred while executing query", e);
-        } finally {
-
-            if (session != null && session.isOpen()) {
-                session.close();
-            }
-        }
+        });
     }
 
 }

@@ -5,7 +5,6 @@ import com.example.entity.UserRoleEntity;
 import com.example.entity.UserRoles;
 import com.example.exception.DAOException;
 import com.example.exception.ServiceException;
-import com.example.repository.CountryRepository;
 import com.example.repository.EmployeeRepository;
 import com.example.repository.UserRoleRepository;
 import com.example.service.EmployeeService;
@@ -19,6 +18,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -32,8 +32,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private final UserRoleRepository userRoleRepository;
 
-    private final CountryRepository countryRepository;
-
     private final UserValidator validator;
 
     private final EmployeeMapper employeeMapper;
@@ -42,8 +40,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     public List<EmployeeDto> getAll(UserSearchCriteriaDto employeeSearchCriteriaDto) {
         try {
             List<EmployeeEntity> entities = userRepository.findAll(
-                    employeeSearchCriteriaDto.getSortBy()
-                    , employeeSearchCriteriaDto.getSortType(),
+                    employeeSearchCriteriaDto.getSortBy(),
+                    employeeSearchCriteriaDto.getSortType(),
                     employeeSearchCriteriaDto.getCountryId(),
                     employeeSearchCriteriaDto.getSearch(),
                     employeeSearchCriteriaDto.getPage(),
@@ -74,29 +72,34 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         EmployeeEntity employeeEntity = employeeMapper.toEntity(employeeDto);
 
-        UserRoleEntity employeeRole = userRoleRepository.findByName(UserRoles.CLIENT.name())
-                .orElseThrow(() -> new ServiceException("Default role 'CLIENT' not found"));
+        UserRoleEntity employeeRole = userRoleRepository.findByName(UserRoles.EMPLOYEE.name())
+                .orElseThrow(() -> new ServiceException("Default role 'EMPLOYEE' not found"));
 
-        employeeEntity.setUserRoles((Set<UserRoleEntity>) employeeRole);
+        Set<UserRoleEntity> roles = new HashSet<>();
+        roles.add(employeeRole);
+
+        employeeEntity.setRegistationDate(LocalDate.now());
+
+        employeeEntity.setUserRoles(roles);
 
         try {
             userRepository.save(employeeEntity);
         } catch (DAOException | ServiceException e) {
-            logger.error("Error while adding a user: {}", e.getMessage(), e);
+            logger.error("Error while adding a employee: {}", e.getMessage(), e);
             throw new ServiceException(e);
         }
     }
 
 
     @Override
-    public void deleteById(Long userId) {
+    public void deleteById(Long employeeId) {
         try {
-            if (userId == null) {
+            if (employeeId == null) {
                 throw new ServiceException("Employee ID is required.");
             }
-            userRepository.deleteById(userId);
+            userRepository.deleteById(employeeId);
         } catch (DAOException | ServiceException e) {
-            logger.error("Error while deleting a user: {}", e.getMessage(), e);
+            logger.error("Error while deleting a employee: {}", e.getMessage(), e);
             throw new ServiceException(e);
         }
     }
@@ -106,7 +109,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         try {
             return userRepository.getTotalResult(sortBy, sortType, countryId, search);
         } catch (DAOException | ServiceException e) {
-            logger.error("Error while getting a total result of users: {}", e.getMessage(), e);
+            logger.error("Error while getting a total result of employees: {}", e.getMessage(), e);
             throw new ServiceException(e);
         }
     }
