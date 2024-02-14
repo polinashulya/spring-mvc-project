@@ -6,17 +6,10 @@ import com.example.service.CountryService;
 import com.example.service.dto.ClientDto;
 import com.example.service.dto.CountryDto;
 import com.example.service.dto.search.UserSearchCriteriaDto;
-import com.example.service.impl.CountryServiceImpl;
-import com.example.service.impl.ClientServiceImpl;
 import lombok.AllArgsConstructor;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @Controller

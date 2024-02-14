@@ -1,8 +1,6 @@
 package com.example.dao;
 
 import com.example.entity.core.AbstractBaseEntity;
-import jakarta.persistence.TypedQuery;
-
 import java.util.List;
 
 public interface AbstractDao<E extends AbstractBaseEntity> {

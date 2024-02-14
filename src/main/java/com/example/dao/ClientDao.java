@@ -1,6 +1,5 @@
 package com.example.dao;
 
-import com.example.dao.impl.ClientDaoImpl;
 import com.example.dao.impl.DeletionStatus;
 import com.example.entity.ClientEntity;
 

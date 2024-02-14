@@ -1,6 +1,5 @@
 package com.example.service.impl;
 
-import com.example.entity.UserRoleEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -12,16 +11,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import com.example.repository.EmployeeRepository;
 import com.example.repository.UserRoleRepository;
 import com.example.repository.CountryRepository;
-import com.example.service.impl.EmployeeServiceImpl;
 import com.example.service.mapper.user.employee.EmployeeMapper;
 import com.example.validator.UserValidator;
-import com.example.entity.EmployeeEntity;
-import com.example.service.dto.EmployeeDto;
-
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-
 
 public class EmployeeServiceImplTest {
 

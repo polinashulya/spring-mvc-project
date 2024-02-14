@@ -3,15 +3,10 @@ package com.example.dao.impl;
 import com.example.dao.ClientDao;
 import com.example.dao.specification.ClientSpecification;
 import com.example.entity.ClientEntity;
-import com.example.exception.DAOException;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.*;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 import java.util.Optional;
 

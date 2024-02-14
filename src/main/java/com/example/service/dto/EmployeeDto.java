@@ -1,11 +1,5 @@
 package com.example.service.dto;
 
-import com.example.entity.EmployeePositionEntity;
-import com.example.entity.ProcedureEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -2,7 +2,6 @@ package com.example.dao.impl;
 
 import com.example.dao.EmployeeDao;
 import com.example.entity.EmployeeEntity;
-import com.example.entity.EmployeeEntity;
 import com.example.exception.DAOException;
 import jakarta.persistence.TypedQuery;
 import org.apache.logging.log4j.LogManager;

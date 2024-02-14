@@ -1,6 +1,5 @@
 package com.example.service;
 
-import com.example.entity.ClientEntity;
 import com.example.service.dto.ClientDto;
 import com.example.service.dto.search.UserSearchCriteriaDto;
 

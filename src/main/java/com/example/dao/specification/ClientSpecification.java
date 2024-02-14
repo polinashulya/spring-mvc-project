@@ -48,22 +48,12 @@ public interface ClientSpecification {
 
     private void applySorting(CriteriaBuilder builder, CriteriaQuery<ClientEntity> criteriaQuery, Root<ClientEntity> root, String sortBy, String sortType) {
         if (sortBy != null && !sortBy.isEmpty()) {
-            Expression<?> orderByExpression;
-            switch (sortBy) {
-                case SORT_USERS_BY_LOGIN:
-                    orderByExpression = root.get("email");
-                    break;
-                case SORT_USERS_BY_SURNAME:
-                    orderByExpression = root.get("surname");
-                    break;
-                case SORT_USERS_BY_BIRTH_DATE:
-                    orderByExpression = root.get("birthDate");
-                    break;
-                case SORT_USERS_BY_ID:
-                default:
-                    orderByExpression = root.get("id");
-                    break;
-            }
+            Expression<?> orderByExpression = switch (sortBy) {
+                case SORT_USERS_BY_LOGIN -> root.get("email");
+                case SORT_USERS_BY_SURNAME -> root.get("surname");
+                case SORT_USERS_BY_BIRTH_DATE -> root.get("birthDate");
+                default -> root.get("id");
+            };
             criteriaQuery.orderBy(sortType.equals(SORT_TYPE_ASC) ? builder.asc(orderByExpression) : builder.desc(orderByExpression));
         }
     }
