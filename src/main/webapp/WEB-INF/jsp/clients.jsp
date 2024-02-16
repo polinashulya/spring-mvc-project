@@ -11,9 +11,14 @@
     <%@ include file="/WEB-INF/jsp/header.jsp" %>
 </div>
 <div id="main">
+    <c:if test="${deletionStatus == 404}">
+        <div class="alert alert-warning">
+            User not found.
+        </div>
+    </c:if>
     <form action="/clients" method="get">
 
-        <input type="hidden" name="page" value="${param.page == '' ? '1' : param.page}" />
+        <input type="hidden" name="page" value="${param.page == '' ? '1' : param.page}"/>
 
         <label for="sortBy">Sort By:</label>
         <select name="sortBy" id="sortBy">
@@ -63,8 +68,13 @@
             }
         </script>
 
-        <button type="button" onclick="goToPage(${param.page - 1})" ${param.page <= 1 || param.page==null  ? 'disabled' : ''}>Previous</button>
-        <button type="button" onclick="goToPage(${param.page + 1})" ${param.page * param.pageSize >= totalUsers ? 'disabled' : ''}>Next</button>
+        <button type="button"
+                onclick="goToPage(${param.page - 1})" ${param.page <= 1 || param.page==null  ? 'disabled' : ''}>Previous
+        </button>
+        <button type="button"
+                onclick="goToPage(${param.page + 1})" ${param.page * param.pageSize >= totalUsers ? 'disabled' : ''}>
+            Next
+        </button>
 
         <input type="submit" class="show-button" value="Show">
 
@@ -93,7 +103,10 @@
                 <td>${client.country.name}</td>
                 <td>${client.birthDate}</td>
                 <td>
-                    <button type="button" onclick="deleteUser(${client.id})" class="delete-button">Delete</button>
+                    <form action="clients/delete/${client.id}" method="post">
+                        <input type="submit" class="delete-button" value="Delete"
+                               onclick="return confirm('Are you sure?');"/>
+                    </form>
                 </td>
             </tr>
         </c:forEach>
@@ -102,25 +115,4 @@
 </div>
 <%@ include file="/WEB-INF/jsp/footer.jsp" %>
 </body>
-<script>
-    function deleteUser(userId) {
-        if (confirm('Are you sure you want to delete this client?')) {
-            fetch('/clients/' + userId, {
-                method: 'DELETE'
-            }).then(response => {
-                return response.text().then(text => ({ status: response.status, statusText: response.statusText, body: text }));
-            }).then(data => {
-                if (data.status === 204) {
-                    alert('Client deleted successfully');
-                    location.reload();
-                } else if (data.status === 404) {
-                    alert('Client not found');
-                }
-            }).catch(error => {
-                console.error('Error:', error);
-                alert('Client not found');
-            });
-        }
-    }
-</script>
 </html>
