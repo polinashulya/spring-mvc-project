@@ -3,14 +3,13 @@ package com.example.dao.impl;
 import com.example.dao.AbstractDao;
 import com.example.entity.core.AbstractBaseEntity;
 import com.example.exception.DAOException;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 import java.util.function.Function;
@@ -53,29 +52,13 @@ public abstract class AbstractDaoImpl<E extends AbstractBaseEntity> implements A
         });
     }
 
-    public <T> DeletionStatus delete(Long id, Class<T> entityType) {
+    public DeletionStatus softDelete(String sql, Long id) {
         try {
-            return executeQuery(session -> {
-                Transaction transaction = session.beginTransaction();
-                T entity = session.get(entityType, id);
-                if (entity == null) {
-                    throw new DAOException("Entity not found");
-                }
-                Method setDeletedMethod;
-                try {
-                    setDeletedMethod = entity.getClass().getMethod("setDeleted", boolean.class);
-                } catch (NoSuchMethodException e) {
-                    throw new DAOException("Method 'setDeleted' not found in entity class", e);
-                }
-                try {
-                    setDeletedMethod.invoke(entity, true);
-                } catch (IllegalAccessException | InvocationTargetException e) {
-                    throw new DAOException("Error invoking 'setDeleted' method", e);
-                }
-                session.update(entity);
-                session.flush();
-                transaction.commit();
-                return DeletionStatus.SUCCESS;
+            return executeTransaction(session -> {
+                session.createQuery(sql)
+                        .setParameter("id", id)
+                        .executeUpdate();
+                return DeletionStatus.NO_CONTENT;
             });
         } catch (DAOException e) {
             return DeletionStatus.NOT_FOUND;
@@ -95,4 +78,22 @@ public abstract class AbstractDaoImpl<E extends AbstractBaseEntity> implements A
             }
         }
     }
+
+    public <T> T executeTransaction(Function<Session, T> function) {
+        Transaction transaction = null;
+        try (Session session = sessionFactory.openSession()) {
+            transaction = session.beginTransaction();
+            T result = function.apply(session);
+            session.flush();
+            transaction.commit();
+            return result;
+        } catch (HibernateException e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            throw new DAOException("Transaction failed", e);
+        }
+    }
+
 }
+

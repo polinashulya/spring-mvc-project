@@ -1,5 +1,6 @@
 package com.example.service.impl;
 
+import com.example.dao.impl.DeletionStatus;
 import com.example.entity.ClientEntity;
 import com.example.entity.UserRoleEntity;
 import com.example.entity.UserRoles;
@@ -16,6 +17,7 @@ import lombok.AllArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
@@ -86,14 +88,14 @@ public class ClientServiceImpl implements ClientService {
 
 
     @Override
-    public void deleteById(Long userId) {
+    public DeletionStatus deleteById(Long id) {
         try {
-            if (userId == null) {
-                throw new ServiceException("Client ID is required.");
+            if (id == null || clientRepository.findById(id).isEmpty()) {
+                return DeletionStatus.NOT_FOUND;
             }
-            clientRepository.deleteById(userId);
+            return clientRepository.deleteById(id);
         } catch (DAOException | ServiceException e) {
-            logger.error("Error while deleting a user: {}", e.getMessage(), e);
+            logger.error("Error while deleting a client: {}", e.getMessage(), e);
             throw new ServiceException(e);
         }
     }

@@ -14,7 +14,7 @@ public interface ClientDao {
 
     void save(ClientEntity client);
 
-    DeletionStatus delete(Long id);
+    DeletionStatus softDelete(Long id);
 
     ClientEntity getByEmail(String email);
 

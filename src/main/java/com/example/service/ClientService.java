@@ -1,5 +1,6 @@
 package com.example.service;
 
+import com.example.dao.impl.DeletionStatus;
 import com.example.service.dto.ClientDto;
 import com.example.service.dto.search.UserSearchCriteriaDto;
 
@@ -11,7 +12,7 @@ public interface ClientService {
 
     void add(ClientDto clientDto);
 
-    void deleteById(Long clientId);
+    DeletionStatus deleteById(Long id);
 
     int getTotalResult(String sortBy, String sortType, String countryId, String search);
     

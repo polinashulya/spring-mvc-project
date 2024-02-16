@@ -1,5 +1,6 @@
 package com.example.repository;
 
+import com.example.dao.impl.DeletionStatus;
 import com.example.entity.ClientEntity;
 import java.util.List;
 import java.util.Optional;
@@ -8,13 +9,13 @@ public interface ClientRepository {
 
     List<ClientEntity> findAll(String sortBy, String sortType, String countryId, String search, String page, String pageSize);
 
-//    ClientEntity getById(Long id);
-
     Optional<ClientEntity> findByEmail(String email);
+
+    Optional<ClientEntity> findById(Long id);
 
     void save(ClientEntity user);
 
-    void deleteById(Long id);
+    DeletionStatus deleteById(Long id);
 
     int getTotalResult(String sortBy, String sortType, String countryId, String search);
 

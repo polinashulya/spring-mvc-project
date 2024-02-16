@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import com.example.dao.impl.DeletionStatus;
 import com.example.exception.ControllerCustomException;
 import com.example.service.ClientService;
 import com.example.service.CountryService;
@@ -7,6 +8,8 @@ import com.example.service.dto.ClientDto;
 import com.example.service.dto.CountryDto;
 import com.example.service.dto.search.UserSearchCriteriaDto;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -67,13 +70,13 @@ public class ClientController {
         }
     }
 
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable(name = "id") String clientId) {
-        try {
-            clientService.deleteById(Long.valueOf(clientId));
-        } catch (Exception e) {
-            throw new ControllerCustomException("Error while executing deleting", e);
-        }
-    }
-
+@DeleteMapping("/{id}")
+@ResponseBody
+public ResponseEntity<?> delete(@PathVariable(name = "id") String id) {
+    DeletionStatus deletionStatus = clientService.deleteById(Long.valueOf(id));
+    return switch (deletionStatus) {
+        case NO_CONTENT -> ResponseEntity.status(HttpStatus.NO_CONTENT).body(deletionStatus.name());
+        case NOT_FOUND -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(deletionStatus.name());
+    };
+}
 }

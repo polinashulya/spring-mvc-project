@@ -48,7 +48,6 @@
         <label for="searchText">Search:</label>
         <input type="text" id="searchText" name="search" value="${param.search}" placeholder="Search text">
 
-        <!-- Поле для указания количества элементов на странице -->
         <select name="pageSize" onchange="this.form.submit()">
             <option value="5" <c:if test="${param.pageSize == 5}">selected</c:if>>5 per page</option>
             <option value="10" <c:if test="${param.pageSize == 10}">selected</c:if>>10 per page</option>
@@ -57,7 +56,7 @@
 
         <script>
             function goToPage(page) {
-                if (page > 0) { // Проверяем, чтобы номер страницы был больше 0
+                if (page > 0) {
                     document.querySelector("input[name='page']").value = page;
                     document.querySelector("form").submit();
                 }
@@ -104,24 +103,23 @@
 <%@ include file="/WEB-INF/jsp/footer.jsp" %>
 </body>
 <script>
-    function deleteUser(id) {
-        console.log("deleteUser function called with id:", id);
-
-        var confirmation = confirm("Are you sure you want to delete this id?");
-        if (confirmation) {
-            var xhr = new XMLHttpRequest();
-            xhr.open("DELETE", "/clients/" + id, true);
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState === 4) {
-                    if (xhr.status === 204) {
-                        alert("Users is successfully deleted");
-                        window.location.reload();
-                    } else {
-                        alert("User deletion error");
-                    }
+    function deleteUser(userId) {
+        if (confirm('Are you sure you want to delete this client?')) {
+            fetch('/clients/' + userId, {
+                method: 'DELETE'
+            }).then(response => {
+                return response.text().then(text => ({ status: response.status, statusText: response.statusText, body: text }));
+            }).then(data => {
+                if (data.status === 204) {
+                    alert('Client deleted successfully');
+                    location.reload();
+                } else if (data.status === 404) {
+                    alert('Client not found');
                 }
-            };
-            xhr.send();
+            }).catch(error => {
+                console.error('Error:', error);
+                alert('Client not found');
+            });
         }
     }
 </script>

@@ -16,6 +16,8 @@ public class ClientDaoImpl extends AbstractDaoImpl<ClientEntity> implements Clie
 
     private static final String GET_CLIENT_BY_ID = "FROM ClientEntity c WHERE c.id = :id";
 
+    private static final String SOFT_DELETE_CLIENT_BY_ID = "UPDATE ClientEntity c SET c.deleted = true WHERE c.id = :id";
+
     private static final String GET_CLIENT_BY_EMAIL = "FROM ClientEntity c JOIN FETCH c.country c WHERE c.email = :email AND c.deleted = false";
 
     @Override
@@ -56,8 +58,8 @@ public class ClientDaoImpl extends AbstractDaoImpl<ClientEntity> implements Clie
     }
 
     @Override
-    public DeletionStatus delete(Long id) {
-        return delete(id, ClientEntity.class);
+    public DeletionStatus softDelete(Long id) {
+        return softDelete(SOFT_DELETE_CLIENT_BY_ID, id);
     }
 
     @Override

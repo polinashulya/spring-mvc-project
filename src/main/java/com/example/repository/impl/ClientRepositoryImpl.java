@@ -1,6 +1,7 @@
 package com.example.repository.impl;
 
 import com.example.dao.ClientDao;
+import com.example.dao.impl.DeletionStatus;
 import com.example.entity.ClientEntity;
 import com.example.exception.DAOException;
 import com.example.exception.RepositoryException;
@@ -26,15 +27,6 @@ public class ClientRepositoryImpl implements ClientRepository {
         }
     }
 
-//    @Override
-//    public ClientEntity getById(Long id) {
-//        try {
-//            return clientDao.getById(id);
-//        } catch (DAOException e) {
-//            throw new RepositoryException(e);
-//        }
-//    }
-
     @Override
     public void save(ClientEntity client) {
         try {
@@ -45,9 +37,9 @@ public class ClientRepositoryImpl implements ClientRepository {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public DeletionStatus deleteById(Long id) {
         try {
-            clientDao.delete(id);
+            return clientDao.softDelete(id);
         } catch (DAOException e) {
             throw new RepositoryException(e);
         }
@@ -66,6 +58,15 @@ public class ClientRepositoryImpl implements ClientRepository {
     public Optional<ClientEntity> findByEmail(String email) {
         try {
             return clientDao.findByEmail(email);
+        } catch (DAOException e) {
+            throw new RepositoryException(e);
+        }
+    }
+
+    @Override
+    public Optional<ClientEntity> findById(Long id) {
+        try {
+            return clientDao.findById(id);
         } catch (DAOException e) {
             throw new RepositoryException(e);
         }
