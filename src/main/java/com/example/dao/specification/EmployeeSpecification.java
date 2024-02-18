@@ -12,7 +12,7 @@ public interface EmployeeSpecification {
     String SORT_TYPE_ASC = "ASC";
     String SORT_USERS_BY_SURNAME = "bySurname";
     String SORT_USERS_BY_LOGIN = "byEmail";
-    String SORT_USERS_BY_BIRTH_DATE = "byBirthDate";
+    String SORT_USERS_BY_HIRE_DATE = "byHireDate";
 
     default CriteriaQuery<EmployeeEntity> buildCriteriaQuery(Session session, String search, String countryId, String sortBy, String sortType) {
         CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -52,7 +52,7 @@ public interface EmployeeSpecification {
             Expression<?> orderByExpression = switch (sortBy) {
                 case SORT_USERS_BY_LOGIN -> root.get("email");
                 case SORT_USERS_BY_SURNAME -> root.get("surname");
-                case SORT_USERS_BY_BIRTH_DATE -> root.get("birthDate");
+                case SORT_USERS_BY_HIRE_DATE -> root.get("hireDate");
                 default -> root.get("id");
             };
             criteriaQuery.orderBy(sortType.equals(SORT_TYPE_ASC) ? builder.asc(orderByExpression) : builder.desc(orderByExpression));
