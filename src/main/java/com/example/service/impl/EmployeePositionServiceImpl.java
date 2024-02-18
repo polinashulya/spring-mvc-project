@@ -29,7 +29,7 @@ public class EmployeePositionServiceImpl implements EmployeePositionService {
             List<EmployeePositionEntity> entities = employeePositionRepository.findAll();
             return employeePositionMapper.toDtoList(entities);
         } catch (DAOException e) {
-            logger.error("Error while getting all countries: {}", e.getMessage(), e);
+            logger.error("Error while getting all positions: {}", e.getMessage(), e);
             throw new ServiceException(e);
         }
     }
@@ -41,10 +41,10 @@ public class EmployeePositionServiceImpl implements EmployeePositionService {
                     .map(employeePositionMapper::toDto)
                     .orElse(null);
         } catch (NumberFormatException e) {
-            logger.error("Error parsing country ID: {}", e.getMessage(), e);
-            throw new ServiceException("Invalid country ID format", e);
+            logger.error("Error parsing position ID: {}", e.getMessage(), e);
+            throw new ServiceException("Invalid position ID format", e);
         } catch (DAOException e) {
-            logger.error("Error while finding country by ID: {}", e.getMessage(), e);
+            logger.error("Error while finding position by ID: {}", e.getMessage(), e);
             throw new ServiceException(e);
         }
     }

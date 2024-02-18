@@ -14,11 +14,11 @@ import java.util.Optional;
 @Transactional
 public class EmployeeDaoImpl extends AbstractDaoImpl<EmployeeEntity> implements EmployeeDao, EmployeeSpecification {
 
-    private static final String GET_EMPLOYEE_BY_ID = "FROM EmployeePositionEntity e WHERE e.id = :id";
+    private static final String GET_EMPLOYEE_BY_ID = "FROM EmployeeEntity e WHERE e.id = :id";
 
-    private static final String SOFT_DELETE_EMPLOYEE_BY_BY_ID = "UPDATE EmployeePositionEntity e SET e.deleted = true WHERE e.id = :id";
+    private static final String SOFT_DELETE_EMPLOYEE_BY_BY_ID = "UPDATE EmployeeEntity e SET em.deleted = true WHERE e.id = :id";
 
-    private static final String GET_EMPLOYEE_BY_BY_EMAIL = "FROM EmployeePositionEntity e JOIN FETCH e.country e WHERE e.email = :email AND e.deleted = false";
+    private static final String GET_EMPLOYEE_BY_BY_EMAIL = "FROM EmployeeEntity e JOIN FETCH e.country c WHERE e.email = :email AND e.deleted = false";
 
     @Transactional
     @Override

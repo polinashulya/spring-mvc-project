@@ -30,7 +30,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private static final Logger logger = LogManager.getLogger(EmployeeServiceImpl.class);
 
-    private final EmployeeRepository userRepository;
+    private final EmployeeRepository employeeRepository;
 
     private final UserRoleRepository userRoleRepository;
 
@@ -41,7 +41,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public PageableDto<EmployeeDto> getAll(UserSearchCriteriaDto employeeSearchCriteriaDto) {
         try {
-            List<EmployeeEntity> entities = userRepository.findAll(
+            List<EmployeeEntity> entities = employeeRepository.findAll(
                     employeeSearchCriteriaDto.getSortBy(),
                     employeeSearchCriteriaDto.getSortType(),
                     employeeSearchCriteriaDto.getCountryId(),
@@ -74,7 +74,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 //            throw new ServiceException("Country is null or did not find!");
 //        }
 
-        if (userRepository.findByEmail(employeeDto.getEmail()).isPresent()) {
+        if (employeeRepository.findByEmail(employeeDto.getEmail()).isPresent()) {
             throw new ServiceException("Email is already in use!");
         }
 
@@ -91,7 +91,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeEntity.setUserRoles(roles);
 
         try {
-            userRepository.save(employeeEntity);
+            employeeRepository.save(employeeEntity);
         } catch (DAOException | ServiceException e) {
             logger.error("Error while adding a employee: {}", e.getMessage(), e);
             throw new ServiceException(e);
@@ -105,7 +105,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             if (employeeId == null) {
                 throw new ServiceException("Employee ID is required.");
             }
-            userRepository.deleteById(employeeId);
+            employeeRepository.deleteById(employeeId);
         } catch (DAOException | ServiceException e) {
             logger.error("Error while deleting a employee: {}", e.getMessage(), e);
             throw new ServiceException(e);
@@ -116,7 +116,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public int getTotalResult(String sortBy, String sortType, String countryId, String search) {
         try {
-            return userRepository.getTotalResult(sortBy, sortType, countryId, search);
+            return employeeRepository.getTotalResult(sortBy, sortType, countryId, search);
         } catch (DAOException | ServiceException e) {
             logger.error("Error while getting a total result of employees: {}", e.getMessage(), e);
             throw new ServiceException(e);

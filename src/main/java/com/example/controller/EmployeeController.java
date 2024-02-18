@@ -5,19 +5,16 @@ import com.example.exception.ControllerCustomException;
 import com.example.service.CountryService;
 import com.example.service.EmployeePositionService;
 import com.example.service.EmployeeService;
-import com.example.service.dto.CountryDto;
-import com.example.service.dto.EmployeeDto;
-import com.example.service.dto.EmployeePositionDto;
-import com.example.service.dto.PageableDto;
+import com.example.service.ProcedureService;
+import com.example.service.dto.*;
 import com.example.service.dto.search.UserSearchCriteriaDto;
-import com.example.service.impl.CountryServiceImpl;
-import com.example.service.impl.EmployeeServiceImpl;
 import lombok.AllArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @Controller
@@ -30,6 +27,7 @@ public class EmployeeController {
     private final EmployeeService employeeService;
     private final CountryService countryService;
     private final EmployeePositionService employeePositionService;
+    private final ProcedureService procedureService;
 
     @GetMapping
     public String findAllEmployees(Model model,
@@ -61,11 +59,18 @@ public class EmployeeController {
         model.addAttribute("positions", employeePositions);
     }
 
+    private void setProceduresToModel(Model model) {
+        List<ProcedureDto> procedures = this.procedureService.findAll();
+        model.addAttribute("procedures", procedures);
+    }
+
     @GetMapping("/adding_form")
     public String addingForm(Model model) {
         try {
             setCountriesToModel(model);
             setEmployeePositionsToModel(model);
+            setProceduresToModel(model);
+
             return "add_employee";
         } catch (Exception e) {
             logger.error("Error while executing adding form", e);
