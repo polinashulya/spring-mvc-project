@@ -1,5 +1,6 @@
 package com.example.service.impl;
 
+import com.example.dao.impl.DeletionStatus;
 import com.example.entity.EmployeeEntity;
 import com.example.entity.UserRoleEntity;
 import com.example.entity.UserRoles;
@@ -8,7 +9,6 @@ import com.example.exception.ServiceException;
 import com.example.repository.EmployeeRepository;
 import com.example.repository.UserRoleRepository;
 import com.example.service.EmployeeService;
-import com.example.service.dto.ClientDto;
 import com.example.service.dto.EmployeeDto;
 import com.example.service.dto.PageableDto;
 import com.example.service.dto.search.UserSearchCriteriaDto;
@@ -100,7 +100,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 
     @Override
-    public void deleteById(Long employeeId) {
+    public DeletionStatus deleteById(Long employeeId) {
         try {
             if (employeeId == null) {
                 throw new ServiceException("Employee ID is required.");
@@ -110,6 +110,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             logger.error("Error while deleting a employee: {}", e.getMessage(), e);
             throw new ServiceException(e);
         }
+        return null;
     }
 
     @Override

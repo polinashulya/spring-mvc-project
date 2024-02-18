@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import com.example.dao.impl.DeletionStatus;
 import com.example.exception.ControllerCustomException;
 import com.example.service.CountryService;
 import com.example.service.EmployeePositionService;
@@ -83,14 +84,11 @@ public class EmployeeController {
         }
     }
 
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable(name = "id") String employeeId) {
-        try {
-            employeeService.deleteById(Long.valueOf(employeeId));
-        } catch (Exception e) {
-            logger.error("Error while executing deleting", e);
-            throw new ControllerCustomException("Error while executing deleting", e);
-        }
+    @PostMapping("/delete/{id}")
+    public String delete(@PathVariable(name = "id") String id, Model model) {
+        DeletionStatus deletionStatus = employeeService.deleteById(Long.valueOf(id));
+        model.addAttribute("deletionStatus", deletionStatus.getStatusCode());
+        return "redirect:/clients";
     }
 
 }
