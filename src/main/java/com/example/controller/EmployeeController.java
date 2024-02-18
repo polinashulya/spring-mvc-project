@@ -1,8 +1,12 @@
 package com.example.controller;
 
 import com.example.exception.ControllerCustomException;
+import com.example.service.CountryService;
+import com.example.service.EmployeePositionService;
+import com.example.service.EmployeeService;
 import com.example.service.dto.CountryDto;
 import com.example.service.dto.EmployeeDto;
+import com.example.service.dto.EmployeePositionDto;
 import com.example.service.dto.PageableDto;
 import com.example.service.dto.search.UserSearchCriteriaDto;
 import com.example.service.impl.CountryServiceImpl;
@@ -22,8 +26,9 @@ public class EmployeeController {
 
     private static final Logger logger = LogManager.getLogger(EmployeeController.class);
 
-    private final EmployeeServiceImpl employeeService;
-    private final CountryServiceImpl countryService;
+    private final EmployeeService employeeService;
+    private final CountryService countryService;
+    private final EmployeePositionService employeePositionService;
 
     @GetMapping
     public String findAllEmployees(Model model,
@@ -50,10 +55,16 @@ public class EmployeeController {
         model.addAttribute("countries", countries);
     }
 
+    private void setEmployeePositionsToModel(Model model) {
+        List<EmployeePositionDto> employeePositions = this.employeePositionService.findAll();
+        model.addAttribute("positions", employeePositions);
+    }
+
     @GetMapping("/adding_form")
     public String addingForm(Model model) {
         try {
             setCountriesToModel(model);
+            setEmployeePositionsToModel(model);
             return "add_employee";
         } catch (Exception e) {
             logger.error("Error while executing adding form", e);
