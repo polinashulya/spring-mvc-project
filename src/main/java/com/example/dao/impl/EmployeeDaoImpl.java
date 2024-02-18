@@ -16,7 +16,7 @@ public class EmployeeDaoImpl extends AbstractDaoImpl<EmployeeEntity> implements 
 
     private static final String GET_EMPLOYEE_BY_ID = "FROM EmployeeEntity e WHERE e.id = :id";
 
-    private static final String SOFT_DELETE_EMPLOYEE_BY_BY_ID = "UPDATE EmployeeEntity e SET em.deleted = true WHERE e.id = :id";
+    private static final String SOFT_DELETE_EMPLOYEE_BY_BY_ID = "UPDATE EmployeeEntity e SET e.deleted = true WHERE e.id = :id";
 
     private static final String GET_EMPLOYEE_BY_BY_EMAIL = "FROM EmployeeEntity e JOIN FETCH e.country c WHERE e.email = :email AND e.deleted = false";
 

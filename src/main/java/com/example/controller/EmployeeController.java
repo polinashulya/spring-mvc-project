@@ -93,7 +93,7 @@ public class EmployeeController {
     public String delete(@PathVariable(name = "id") String id, Model model) {
         DeletionStatus deletionStatus = employeeService.deleteById(Long.valueOf(id));
         model.addAttribute("deletionStatus", deletionStatus.getStatusCode());
-        return "redirect:/clients";
+        return "redirect:/employees";
     }
 
 }

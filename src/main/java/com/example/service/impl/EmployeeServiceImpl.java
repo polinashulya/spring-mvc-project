@@ -100,17 +100,16 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 
     @Override
-    public DeletionStatus deleteById(Long employeeId) {
+    public DeletionStatus deleteById(Long id) {
         try {
-            if (employeeId == null) {
-                throw new ServiceException("Employee ID is required.");
+            if (id == null || employeeRepository.findById(id).isEmpty()) {
+                return DeletionStatus.NOT_FOUND;
             }
-            employeeRepository.deleteById(employeeId);
+            return employeeRepository.deleteById(id);
         } catch (DAOException | ServiceException e) {
             logger.error("Error while deleting a employee: {}", e.getMessage(), e);
             throw new ServiceException(e);
         }
-        return null;
     }
 
     @Override
