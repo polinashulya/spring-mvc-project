@@ -17,7 +17,6 @@ import java.util.Set;
 @Setter
 @Getter
 @NoArgsConstructor
-//@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class EmployeeEntity extends UserEntity {
 
     @Column(name = "hireDate")

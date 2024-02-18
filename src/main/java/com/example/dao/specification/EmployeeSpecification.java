@@ -1,23 +1,25 @@
 package com.example.dao.specification;
 
-import com.example.entity.ClientEntity;
+import com.example.entity.EmployeeEntity;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.*;
 import org.hibernate.Session;
 
 import java.util.Optional;
 
-public interface ClientSpecification {
+public interface EmployeeSpecification {
 
     String SORT_TYPE_ASC = "ASC";
     String SORT_USERS_BY_SURNAME = "bySurname";
     String SORT_USERS_BY_LOGIN = "byEmail";
     String SORT_USERS_BY_BIRTH_DATE = "byBirthDate";
 
-    default CriteriaQuery<ClientEntity> buildCriteriaQuery(Session session, String search, String countryId, String sortBy, String sortType) {
+    default CriteriaQuery<EmployeeEntity> buildCriteriaQuery(Session session, String search, String countryId, String sortBy, String sortType) {
         CriteriaBuilder builder = session.getCriteriaBuilder();
-        CriteriaQuery<ClientEntity> criteriaQuery = builder.createQuery(ClientEntity.class);
-        Root<ClientEntity> root = criteriaQuery.from(ClientEntity.class);
+        CriteriaQuery<EmployeeEntity> criteriaQuery = builder.createQuery(EmployeeEntity.class);
+        Root<EmployeeEntity> root = criteriaQuery.from(EmployeeEntity.class);
+        root.fetch("positions", JoinType.LEFT);
+        root.fetch("procedures", JoinType.LEFT);
 
         Predicate predicate = buildPredicate(builder, root, search, countryId);
         criteriaQuery.where(predicate);
@@ -27,7 +29,7 @@ public interface ClientSpecification {
         return criteriaQuery;
     }
 
-    default Predicate buildPredicate(CriteriaBuilder builder, Root<ClientEntity> root, String search, String countryId) {
+    default Predicate buildPredicate(CriteriaBuilder builder, Root<EmployeeEntity> root, String search, String countryId) {
         Predicate predicate = builder.conjunction();
         if (countryId != null && !countryId.isEmpty()) {
             predicate = builder.and(predicate, builder.equal(root.get("country").get("id"), Long.parseLong(countryId)));
@@ -45,7 +47,7 @@ public interface ClientSpecification {
         return predicate;
     }
 
-    private void applySorting(CriteriaBuilder builder, CriteriaQuery<ClientEntity> criteriaQuery, Root<ClientEntity> root, String sortBy, String sortType) {
+    private void applySorting(CriteriaBuilder builder, CriteriaQuery<EmployeeEntity> criteriaQuery, Root<EmployeeEntity> root, String sortBy, String sortType) {
         if (sortBy != null && !sortBy.isEmpty()) {
             Expression<?> orderByExpression = switch (sortBy) {
                 case SORT_USERS_BY_LOGIN -> root.get("email");
@@ -57,7 +59,7 @@ public interface ClientSpecification {
         }
     }
 
-    default void applyPagination(TypedQuery<ClientEntity> query, String page, String pageSize) {
+    default void applyPagination(TypedQuery<EmployeeEntity> query, String page, String pageSize) {
         int offset = Optional.ofNullable(page)
                 .filter(p -> !p.isEmpty())
                 .map(Integer::parseInt)

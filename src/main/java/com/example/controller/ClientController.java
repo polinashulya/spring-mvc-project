@@ -6,6 +6,7 @@ import com.example.service.ClientService;
 import com.example.service.CountryService;
 import com.example.service.dto.ClientDto;
 import com.example.service.dto.CountryDto;
+import com.example.service.dto.PageableDto;
 import com.example.service.dto.search.UserSearchCriteriaDto;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -25,13 +26,9 @@ public class ClientController {
     @GetMapping
     public String findAllClients(Model model, @ModelAttribute UserSearchCriteriaDto clientSearchCriteriaDto) {
         try {
-            List<ClientDto> clients = clientService.getAll(clientSearchCriteriaDto);
+            PageableDto<ClientDto> clients = clientService.getAll(clientSearchCriteriaDto);
 
-            int totalClients = clientService.getTotalResult(clientSearchCriteriaDto.getSortBy(), clientSearchCriteriaDto.getSortType(),
-                    clientSearchCriteriaDto.getCountryId(), clientSearchCriteriaDto.getSearch());
-
-            model.addAttribute("totalUsers", totalClients);
-            model.addAttribute("clients", clients);
+            model.addAttribute("clientPageable", clients);
             model.addAttribute("sortBy", clientSearchCriteriaDto.getSortBy());
             model.addAttribute("sortType", clientSearchCriteriaDto.getSortType());
             model.addAttribute("currentCountryId", clientSearchCriteriaDto.getCountryId());

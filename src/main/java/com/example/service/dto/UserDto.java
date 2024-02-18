@@ -1,6 +1,7 @@
 package com.example.service.dto;
 
 import com.example.service.dto.core.AbstractBaseDto;
+import com.example.service.dto.core.AbstractCoreDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,9 +13,9 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
-public class UserDto extends AbstractBaseDto {
+public class UserDto extends AbstractCoreDto {
 
-    private Long id;
+   // private Long id;
 
     //    @NotBlank(message = "Email is mandatory")
 //    @Email(message = "Email must be valid")

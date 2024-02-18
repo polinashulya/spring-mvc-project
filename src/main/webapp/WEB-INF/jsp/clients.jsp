@@ -72,7 +72,7 @@
                 onclick="goToPage(${param.page - 1})" ${param.page <= 1 || param.page==null  ? 'disabled' : ''}>Previous
         </button>
         <button type="button"
-                onclick="goToPage(${param.page + 1})" ${param.page * param.pageSize >= totalUsers ? 'disabled' : ''}>
+                onclick="goToPage(${param.page + 1})" ${param.page * param.pageSize >= clientPageable.totalSize ? 'disabled' : ''}>
             Next
         </button>
 
@@ -94,7 +94,7 @@
         </tr>
         </thead>
         <tbody>
-        <c:forEach items="${clients}" var="client">
+        <c:forEach items="${clientPageable.elements}" var="client">
             <tr>
                 <td>${client.id}</td>
                 <td>${client.email}</td>

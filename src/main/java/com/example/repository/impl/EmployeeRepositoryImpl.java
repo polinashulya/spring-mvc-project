@@ -20,7 +20,8 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     @Override
     public List<EmployeeEntity> findAll() {
         try {
-            return employeeDao.findAll();
+          //  return employeeDao.findAll();
+            return null;
         } catch (DAOException e) {
             throw new RepositoryException(e);
         }
@@ -38,7 +39,8 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     @Override
     public EmployeeEntity getById(Long id) {
         try {
-            return employeeDao.getById(id);
+          //  return employeeDao.getById(id);
+            return null;
         } catch (DAOException e) {
             throw new RepositoryException(e);
         }
@@ -56,7 +58,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     @Override
     public void deleteById(Long id) {
         try {
-            employeeDao.delete(id);
+            //   employeeDao.delete(id);
         } catch (DAOException e) {
             throw new RepositoryException(e);
         }
@@ -65,8 +67,9 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     @Override
     public int getTotalResult(String sortBy, String sortType, String countryId, String search) {
         try {
-            final String filterAndSearchSql = employeeDao.getFilterAndSearchHql(countryId, search);
-            return employeeDao.getTotalResult(filterAndSearchSql);
+//            final String filterAndSearchSql = employeeDao.getFilterAndSearchHql(countryId, search);
+//            return employeeDao.getTotalResult(filterAndSearchSql);
+            return 0;
         } catch (DAOException e) {
             throw new RepositoryException(e);
         }

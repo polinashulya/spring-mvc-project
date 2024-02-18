@@ -2,13 +2,14 @@ package com.example.service;
 
 import com.example.dao.impl.DeletionStatus;
 import com.example.service.dto.ClientDto;
+import com.example.service.dto.PageableDto;
 import com.example.service.dto.search.UserSearchCriteriaDto;
 
 import java.util.List;
 
 public interface ClientService {
 
-    List<ClientDto> getAll(UserSearchCriteriaDto clientSearchCriteriaDto);
+    PageableDto<ClientDto> getAll(UserSearchCriteriaDto clientSearchCriteriaDto);
 
     void add(ClientDto clientDto);
 

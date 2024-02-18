@@ -3,6 +3,7 @@ package com.example.controller;
 import com.example.exception.ControllerCustomException;
 import com.example.service.dto.CountryDto;
 import com.example.service.dto.EmployeeDto;
+import com.example.service.dto.PageableDto;
 import com.example.service.dto.search.UserSearchCriteriaDto;
 import com.example.service.impl.CountryServiceImpl;
 import com.example.service.impl.EmployeeServiceImpl;
@@ -28,13 +29,9 @@ public class EmployeeController {
     public String findAllEmployees(Model model,
                                    @ModelAttribute UserSearchCriteriaDto employeeSearchCriteriaDto) {
         try {
-            List<EmployeeDto> employees = employeeService.getAll(employeeSearchCriteriaDto);
+            PageableDto<EmployeeDto> employees = employeeService.getAll(employeeSearchCriteriaDto);
 
-            int totalEmployees = employeeService.getTotalResult(employeeSearchCriteriaDto.getSortBy(), employeeSearchCriteriaDto.getSortType(),
-                    employeeSearchCriteriaDto.getCountryId(), employeeSearchCriteriaDto.getSearch());
-
-            model.addAttribute("totalUsers", totalEmployees);
-            model.addAttribute("employees", employees);
+            model.addAttribute("employeePageable", employees);
             model.addAttribute("sortBy", employeeSearchCriteriaDto.getSortBy());
             model.addAttribute("sortType", employeeSearchCriteriaDto.getSortType());
             model.addAttribute("currentCountryId", employeeSearchCriteriaDto.getCountryId());

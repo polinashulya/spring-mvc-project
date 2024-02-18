@@ -1,5 +1,7 @@
 package com.example.dao;
 
+import com.example.dao.impl.DeletionStatus;
+import com.example.entity.ClientEntity;
 import com.example.entity.EmployeeEntity;
 
 import java.util.List;
@@ -7,26 +9,20 @@ import java.util.Optional;
 
 public interface EmployeeDao {
 
-    List<EmployeeEntity> findAll();
 
-    List<EmployeeEntity> findAll( String  search, String countyId, String sortBy, String sortType, String page, String pageSize);
-
-    EmployeeEntity getById(Long id);
+    List<EmployeeEntity> findAll(String  search, String countyId, String sortBy, String sortType, String page, String pageSize);
 
     Optional<EmployeeEntity> findById(Long id);
 
-    void save(EmployeeEntity employee);
+    void save(EmployeeEntity client);
 
-    void delete(Long id);
+    DeletionStatus softDelete(Long id);
 
     EmployeeEntity getByEmail(String email);
 
     Optional<EmployeeEntity> findByEmail(String email);
 
-    String getFilterAndSearchHql(String countryId, String search);
+    int getTotalResult(String search, String countryId);
 
-    String getSortingHql(String sortBy, String sortType);
-
-    int getTotalResult(String filterAndSearchsql);
 
 }

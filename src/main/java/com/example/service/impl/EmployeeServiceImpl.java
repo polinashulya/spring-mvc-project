@@ -8,7 +8,9 @@ import com.example.exception.ServiceException;
 import com.example.repository.EmployeeRepository;
 import com.example.repository.UserRoleRepository;
 import com.example.service.EmployeeService;
+import com.example.service.dto.ClientDto;
 import com.example.service.dto.EmployeeDto;
+import com.example.service.dto.PageableDto;
 import com.example.service.dto.search.UserSearchCriteriaDto;
 import com.example.service.mapper.user.employee.EmployeeMapper;
 import com.example.validator.UserValidator;
@@ -37,7 +39,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeMapper employeeMapper;
 
     @Override
-    public List<EmployeeDto> getAll(UserSearchCriteriaDto employeeSearchCriteriaDto) {
+    public PageableDto<EmployeeDto> getAll(UserSearchCriteriaDto employeeSearchCriteriaDto) {
         try {
             List<EmployeeEntity> entities = userRepository.findAll(
                     employeeSearchCriteriaDto.getSortBy(),
@@ -47,7 +49,13 @@ public class EmployeeServiceImpl implements EmployeeService {
                     employeeSearchCriteriaDto.getPage(),
                     employeeSearchCriteriaDto.getPageSize());
 
-            return employeeMapper.toDtoList(entities);
+            int totalResult = getTotalResult(employeeSearchCriteriaDto.getSortBy(), employeeSearchCriteriaDto.getSortType(),
+                    employeeSearchCriteriaDto.getCountryId(), employeeSearchCriteriaDto.getSearch());
+
+            return PageableDto.<EmployeeDto>builder()
+                    .elements(employeeMapper.toDtoList(entities))
+                    .totalSize(totalResult)
+                    .build();
         } catch (DAOException e) {
             logger.error("Error while getting all users: {}", e.getMessage(), e);
             throw new ServiceException(e);

@@ -18,7 +18,7 @@ import java.util.Set;
 public class UserEntity extends AbstractCoreEntity {
 
     @ManyToOne
-    private CountryEntity country; //пока как пример для фильтра потом вообще удалить
+    private CountryEntity country;
 
     @Column(name = "email", unique = true)
     private String email;

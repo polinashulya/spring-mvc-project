@@ -10,6 +10,7 @@ import com.example.repository.ClientRepository;
 import com.example.repository.UserRoleRepository;
 import com.example.service.ClientService;
 import com.example.service.dto.ClientDto;
+import com.example.service.dto.PageableDto;
 import com.example.service.dto.search.UserSearchCriteriaDto;
 import com.example.service.mapper.user.client.ClientMapper;
 import com.example.validator.UserValidator;
@@ -38,7 +39,7 @@ public class ClientServiceImpl implements ClientService {
     private final ClientMapper clientMapper;
 
     @Override
-    public List<ClientDto> getAll(UserSearchCriteriaDto clientSearchCriteriaDto) {
+    public PageableDto<ClientDto> getAll(UserSearchCriteriaDto clientSearchCriteriaDto) {
         try {
             List<ClientEntity> entities = clientRepository.findAll(
                     clientSearchCriteriaDto.getSortBy(),
@@ -48,7 +49,13 @@ public class ClientServiceImpl implements ClientService {
                     clientSearchCriteriaDto.getPage(),
                     clientSearchCriteriaDto.getPageSize());
 
-            return clientMapper.toDtoList(entities);
+            int totalResult = getTotalResult(clientSearchCriteriaDto.getSortBy(), clientSearchCriteriaDto.getSortType(),
+                    clientSearchCriteriaDto.getCountryId(), clientSearchCriteriaDto.getSearch());
+
+           return PageableDto.<ClientDto>builder()
+                    .elements(clientMapper.toDtoList(entities))
+                    .totalSize(totalResult)
+                    .build();
         } catch (DAOException e) {
             logger.error("Error while getting all clients: {}", e.getMessage(), e);
             throw new ServiceException(e);
