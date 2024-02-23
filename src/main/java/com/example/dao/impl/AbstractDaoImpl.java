@@ -45,9 +45,9 @@ public abstract class AbstractDaoImpl<E extends AbstractBaseEntity> implements A
     }
 
     @Override
-    public <E> void save(E entity) {
-        executeQuery(session -> {
-            session.saveOrUpdate(entity);
+    public void save(E entity) {
+        executeTransaction(session -> {
+            session.persist(entity);
             return entity;
         });
     }

@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface EmployeeRepository {
 
-    List<EmployeeEntity> findAll(String sortBy, String sortType, String countryId, String search, String page, String pageSize);
+    List<EmployeeEntity> findAll(String sortBy, String sortType, String countryId, String search, String page, String pageSize, String positionId, String procedureId);
 
     Optional<EmployeeEntity> findById(Long id);
 
@@ -18,6 +18,6 @@ public interface EmployeeRepository {
 
     DeletionStatus deleteById(Long id);
 
-    int getTotalResult(String sortBy, String sortType, String countryId, String search);
+    int getTotalResult(String sortBy, String sortType, String countryId, String search, String positionId, String procedureId);
     
 }

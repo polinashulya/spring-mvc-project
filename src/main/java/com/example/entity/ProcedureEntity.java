@@ -1,5 +1,6 @@
 package com.example.entity;
 
+import com.example.entity.core.AbstractBaseEntity;
 import com.example.entity.core.AbstractCoreEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -18,9 +19,13 @@ import java.time.LocalTime;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProcedureEntity extends AbstractCoreEntity {
+public class ProcedureEntity extends AbstractBaseEntity {
 
-    @Column(name = "name")
+    @Id
+    @Column(name = "code", unique = true, nullable = false)
+    private String code;
+
+    @Column(name = "name", unique = true, nullable = false)
     private String name;
 
     @Column(name = "duration")

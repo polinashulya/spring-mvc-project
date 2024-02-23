@@ -7,12 +7,14 @@ import com.example.service.EmployeePositionService;
 import com.example.service.EmployeeService;
 import com.example.service.ProcedureService;
 import com.example.service.dto.*;
-import com.example.service.dto.search.UserSearchCriteriaDto;
+import com.example.service.dto.search.EmployeeSearchCriteriaDto;
 import lombok.AllArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,7 +33,7 @@ public class EmployeeController {
 
     @GetMapping
     public String findAllEmployees(Model model,
-                                   @ModelAttribute UserSearchCriteriaDto employeeSearchCriteriaDto) {
+                                   @ModelAttribute EmployeeSearchCriteriaDto employeeSearchCriteriaDto) {
         try {
             PageableDto<EmployeeDto> employees = employeeService.getAll(employeeSearchCriteriaDto);
 
@@ -39,10 +41,14 @@ public class EmployeeController {
             model.addAttribute("sortBy", employeeSearchCriteriaDto.getSortBy());
             model.addAttribute("sortType", employeeSearchCriteriaDto.getSortType());
             model.addAttribute("currentCountryId", employeeSearchCriteriaDto.getCountryId());
+            model.addAttribute("currentPositionCode", employeeSearchCriteriaDto.getPositionCode());
+            model.addAttribute("currentProcedureCode", employeeSearchCriteriaDto.getProcedureCode());
 
             setCountriesToModel(model);
+            setEmployeePositionsToModel(model);
+            setProceduresToModel(model);
 
-            return "employees";
+            return "employee/employees";
         } catch (Exception e) {
             logger.error("Error while executing find all employees", e);
             throw new ControllerCustomException("Error while executing find all employees", e);
@@ -71,18 +77,34 @@ public class EmployeeController {
             setEmployeePositionsToModel(model);
             setProceduresToModel(model);
 
-            return "add_employee";
+            EmployeeDto employeeDto = new EmployeeDto();
+            model.addAttribute("employeeForm", employeeDto);
+
+            return "employee/add_employee";
         } catch (Exception e) {
             logger.error("Error while executing adding form", e);
             throw new ControllerCustomException("Error while executing adding form", e);
         }
     }
+    // @Validated @ModelAttribute
+    //                                     (ControllerConstantsHolder.USER_FORM) UserSignUpDTO userForm,
+    //                             BindingResult bindingResult)
 
-    @PostMapping
-    public EmployeeDto save(@ModelAttribute EmployeeDto employeeDto) {
+
+    @PostMapping("/adding_form")
+    public String save(Model model,
+                       @Validated @ModelAttribute("employeeForm") EmployeeDto employeeDto,
+                       BindingResult bindingResult
+    ) {
         try {
-            employeeService.add(employeeDto);
-            return employeeDto;
+
+            if (bindingResult.hasErrors()) {
+                return "employee/add_employee";
+            }
+
+            employeeService.save(employeeDto);
+
+            return "redirect:/employees";
         } catch (Exception e) {
             logger.error("Error while executing saving", e);
             throw new ControllerCustomException("Error while executing saving", e);

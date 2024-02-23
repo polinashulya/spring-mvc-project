@@ -11,6 +11,8 @@ import com.example.service.dto.search.UserSearchCriteriaDto;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,7 +37,7 @@ public class ClientController {
 
             setCountriesToModel(model);
 
-            return "clients";
+            return "client/clients";
         } catch (Exception e) {
             throw new ControllerCustomException("Error while executing find all clients", e);
         }
@@ -50,16 +52,29 @@ public class ClientController {
     public String addingForm(Model model) {
         try {
             setCountriesToModel(model);
-            return "add_client";
+
+            ClientDto clientDto = new ClientDto();
+            model.addAttribute("clientForm", clientDto);
+
+            return "client/add_client";
         } catch (Exception e) {
             throw new ControllerCustomException("Error while executing adding form", e);
         }
     }
 
-    @PostMapping
-    public String save(@ModelAttribute ClientDto clientDto) {
+    @PostMapping("/adding_form")
+    public String save(@Validated @ModelAttribute ClientDto clientDto,
+                       BindingResult bindingResult
+
+    ) {
         try {
+
+            if (bindingResult.hasErrors()) {
+                return "client/add_client";
+            }
+
             clientService.add(clientDto);
+
             return "redirect:/clients";
         } catch (Exception e) {
             throw new ControllerCustomException("Error while executing saving", e);

@@ -37,7 +37,8 @@ public interface ClientSpecification {
                     builder.or(
                             builder.like(root.get("email"), "%" + search + "%"),
                             builder.like(root.get("name"), "%" + search + "%"),
-                            builder.like(root.get("surname"), "%" + search + "%")
+                            builder.like(root.get("surname"), "%" + search + "%"),
+                            builder.like(root.get("phoneNumber"), "%" + search + "%")
                     )
             );
         }

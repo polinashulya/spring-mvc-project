@@ -15,7 +15,6 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder(toBuilder = true)
 public class CountryDto extends AbstractCoreDto {
 
-  //  @NotBlank(message = "Name is mandatory")
     private String name;
 
 }

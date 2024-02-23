@@ -1,20 +1,16 @@
 package com.example.dao;
 
 import com.example.dao.impl.DeletionStatus;
-import com.example.entity.ClientEntity;
 import com.example.entity.EmployeeEntity;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface EmployeeDao {
+public interface EmployeeDao extends AbstractDao<EmployeeEntity> {
 
-
-    List<EmployeeEntity> findAll(String  search, String countyId, String sortBy, String sortType, String page, String pageSize);
+    List<EmployeeEntity> findAll(String search, String countyId, String sortBy, String sortType, String page, String pageSize, String positionId, String procedureId);
 
     Optional<EmployeeEntity> findById(Long id);
-
-    void save(EmployeeEntity client);
 
     DeletionStatus softDelete(Long id);
 
@@ -22,7 +18,7 @@ public interface EmployeeDao {
 
     Optional<EmployeeEntity> findByEmail(String email);
 
-    int getTotalResult(String search, String countryId);
+    int getTotalResult(String search, String countryId, String positionId, String procedureId);
 
 
 }

@@ -11,9 +11,14 @@
     <%@ include file="/WEB-INF/jsp/header.jsp" %>
 </div>
 <div id="main">
-    <form action="/users" method="get">
+    <c:if test="${deletionStatus == 404}">
+        <div class="alert alert-warning">
+            User not found.
+        </div>
+    </c:if>
+    <form action="/clients" method="get">
 
-        <input type="hidden" name="page" value="${param.page == '' ? '1' : param.page}" />
+        <input type="hidden" name="page" value="${param.page == '' ? '1' : param.page}"/>
 
         <label for="sortBy">Sort By:</label>
         <select name="sortBy" id="sortBy">
@@ -33,22 +38,21 @@
             </option>
         </select>
 
-        <label for="countryFiltering"> Country: </label>
-        <select id="countryFiltering" name="countryId">
-            <option disabled selected value> -- select an option --</option>
-            <c:forEach items="${countries}" var="country">
-                <option value="${country.id}"
-                        <c:if test="${country.id == currentCountryId}">selected</c:if>>
-                        ${country.name}
-                </option>
-            </c:forEach>
-            <option value=""> none</option>
-        </select>
+<%--        <label for="countryFiltering"> Country: </label>--%>
+<%--        <select id="countryFiltering" name="countryId">--%>
+<%--            <option disabled selected value> -- select an option --</option>--%>
+<%--            <c:forEach items="${countries}" var="country">--%>
+<%--                <option value="${country.id}"--%>
+<%--                        <c:if test="${country.id == currentCountryId}">selected</c:if>>--%>
+<%--                        ${country.name}--%>
+<%--                </option>--%>
+<%--            </c:forEach>--%>
+<%--            <option value=""> none</option>--%>
+<%--        </select>--%>
 
         <label for="searchText">Search:</label>
         <input type="text" id="searchText" name="search" value="${param.search}" placeholder="Search text">
 
-        <!-- Поле для указания количества элементов на странице -->
         <select name="pageSize" onchange="this.form.submit()">
             <option value="5" <c:if test="${param.pageSize == 5}">selected</c:if>>5 per page</option>
             <option value="10" <c:if test="${param.pageSize == 10}">selected</c:if>>10 per page</option>
@@ -57,19 +61,24 @@
 
         <script>
             function goToPage(page) {
-                if (page > 0) { // Проверяем, чтобы номер страницы был больше 0
+                if (page > 0) {
                     document.querySelector("input[name='page']").value = page;
                     document.querySelector("form").submit();
                 }
             }
         </script>
 
-        <button type="button" onclick="goToPage(${param.page - 1})" ${param.page <= 1 || param.page==null  ? 'disabled' : ''}>Previous</button>
-        <button type="button" onclick="goToPage(${param.page + 1})" ${param.page * param.pageSize >= totalUsers ? 'disabled' : ''}>Next</button>
+        <button type="button"
+                onclick="goToPage(${param.page - 1})" ${param.page <= 1 || param.page==null  ? 'disabled' : ''}>Previous
+        </button>
+        <button type="button"
+                onclick="goToPage(${param.page + 1})" ${param.page * param.pageSize >= clientPageable.totalSize ? 'disabled' : ''}>
+            Next
+        </button>
 
         <input type="submit" class="show-button" value="Show">
 
-        <input hidden="hidden" name="action" value="users">
+        <input hidden="hidden" name="action" value="clients">
     </form>
 
     <table class="timecard">
@@ -80,21 +89,22 @@
             <th id="email">Email</th>
             <th id="name">name</th>
             <th id="secondName">Surname</th>
-            <th id="country">Country</th>
             <th id="birthDate">Birth date</th>
         </tr>
         </thead>
         <tbody>
-        <c:forEach items="${users}" var="user">
+        <c:forEach items="${clientPageable.elements}" var="client">
             <tr>
-                <td>${user.id}</td>
-                <td>${user.email}</td>
-                <td>${user.name}</td>
-                <td>${user.surname}</td>
-                <td>${user.country.name}</td>
-                <td>${user.birthDate}</td>
+                <td>${client.id}</td>
+                <td>${client.email}</td>
+                <td>${client.name}</td>
+                <td>${client.surname}</td>
+                <td>${client.birthDate}</td>
                 <td>
-                    <button type="button" onclick="deleteUser(${user.id})" class="delete-button">Delete</button>
+                    <form action="clients/delete/${client.id}" method="post">
+                        <input type="submit" class="delete-button" value="Delete"
+                               onclick="return confirm('Are you sure?');"/>
+                    </form>
                 </td>
             </tr>
         </c:forEach>
@@ -103,26 +113,4 @@
 </div>
 <%@ include file="/WEB-INF/jsp/footer.jsp" %>
 </body>
-<script>
-    function deleteUser(userId) {
-        console.log("deleteUser function called with userId:", userId);
-
-        var confirmation = confirm("Are you sure you want to delete this user?");
-        if (confirmation) {
-            var xhr = new XMLHttpRequest();
-            xhr.open("DELETE", "/users/" + userId, true);
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState === 4) {
-                    if (xhr.status === 204) {
-                        alert("Users is successfully deleted");
-                        window.location.reload();
-                    } else {
-                        alert("User deletion error");
-                    }
-                }
-            };
-            xhr.send();
-        }
-    }
-</script>
 </html>

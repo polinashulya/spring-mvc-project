@@ -22,9 +22,9 @@ public class EmployeeDaoImpl extends AbstractDaoImpl<EmployeeEntity> implements 
 
     @Transactional
     @Override
-    public List<EmployeeEntity> findAll(String search, String countryId, String sortBy, String sortType, String page, String pageSize) {
+    public List<EmployeeEntity> findAll(String search, String countryId, String sortBy, String sortType, String page, String pageSize, String positionId, String procedureId) {
         return executeQuery(session -> {
-            CriteriaQuery<EmployeeEntity> criteriaQuery = buildCriteriaQuery(session, search, countryId, sortBy, sortType);
+            CriteriaQuery<EmployeeEntity> criteriaQuery = buildCriteriaQuery(session, search, countryId, sortBy, sortType, positionId,procedureId);
             TypedQuery<EmployeeEntity> query = session.createQuery(criteriaQuery);
             applyPagination(query, page, pageSize);
             return query.getResultList();
@@ -54,8 +54,8 @@ public class EmployeeDaoImpl extends AbstractDaoImpl<EmployeeEntity> implements 
     }
 
     @Override
-    public void save(EmployeeEntity client) {
-        super.save(client);
+    public void save(EmployeeEntity employee) {
+        super.save(employee);
     }
 
     @Override
@@ -64,13 +64,13 @@ public class EmployeeDaoImpl extends AbstractDaoImpl<EmployeeEntity> implements 
     }
 
     @Override
-    public int getTotalResult(String search, String countryId) {
+    public int getTotalResult(String search, String countryId, String positionId, String procedureId) {
         return executeQuery(session -> {
             CriteriaBuilder builder = session.getCriteriaBuilder();
             CriteriaQuery<Long> countQuery = builder.createQuery(Long.class);
             Root<EmployeeEntity> root = countQuery.from(EmployeeEntity.class);
 
-            Predicate predicate = buildPredicate(builder, root, search, countryId);
+            Predicate predicate = buildPredicate(builder, root, search, countryId, positionId,procedureId);
 
             countQuery.select(builder.count(root)).where(predicate);
 

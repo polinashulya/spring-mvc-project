@@ -1,32 +1,38 @@
-create table users
-(
-    id         serial,
-    email      character(20) NOT NULL UNIQUE,
-    password   character(20) NOT NULL,
-    name  character(20) NOT NULL,
-    surname    character(20) NOT NULL,
-    country_id int,
-    birth_date date,
-    banned     bool,
-    deleted    bool
-);
+INSERT INTO user_roles (name)
+VALUES ('CLIENT'),
+       ('EMPLOYEE'),
+       ('ADMIN')
+ON CONFLICT (name) DO NOTHING;
 
 
-create table countries
-(
-    id   serial,
-    name character(20) NOT NULL UNIQUE
-);
+/**
+  countries
+ */
 
-ALTER TABLE users
-    ADD FOREIGN KEY (country_id) REFERENCES countries (id);
+insert into countries(id, name)
+values (1, 'Belarus')
+ON CONFLICT (id) DO NOTHING;;
 
-create table user_roles
-(
-    id   serial,
-    name character(10) NOT NULL UNIQUE
-);
 
-INSERT INTO user_roles (name) VALUES ('CLIENT');
-INSERT INTO user_roles (name) VALUES ('EMPLOYEE');
-INSERT INTO user_roles (name) VALUES ('ADMIN');
+/**
+  positions
+ */
+INSERT INTO employee_positions(code, name)
+values ('test', 'cleaner')
+ON CONFLICT (code) DO NOTHING;
+
+
+/**
+  categories
+ */
+
+insert into procedurecategories(id, name)
+values (1, 'test1')
+ON CONFLICT (id) DO NOTHING;
+/**
+  producers
+ */
+
+INSERT INTO procedures(code, description, duration, name, price, procedurecategories_id)
+values ('test', 'blabla', 3, 'test1', 5, 1)
+ON CONFLICT (code) DO NOTHING;

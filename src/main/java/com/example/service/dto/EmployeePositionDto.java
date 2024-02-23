@@ -1,6 +1,6 @@
 package com.example.service.dto;
 
-import com.example.service.dto.core.AbstractCoreDto;
+import com.example.service.dto.core.AbstractBaseDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +12,9 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
-public class EmployeePositionDto extends AbstractCoreDto {
+public class EmployeePositionDto extends AbstractBaseDto {
+
+    private String code;
 
     private String name;
 

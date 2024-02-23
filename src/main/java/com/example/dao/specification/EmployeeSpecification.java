@@ -1,6 +1,8 @@
 package com.example.dao.specification;
 
 import com.example.entity.EmployeeEntity;
+import com.example.entity.EmployeePositionEntity;
+import com.example.entity.ProcedureEntity;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.*;
 import org.hibernate.Session;
@@ -14,14 +16,14 @@ public interface EmployeeSpecification {
     String SORT_USERS_BY_LOGIN = "byEmail";
     String SORT_USERS_BY_HIRE_DATE = "byHireDate";
 
-    default CriteriaQuery<EmployeeEntity> buildCriteriaQuery(Session session, String search, String countryId, String sortBy, String sortType) {
+    default CriteriaQuery<EmployeeEntity> buildCriteriaQuery(Session session, String search, String countryId, String sortBy, String sortType, String positionId, String procedureId) {
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<EmployeeEntity> criteriaQuery = builder.createQuery(EmployeeEntity.class);
         Root<EmployeeEntity> root = criteriaQuery.from(EmployeeEntity.class);
         root.fetch("positions", JoinType.LEFT);
         root.fetch("procedures", JoinType.LEFT);
 
-        Predicate predicate = buildPredicate(builder, root, search, countryId);
+        Predicate predicate = buildPredicate(builder, root, search, countryId, positionId, procedureId);
         criteriaQuery.where(predicate);
 
         applySorting(builder, criteriaQuery, root, sortBy, sortType);
@@ -29,7 +31,7 @@ public interface EmployeeSpecification {
         return criteriaQuery;
     }
 
-    default Predicate buildPredicate(CriteriaBuilder builder, Root<EmployeeEntity> root, String search, String countryId) {
+    default Predicate buildPredicate(CriteriaBuilder builder, Root<EmployeeEntity> root, String search, String countryId, String positionId, String procedureId) {
         Predicate predicate = builder.conjunction();
         if (countryId != null && !countryId.isEmpty()) {
             predicate = builder.and(predicate, builder.equal(root.get("country").get("id"), Long.parseLong(countryId)));
@@ -39,10 +41,22 @@ public interface EmployeeSpecification {
                     builder.or(
                             builder.like(root.get("email"), "%" + search + "%"),
                             builder.like(root.get("name"), "%" + search + "%"),
-                            builder.like(root.get("surname"), "%" + search + "%")
+                            builder.like(root.get("surname"), "%" + search + "%"),
+                            builder.like(root.get("phoneNumber"), "%" + search + "%")
                     )
             );
         }
+
+        if (positionId != null && !positionId.isEmpty()) {
+            SetJoin<EmployeeEntity, EmployeePositionEntity> positionJoin = root.joinSet("positions", JoinType.INNER);
+            predicate = builder.and(predicate, builder.equal(positionJoin.get("code"), positionId));
+        }
+
+        if (procedureId != null && !procedureId.isEmpty()) {
+            SetJoin<EmployeeEntity, ProcedureEntity> positionJoin = root.joinSet("procedures", JoinType.INNER);
+            predicate = builder.and(predicate, builder.equal(positionJoin.get("code"), procedureId));
+        }
+
         predicate = builder.and(predicate, builder.equal(root.get("deleted"), false));
         return predicate;
     }

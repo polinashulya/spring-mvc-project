@@ -11,10 +11,8 @@ import java.util.List;
 @Mapper(config = EmployeeMapperConfig.class)
 public interface EmployeeMapper extends AbstractMapper<EmployeeDto, EmployeeEntity> {
 
-    @Mapping(target = "countryId", source = "country.id")
     EmployeeDto toDto(EmployeeEntity entity);
 
-    @Mapping(target = "country", ignore = true)
     EmployeeEntity toEntity(EmployeeDto dto);
 
     List<EmployeeDto> toDtoList(List<EmployeeEntity> employeeEntities);

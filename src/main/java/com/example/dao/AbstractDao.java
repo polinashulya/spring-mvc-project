@@ -2,6 +2,7 @@ package com.example.dao;
 
 import com.example.dao.impl.DeletionStatus;
 import com.example.entity.core.AbstractBaseEntity;
+
 import java.util.List;
 
 public interface AbstractDao<E extends AbstractBaseEntity> {
@@ -9,7 +10,7 @@ public interface AbstractDao<E extends AbstractBaseEntity> {
 
     List<E> findAll(String sql);
 
-    <E> void save(E clazz);
+    void save(E clazz);
 
     DeletionStatus softDelete(String sql, Long id);
 

@@ -2,9 +2,10 @@ package com.example.entity;
 
 import com.example.entity.core.AbstractCoreEntity;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -38,7 +39,7 @@ public class UserEntity extends AbstractCoreEntity {
     @Column(name = "birthDate")
     private LocalDate birthDate;
 
-    @Column(name = "registationDate")
+    @Column(name = "registation_date")
     private LocalDate registationDate;
 
     @Column(name = "banned")
@@ -53,4 +54,9 @@ public class UserEntity extends AbstractCoreEntity {
             inverseJoinColumns = @JoinColumn(name = "userRole_id"))
     private Set<UserRoleEntity> userRoles = new HashSet<>();
 
+
+    @PrePersist
+    protected void beforeSave() {
+        this.registationDate = LocalDate.now();
+    }
 }

@@ -19,13 +19,13 @@ import java.util.Set;
 @NoArgsConstructor
 public class EmployeeEntity extends UserEntity {
 
-    @Column(name = "hireDate")
+    @Column(name = "hire_date")
     private LocalDate hireDate;
 
     @ManyToMany
-    @JoinTable(name = "employees_employeePositions",
+    @JoinTable(name = "employees_positions",
             joinColumns = @JoinColumn(name = "employee_id"),
-            inverseJoinColumns = @JoinColumn(name = "employeePosition_id"))
+            inverseJoinColumns = @JoinColumn(name = "position_code"))
     private Set<EmployeePositionEntity> positions = new HashSet<>();
 
     @ManyToMany

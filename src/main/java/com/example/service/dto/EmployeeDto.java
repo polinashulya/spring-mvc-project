@@ -7,8 +7,8 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Setter
 @Getter
@@ -19,8 +19,8 @@ public class EmployeeDto extends UserDto {
 
     private LocalDate hireDate;
 
-    private Set<EmployeePositionDto> positions = new HashSet<>();
+    private List<EmployeePositionDto> positions = new ArrayList<>();
 
-    private Set<ProcedureDto> procedures = new HashSet<>();
+    private List<ProcedureDto> procedures;
 
 }

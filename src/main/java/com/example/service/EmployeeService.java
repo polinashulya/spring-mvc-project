@@ -3,14 +3,14 @@ package com.example.service;
 import com.example.dao.impl.DeletionStatus;
 import com.example.service.dto.EmployeeDto;
 import com.example.service.dto.PageableDto;
-import com.example.service.dto.search.UserSearchCriteriaDto;
+import com.example.service.dto.search.EmployeeSearchCriteriaDto;
 
 public interface EmployeeService {
-    PageableDto<EmployeeDto> getAll(UserSearchCriteriaDto employeeSearchCriteriaDto);
+    PageableDto<EmployeeDto> getAll(EmployeeSearchCriteriaDto employeeSearchCriteriaDto);
 
-    void add(EmployeeDto employeeDto);
+    void save(EmployeeDto employeeDto);
 
     DeletionStatus deleteById(Long employeeId);
 
-    int getTotalResult(String sortBy, String sortType, String countryId, String search);
+    int getTotalResult(String sortBy, String sortType, String countryId, String search, String positionId, String procedureId);
 }

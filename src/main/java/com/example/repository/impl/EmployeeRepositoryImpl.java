@@ -19,9 +19,9 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     private final EmployeeDao employeeDao;
 
     @Override
-    public List<EmployeeEntity> findAll(String sortBy, String sortType, String countryId, String search, String page, String pageSize) {
+    public List<EmployeeEntity> findAll(String sortBy, String sortType, String countryId, String search, String page, String pageSize, String positionId, String procedureId) {
         try {
-            return employeeDao.findAll(search, countryId, sortBy, sortType, page, pageSize);
+            return employeeDao.findAll(search, countryId, sortBy, sortType, page, pageSize, positionId, procedureId);
         } catch (DAOException e) {
             throw new RepositoryException(e);
         }
@@ -46,9 +46,9 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     }
 
     @Override
-    public int getTotalResult(String sortBy, String sortType, String countryId, String search) {
+    public int getTotalResult(String sortBy, String sortType, String countryId, String search, String positionId, String procedureId) {
         try {
-            return employeeDao.getTotalResult(search, countryId);
+            return employeeDao.getTotalResult(search, countryId, positionId, procedureId);
         } catch (DAOException e) {
             throw new RepositoryException(e);
         }
