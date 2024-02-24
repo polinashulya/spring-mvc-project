@@ -1,7 +1,6 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
-
 <spring:bind path="email">
     <div>
         <label for="email">
@@ -18,7 +17,7 @@
                 maxlength="20"
                 autofocus="true"/>
         <div class="error">
-            <form:errors path="email" cssClass="form-errors"/>
+            <form:errors path="email"/>
         </div>
     </div>
 </spring:bind>

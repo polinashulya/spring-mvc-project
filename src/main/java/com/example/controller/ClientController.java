@@ -63,7 +63,7 @@ public class ClientController {
     }
 
     @PostMapping("/adding_form")
-    public String save(@Validated @ModelAttribute ClientDto clientDto,
+    public String save(@Validated @ModelAttribute("clientForm") ClientDto clientDto,
                        BindingResult bindingResult
 
     ) {

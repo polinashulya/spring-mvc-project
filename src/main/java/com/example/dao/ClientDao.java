@@ -6,7 +6,7 @@ import com.example.entity.ClientEntity;
 import java.util.List;
 import java.util.Optional;
 
-public interface ClientDao extends AbstractDao<ClientEntity>{
+public interface ClientDao {
 
     List<ClientEntity> findAll( String  search, String countyId, String sortBy, String sortType, String page, String pageSize);
 

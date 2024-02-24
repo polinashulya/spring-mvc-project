@@ -70,20 +70,16 @@ public class ClientServiceImpl implements ClientService {
 //            throw new ServiceException("Information is not valid!");
 //        }
 
-//        if (clientRepository.findByEmail(clientDto.getEmail()).isPresent()) {
-//            throw new ServiceException("Email is already in use!");
-//        }
+        if (clientRepository.findByEmail(clientDto.getEmail()).isPresent()) {
+            throw new ServiceException("Email is already in use!");
+        }
 
         ClientEntity clientEntity = clientMapper.toEntity(clientDto);
 
         UserRoleEntity clientRole = userRoleRepository.findByName(UserRoles.CLIENT.name())
                 .orElseThrow(() -> new ServiceException("Default role 'CLIENT' not found"));
-        Set<UserRoleEntity> roles = new HashSet<>();
-        roles.add(clientRole);
 
-        clientEntity.setRegistationDate(LocalDate.now());
-
-        clientEntity.setUserRoles(roles);
+        clientEntity.setUserRoles(Set.of(clientRole));
 
         try {
             clientRepository.save(clientEntity);
