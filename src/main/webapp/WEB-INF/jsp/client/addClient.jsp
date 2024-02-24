@@ -13,7 +13,7 @@
 </head>
 <body>
 <div>
-    <%@ include file="/WEB-INF/jsp/header.jsp" %>
+    <%@ include file="/WEB-INF/jsp/common/header.jsp" %>
 </div>
 <div id="container">
     <h1>Add new employee</h1>
@@ -33,6 +33,6 @@
         <input type="submit" value="Submit"/>
     </form:form>
 </div>
-<%@ include file="/WEB-INF/jsp/footer.jsp" %>
+<%@ include file="/WEB-INF/jsp/common/footer.jsp" %>
 </body>
 </html>

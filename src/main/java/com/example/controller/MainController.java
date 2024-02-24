@@ -15,7 +15,7 @@ public class MainController {
     public String mainPage() {
 
         try {
-            return "index";
+            return "common/index";
         } catch (Exception e) {
             logger.error("Error while executing DeleteUserCommand", e);
             throw new ControllerCustomException("Error while executing DeleteUserCommand", e);

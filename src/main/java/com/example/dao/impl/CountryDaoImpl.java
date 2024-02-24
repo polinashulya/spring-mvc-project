@@ -22,8 +22,6 @@ public class CountryDaoImpl extends AbstractDaoImpl<CountryEntity> implements Co
 
     @Override
     public Optional<CountryEntity> findById(Long id) {
-        return Optional.ofNullable(
-                getById(GET_COUNTRY_BY_ID, id)
-        );
+        return findById(GET_COUNTRY_BY_ID, id);
     }
 }

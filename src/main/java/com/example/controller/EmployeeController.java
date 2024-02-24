@@ -80,7 +80,7 @@ public class EmployeeController {
             EmployeeDto employeeDto = new EmployeeDto();
             model.addAttribute("employeeForm", employeeDto);
 
-            return "employee/add_employee";
+            return "employee/addEmployee";
         } catch (Exception e) {
             logger.error("Error while executing adding form", e);
             throw new ControllerCustomException("Error while executing adding form", e);
@@ -99,7 +99,7 @@ public class EmployeeController {
         try {
 
             if (bindingResult.hasErrors()) {
-                return "employee/add_employee";
+                return "employee/addEmployee";
             }
 
             employeeService.save(employeeDto);

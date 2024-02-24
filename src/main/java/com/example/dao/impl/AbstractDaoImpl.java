@@ -1,6 +1,7 @@
 package com.example.dao.impl;
 
 import com.example.dao.AbstractDao;
+import com.example.entity.ClientEntity;
 import com.example.entity.core.AbstractBaseEntity;
 import com.example.exception.DAOException;
 import org.hibernate.HibernateException;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 
 @Repository
@@ -35,6 +37,13 @@ public abstract class AbstractDaoImpl<E extends AbstractBaseEntity> implements A
                 session.createQuery(sql, clazz)
                         .setParameter("id", id)
                         .uniqueResult());
+    }
+
+    @Override
+    public Optional<E> findById(String sql, Long id) {
+        return Optional.ofNullable(
+                getById(sql, id)
+        );
     }
 
     @Override

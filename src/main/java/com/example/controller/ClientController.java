@@ -56,7 +56,7 @@ public class ClientController {
             ClientDto clientDto = new ClientDto();
             model.addAttribute("clientForm", clientDto);
 
-            return "client/add_client";
+            return "client/addClient";
         } catch (Exception e) {
             throw new ControllerCustomException("Error while executing adding form", e);
         }
@@ -70,7 +70,7 @@ public class ClientController {
         try {
 
             if (bindingResult.hasErrors()) {
-                return "client/add_client";
+                return "client/addClient";
             }
 
             clientService.add(clientDto);

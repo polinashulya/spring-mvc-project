@@ -22,8 +22,6 @@ public class ProcedureDaoImpl extends AbstractDaoImpl<ProcedureEntity> implement
 
     @Override
     public Optional<ProcedureEntity> findById(Long id) {
-        return Optional.ofNullable(
-                getById(GET_PROCEDURES_BY_ID, id)
-        );
+        return findById(GET_PROCEDURES_BY_ID, id);
     }
 }

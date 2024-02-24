@@ -21,8 +21,6 @@ public class EmployeePositionDaoImpl extends AbstractDaoImpl<EmployeePositionEnt
 
     @Override
     public Optional<EmployeePositionEntity> findById(Long id) {
-        return Optional.ofNullable(
-                getById(GET_POSITION_BY_ID, id)
-        );
+        return findById(GET_POSITION_BY_ID, id);
     }
 }

@@ -12,6 +12,6 @@ public class GlobalExceptionHandler {
 
         model.addAttribute("error", "An unexpected error occurred: " + e.getMessage());
 
-        return "error_page";
+        return "error/errorPage";
     }
 }

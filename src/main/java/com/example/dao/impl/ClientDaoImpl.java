@@ -4,9 +4,13 @@ import com.example.dao.ClientDao;
 import com.example.dao.specification.ClientSpecification;
 import com.example.entity.ClientEntity;
 import jakarta.persistence.TypedQuery;
-import jakarta.persistence.criteria.*;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -32,9 +36,7 @@ public class ClientDaoImpl extends AbstractDaoImpl<ClientEntity> implements Clie
 
     @Override
     public Optional<ClientEntity> findById(Long id) {
-        return Optional.ofNullable(
-                getById(GET_CLIENT_BY_ID, id)
-        );
+        return findById(GET_CLIENT_BY_ID, id);
     }
 
     @Override
@@ -50,11 +52,6 @@ public class ClientDaoImpl extends AbstractDaoImpl<ClientEntity> implements Clie
     @Override
     public Optional<ClientEntity> findByEmail(String email) {
         return Optional.ofNullable(getByEmail(email));
-    }
-
-    @Override
-    public void save(ClientEntity client) {
-        super.save(client);
     }
 
     @Override
