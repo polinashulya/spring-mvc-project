@@ -22,7 +22,7 @@
 
         <label for="sortBy">Sort By:</label>
         <select name="sortBy" id="sortBy">
-            <option value="byId" <c:if test="${sortType == 'byId'}">selected</c:if>>ID</option>
+            <%--            <option value="byId" <c:if test="${sortType == 'byId'}">selected</c:if>>ID</option>--%>
             <option value="byEmail" <c:if test="${sortType == 'byEmail'}">selected</c:if>>Email</option>
             <option value="bySurname" <c:if test="${sortType == 'bySurname'}">selected</c:if>>Surname</option>
             <option value="byBirthDate" <c:if test="${sortType == 'byBirthDate'}">selected</c:if>>Birth Date</option>
@@ -38,17 +38,17 @@
             </option>
         </select>
 
-<%--        <label for="countryFiltering"> Country: </label>--%>
-<%--        <select id="countryFiltering" name="countryId">--%>
-<%--            <option disabled selected value> -- select an option --</option>--%>
-<%--            <c:forEach items="${countries}" var="country">--%>
-<%--                <option value="${country.id}"--%>
-<%--                        <c:if test="${country.id == currentCountryId}">selected</c:if>>--%>
-<%--                        ${country.name}--%>
-<%--                </option>--%>
-<%--            </c:forEach>--%>
-<%--            <option value=""> none</option>--%>
-<%--        </select>--%>
+        <%--        <label for="countryFiltering"> Country: </label>--%>
+        <%--        <select id="countryFiltering" name="countryId">--%>
+        <%--            <option disabled selected value> -- select an option --</option>--%>
+        <%--            <c:forEach items="${countries}" var="country">--%>
+        <%--                <option value="${country.id}"--%>
+        <%--                        <c:if test="${country.id == currentCountryId}">selected</c:if>>--%>
+        <%--                        ${country.name}--%>
+        <%--                </option>--%>
+        <%--            </c:forEach>--%>
+        <%--            <option value=""> none</option>--%>
+        <%--        </select>--%>
 
         <label for="searchText">Search:</label>
         <input type="text" id="searchText" name="search" value="${param.search}" placeholder="Search text">
@@ -85,20 +85,21 @@
         <caption>Users</caption>
         <thead>
         <tr>
-            <th id="id">User`s id</th>
+            <%--            <th id="id">User`s id</th>--%>
+            <th id="name">Name and surname</th>
+            <%--            <th id="secondName">Surname</th>--%>
             <th id="email">Email</th>
-            <th id="name">name</th>
-            <th id="secondName">Surname</th>
+            <th id="phoneNumber">Phone number</th>
             <th id="birthDate">Birth date</th>
         </tr>
         </thead>
         <tbody>
         <c:forEach items="${clientPageable.elements}" var="client">
             <tr>
-                <td>${client.id}</td>
+                    <%--                <td>${client.id}</td>--%>
+                <td>${client.name} ${client.surname}</td>
                 <td>${client.email}</td>
-                <td>${client.name}</td>
-                <td>${client.surname}</td>
+                <td>${client.phoneNumber}</td>
                 <td>${client.birthDate}</td>
                 <td>
                     <form action="clients/delete/${client.id}" method="post">

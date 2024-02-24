@@ -22,7 +22,7 @@
 
         <label for="sortBy">Sort By:</label>
         <select name="sortBy" id="sortBy">
-            <option value="byId" <c:if test="${sortType == 'byId'}">selected</c:if>>ID</option>
+            <%--            <option value="byId" <c:if test="${sortType == 'byId'}">selected</c:if>>ID</option>--%>
             <option value="byEmail" <c:if test="${sortType == 'byEmail'}">selected</c:if>>Email</option>
             <option value="bySurname" <c:if test="${sortType == 'bySurname'}">selected</c:if>>Surname</option>
             <option value="byHireDate" <c:if test="${sortType == 'byHireDate'}">selected</c:if>>Hire Date</option>
@@ -97,10 +97,9 @@
         <caption>Users</caption>
         <thead>
         <tr>
-            <th id="id">User`s id</th>
+            <%--            <th id="id">User`s id</th>--%>
+            <th id="name">Name and surname</th>
             <th id="email">Email</th>
-            <th id="name">name</th>
-            <th id="secondName">Surname</th>
             <th id="phoneNumber">Phone</th>
             <th id="birthDate">Birth date</th>
             <th id="hireDate">Hire date</th>
@@ -111,10 +110,9 @@
         <tbody>
         <c:forEach items="${employeePageable.elements}" var="employee">
             <tr>
-                <td>${employee.id}</td>
+                    <%--                <td>${employee.id}</td>--%>
+                <td>${employee.name} ${employee.surname}</td>
                 <td>${employee.email}</td>
-                <td>${employee.name}</td>
-                <td>${employee.surname}</td>
                 <td>${employee.phoneNumber}</td>
                 <td>${employee.birthDate}</td>
                 <td>${employee.hireDate}</td>
