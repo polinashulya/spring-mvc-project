@@ -2,7 +2,6 @@ package com.example.entity;
 
 
 import com.example.entity.core.AbstractBaseEntity;
-import com.example.service.dto.core.AbstractBaseDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

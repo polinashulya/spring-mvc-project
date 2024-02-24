@@ -13,10 +13,6 @@ public interface UserMapper extends AbstractMapper<UserDto, UserEntity> {
 
     UserDto toDto(UserEntity userEntity);
 
-    CountryDto countryEntityToCountryDto(CountryEntity countryEntity);
-
-    UserRoleDto userRoleEntityToUserRoleDto(UserRoleEntity userRoleEntity);
-
     EmployeePositionDto employeePositionEntityToEmployeePositionDto(EmployeePositionEntity employeePosition);
 
     ProcedureDto procedureEntityToProcedureDto(ProcedureEntity procedureEntity);

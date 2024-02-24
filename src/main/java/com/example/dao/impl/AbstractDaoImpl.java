@@ -1,7 +1,6 @@
 package com.example.dao.impl;
 
 import com.example.dao.AbstractDao;
-import com.example.entity.ClientEntity;
 import com.example.entity.core.AbstractBaseEntity;
 import com.example.exception.DAOException;
 import org.hibernate.HibernateException;

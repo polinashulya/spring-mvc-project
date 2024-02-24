@@ -92,10 +92,8 @@ public class EmployeeController {
 
 
     @PostMapping("/adding_form")
-    public String save(Model model,
-                       @Validated @ModelAttribute("employeeForm") EmployeeDto employeeDto,
-                       BindingResult bindingResult
-    ) {
+    public String save(@Validated @ModelAttribute("employeeForm") EmployeeDto employeeDto,
+                       BindingResult bindingResult) {
         try {
 
             if (bindingResult.hasErrors()) {

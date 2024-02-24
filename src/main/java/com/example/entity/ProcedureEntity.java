@@ -1,7 +1,6 @@
 package com.example.entity;
 
 import com.example.entity.core.AbstractBaseEntity;
-import com.example.entity.core.AbstractCoreEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,7 +9,6 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
-import java.time.LocalTime;
 
 @Entity
 @Table(name = "procedures")

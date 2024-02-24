@@ -22,7 +22,7 @@ public class ClientDaoImpl extends AbstractDaoImpl<ClientEntity> implements Clie
 
     private static final String SOFT_DELETE_CLIENT_BY_ID = "UPDATE ClientEntity c SET c.deleted = true WHERE c.id = :id";
 
-    private static final String GET_CLIENT_BY_EMAIL = "FROM ClientEntity c JOIN FETCH c.country c WHERE c.email = :email AND c.deleted = false";
+    private static final String GET_CLIENT_BY_EMAIL = "FROM ClientEntity c JOIN FETCH c.country WHERE c.email = :email AND c.deleted = false";
 
     @Override
     public List<ClientEntity> findAll(String search, String countryId, String sortBy, String sortType, String page, String pageSize) {

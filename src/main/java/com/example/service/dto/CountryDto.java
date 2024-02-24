@@ -1,7 +1,6 @@
 package com.example.service.dto;
 
 import com.example.service.dto.core.AbstractCoreDto;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

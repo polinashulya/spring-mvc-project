@@ -34,10 +34,6 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeRepository employeeRepository;
 
     private final UserRoleRepository userRoleRepository;
-    private final EmployeePositionRepository employeePositionRepository;
-    private final ProcedureRepository procedureRepository;
-
-    private final UserValidator validator;
 
     private final EmployeeMapper employeeMapper;
 

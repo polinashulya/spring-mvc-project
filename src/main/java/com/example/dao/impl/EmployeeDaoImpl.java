@@ -2,7 +2,6 @@ package com.example.dao.impl;
 
 import com.example.dao.EmployeeDao;
 import com.example.dao.specification.EmployeeSpecification;
-import com.example.entity.ClientEntity;
 import com.example.entity.EmployeeEntity;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.*;
