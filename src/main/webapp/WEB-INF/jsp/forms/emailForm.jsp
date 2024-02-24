@@ -18,7 +18,7 @@
                 maxlength="20"
                 autofocus="true"/>
         <div class="error">
-            <form:errors path="email"/>
+            <form:errors path="email" cssClass="form-errors"/>
         </div>
     </div>
 </spring:bind>

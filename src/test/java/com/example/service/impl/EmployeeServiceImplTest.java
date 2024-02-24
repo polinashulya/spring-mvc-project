@@ -12,7 +12,7 @@ import com.example.repository.EmployeeRepository;
 import com.example.repository.UserRoleRepository;
 import com.example.repository.CountryRepository;
 import com.example.service.mapper.user.employee.EmployeeMapper;
-import com.example.validator.UserValidator;
+import com.example.validation.UserValidator;
 
 public class EmployeeServiceImplTest {
 

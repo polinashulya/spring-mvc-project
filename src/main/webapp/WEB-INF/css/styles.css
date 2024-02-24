@@ -69,3 +69,7 @@ input[type="submit"] {
     align-items: center;
     justify-content: center;
 }
+
+.form-errors {
+    color: red;
+}

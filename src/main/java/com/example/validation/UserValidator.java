@@ -1,4 +1,4 @@
-package com.example.validator;
+package com.example.validation;
 
 import java.time.LocalDate;
 

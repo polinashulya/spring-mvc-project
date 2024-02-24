@@ -1,8 +1,11 @@
 package com.example.service.dto;
 
 import com.example.service.dto.core.AbstractCoreDto;
+import com.example.validation.annotatoin.ValidPhone;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,22 +21,25 @@ import java.time.LocalDate;
 @SuperBuilder(toBuilder = true)
 public class UserDto extends AbstractCoreDto {
 
-    @NotBlank(message = "Email is mandatory")
+    @NotNull
     @Email(message = "Email must be valid")
     private String email;
 
+    @NotNull
+    @ValidPhone
     private String phoneNumber;
 
     @NotBlank(message = "Password is mandatory")
     private String password;
 
-  //  @NotNull(message = "Role is mandatory")
     private UserRoleDto role;
 
     @NotBlank(message = "Name is mandatory")
+    @Size(min = 2, max = 20, message = "The name is mandatory and must be at least 2 characters and no more than 20 characters.")
     private String name;
 
     @NotBlank(message = "Surname is mandatory")
+    @Size(min = 2, max = 20, message = "The surname is mandatory and must be at least 2 characters and no more than 20 characters.")
     private String surname;
 
     private LocalDate birthDate;

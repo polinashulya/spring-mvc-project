@@ -4,8 +4,11 @@
 
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-
-
+<head>
+    <style type="text/css">
+        <%@ include file="/WEB-INF/css/table.css" %>
+    </style>
+</head>
 <td rowspan="1" class="form-group">
     <spring:bind path="password">
         <label for="password">
@@ -21,7 +24,7 @@
                 name="password"/>
 
         <div class="error">
-            <form:errors path="password"/>
+            <form:errors path="password" cssClass="form-errors"/>
         </div>
     </spring:bind>
 </td>
@@ -42,7 +45,7 @@
                 title="Phone number"/>
 
         <div class="error">
-            <form:errors path="phoneNumber"/>
+            <form:errors path="phoneNumber" cssClass="form-errors"/>
         </div>
     </spring:bind>
 </td>
@@ -64,7 +67,7 @@
                     name="name"/>
 
             <div class="error">
-                <form:errors path="name"/>
+                <form:errors path="name" cssClass="form-errors"/>
             </div>
         </spring:bind>
     </td>
@@ -84,7 +87,7 @@
                     value="testValue"/>
 
             <div class="error">
-                <form:errors path="surname"/>
+                <form:errors path="surname" cssClass="form-errors"/>
             </div>
         </spring:bind>
     </td>
@@ -103,7 +106,7 @@
                     name="birthDate"/>
 
             <div class="error">
-                <form:errors path="birthDate"/>
+                <form:errors path="birthDate" cssClass="form-errors"/>
             </div>
         </spring:bind>
     </td>

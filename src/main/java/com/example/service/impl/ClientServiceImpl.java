@@ -13,7 +13,7 @@ import com.example.service.dto.ClientDto;
 import com.example.service.dto.PageableDto;
 import com.example.service.dto.search.UserSearchCriteriaDto;
 import com.example.service.mapper.user.client.ClientMapper;
-import com.example.validator.UserValidator;
+import com.example.validation.UserValidator;
 import lombok.AllArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

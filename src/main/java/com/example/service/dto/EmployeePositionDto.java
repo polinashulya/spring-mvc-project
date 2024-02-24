@@ -1,6 +1,7 @@
 package com.example.service.dto;
 
 import com.example.service.dto.core.AbstractBaseDto;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,6 +17,7 @@ public class EmployeePositionDto extends AbstractBaseDto {
 
     private String code;
 
+    @NotBlank(message = "Name is mandatory")
     private String name;
 
 }

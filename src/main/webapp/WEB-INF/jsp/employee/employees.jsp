@@ -38,41 +38,29 @@
             </option>
         </select>
 
-        <%--        <label for="countryFiltering"> Country: </label>--%>
-        <%--        <select id="countryFiltering" name="countryId">--%>
-        <%--            <option disabled selected value> -- select an option --</option>--%>
-        <%--            <c:forEach items="${countries}" var="country">--%>
-        <%--                <option value="${country.id}"--%>
-        <%--                        <c:if test="${country.id == currentCountryId}">selected</c:if>>--%>
-        <%--                        ${country.name}--%>
-        <%--                </option>--%>
-        <%--            </c:forEach>--%>
-        <%--            <option value=""> none</option>--%>
-        <%--        </select>--%>
+        <label for="positionFiltering"> Position: </label>
+        <select id="positionFiltering" name="positionCode">
+            <option disabled selected value> -- select an option --</option>
+            <c:forEach items="${positions}" var="position">
+                <option value="${position.code}"
+                        <c:if test="${position.code == currentPositionCode}">selected</c:if>>
+                        ${position.name}
+                </option>
+            </c:forEach>
+            <option value=""> none</option>
+        </select>
 
-                <label for="positionFiltering"> Position: </label>
-                <select id="positionFiltering" name="positionCode">
-                    <option disabled selected value> -- select an option --</option>
-                    <c:forEach items="${positions}" var="position">
-                        <option value="${position.code}"
-                                <c:if test="${position.code == currentPositionCode}">selected</c:if>>
-                                ${position.name}
-                        </option>
-                    </c:forEach>
-                    <option value=""> none</option>
-                </select>
-
-                <label for="procedureFiltering"> Procedure: </label>
-                <select id="procedureFiltering" name="procedureCode">
-                    <option disabled selected value> -- select an option --</option>
-                    <c:forEach items="${procedures}" var="procedure">
-                        <option value="${procedure.code}"
-                                <c:if test="${procedure.code == currentProcedureCode}">selected</c:if>>
-                                ${procedure.name}
-                        </option>
-                    </c:forEach>
-                    <option value=""> none</option>
-                </select>
+        <label for="procedureFiltering"> Procedure: </label>
+        <select id="procedureFiltering" name="procedureCode">
+            <option disabled selected value> -- select an option --</option>
+            <c:forEach items="${procedures}" var="procedure">
+                <option value="${procedure.code}"
+                        <c:if test="${procedure.code == currentProcedureCode}">selected</c:if>>
+                        ${procedure.name}
+                </option>
+            </c:forEach>
+            <option value=""> none</option>
+        </select>
 
         <label for="searchText">Search:</label>
         <input type="text" id="searchText" name="search" value="${param.search}" placeholder="Search text">

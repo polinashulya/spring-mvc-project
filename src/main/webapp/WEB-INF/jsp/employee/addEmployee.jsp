@@ -45,7 +45,7 @@
                                 name="hireDate"/>
 
                         <div class="error">
-                            <form:errors path="hireDate"/>
+                            <form:errors path="hireDate" cssClass="form-errors"/>
                         </div>
                     </spring:bind>
                 </td>
@@ -67,23 +67,6 @@
                                 disabled="true"/>
                     </form:select>
                 </td>
-                    <%--                <td rowspan="1" class="form-group">--%>
-                    <%--                    <form:label path="procedures">--%>
-                    <%--                        <sup>*</sup>Procedures:--%>
-                    <%--                    </form:label>--%>
-                    <%--                    <form:select--%>
-                    <%--                            path="procedures"--%>
-                    <%--                            items="${procedures}"--%>
-                    <%--                            itemValue="code"--%>
-                    <%--                            itemLabel="name"--%>
-                    <%--                            multiple="true"--%>
-                    <%--                    >--%>
-                    <%--                        <form:option--%>
-                    <%--                                value=""--%>
-                    <%--                                label="-- select an option --"--%>
-                    <%--                                disabled="true"/>--%>
-                    <%--                    </form:select>--%>
-                    <%--                </td>--%>
                 <td rowspan="1" class="form-group">
                     <form:label path="procedures">
                         <sup>*</sup>Procedures:

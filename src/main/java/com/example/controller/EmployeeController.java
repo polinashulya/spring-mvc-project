@@ -86,10 +86,6 @@ public class EmployeeController {
             throw new ControllerCustomException("Error while executing adding form", e);
         }
     }
-    // @Validated @ModelAttribute
-    //                                     (ControllerConstantsHolder.USER_FORM) UserSignUpDTO userForm,
-    //                             BindingResult bindingResult)
-
 
     @PostMapping("/adding_form")
     public String save(@Validated @ModelAttribute("employeeForm") EmployeeDto employeeDto,
