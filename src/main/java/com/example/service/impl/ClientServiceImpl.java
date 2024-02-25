@@ -65,11 +65,6 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public void add(ClientDto clientDto) {
 
-//        if (!validator.isUserValid(clientDto.getEmail(), clientDto.getPassword(),
-//                clientDto.getName(), clientDto.getSurname(), clientDto.getBirthDate())) {
-//            throw new ServiceException("Information is not valid!");
-//        }
-
         if (clientRepository.findByEmail(clientDto.getEmail()).isPresent()) {
             throw new ServiceException("Email is already in use!");
         }

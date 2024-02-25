@@ -1,6 +1,7 @@
 package com.example.service.dto;
 
 import com.example.service.dto.core.AbstractCoreDto;
+import com.example.validation.annotatoin.ValidAge;
 import com.example.validation.annotatoin.ValidPhone;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -11,6 +12,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
@@ -30,6 +32,7 @@ public class UserDto extends AbstractCoreDto {
     private String phoneNumber;
 
     @NotBlank(message = "Password is mandatory")
+    @Size(min = 2, max = 20, message = "The password is mandatory and must be at least 2 characters and no more than 20 characters.")
     private String password;
 
     private UserRoleDto role;
@@ -42,6 +45,8 @@ public class UserDto extends AbstractCoreDto {
     @Size(min = 2, max = 20, message = "The surname is mandatory and must be at least 2 characters and no more than 20 characters.")
     private String surname;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @ValidAge(message = "You must be at least 16 years old", minAge = 16)
     private LocalDate birthDate;
 
     private boolean banned;

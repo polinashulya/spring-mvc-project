@@ -7,11 +7,11 @@ import java.time.LocalDate;
 @Component
 public class UserValidatorImpl implements UserValidator {
 
-    private static final String LOGIN_FORMAT_REGEX = "^[a-zA-Z][a-zA-Z0-9-_.]{2,19}$";
+    private static final String LOGIN_FORMAT_REGEX = "^[a-zA-Z][a-zA-Z0-9-_.]{2,20}$";
 
-    private static final String PASSWORD_FORMAT_REGEX = ".{2,19}$";
+    private static final String PASSWORD_FORMAT_REGEX = ".{2,20}$";
 
-    private static final String NAME_FORMAT_REGEX = ".{2,19}";
+    private static final String NAME_FORMAT_REGEX = ".{2,20}";
 
     @Override
     public boolean isUserValid(String email, String password, String name, String surname,

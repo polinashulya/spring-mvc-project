@@ -3,6 +3,7 @@ package com.example.dao.impl;
 import com.example.dao.ClientDao;
 import com.example.dao.specification.ClientSpecification;
 import com.example.entity.ClientEntity;
+import com.example.entity.EmployeeEntity;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -48,6 +49,10 @@ public class ClientDaoImpl extends AbstractDaoImpl<ClientEntity> implements Clie
 
     }
 
+    @Override
+    public void save(ClientEntity client) {
+        super.save(client);
+    }
 
     @Override
     public Optional<ClientEntity> findByEmail(String email) {

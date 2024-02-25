@@ -2,6 +2,7 @@ package com.example.dao;
 
 import com.example.dao.impl.DeletionStatus;
 import com.example.entity.ClientEntity;
+import com.example.entity.EmployeeEntity;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,5 +20,7 @@ public interface ClientDao {
     Optional<ClientEntity> findByEmail(String email);
 
     int getTotalResult(String search, String countryId);
+
+    void save(ClientEntity client);
 
 }

@@ -20,5 +20,6 @@ public interface EmployeeDao {
 
     int getTotalResult(String search, String countryId, String positionId, String procedureId);
 
+    void save(EmployeeEntity employee);
 
 }
