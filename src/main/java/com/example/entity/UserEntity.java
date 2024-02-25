@@ -55,8 +55,8 @@ public class UserEntity extends AbstractCoreEntity {
     private Set<UserRoleEntity> userRoles = new HashSet<>();
 
 
-    @PrePersist
-    protected void beforeSave() {
-        this.registationDate = LocalDate.now();
-    }
+//    @PrePersist
+//    protected void beforeSave() {
+//        this.registationDate = LocalDate.now();
+//    }
 }

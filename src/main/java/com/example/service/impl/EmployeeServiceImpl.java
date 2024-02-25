@@ -19,6 +19,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
@@ -75,6 +76,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .orElseThrow(() -> new ServiceException("Default role 'EMPLOYEE' not found"));
 
         employeeEntity.setUserRoles(Set.of(employeeRole));
+        employeeEntity.setRegistationDate(LocalDate.now());
 
         try {
             employeeRepository.save(employeeEntity);

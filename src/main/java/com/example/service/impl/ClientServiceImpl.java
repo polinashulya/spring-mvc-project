@@ -13,14 +13,12 @@ import com.example.service.dto.ClientDto;
 import com.example.service.dto.PageableDto;
 import com.example.service.dto.search.UserSearchCriteriaDto;
 import com.example.service.mapper.user.client.ClientMapper;
-import com.example.validation.UserValidator;
 import lombok.AllArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -33,8 +31,6 @@ public class ClientServiceImpl implements ClientService {
     private final ClientRepository clientRepository;
 
     private final UserRoleRepository userRoleRepository;
-
-    private final UserValidator validator;
 
     private final ClientMapper clientMapper;
 
@@ -75,6 +71,7 @@ public class ClientServiceImpl implements ClientService {
                 .orElseThrow(() -> new ServiceException("Default role 'CLIENT' not found"));
 
         clientEntity.setUserRoles(Set.of(clientRole));
+        clientEntity.setRegistationDate(LocalDate.now());
 
         try {
             clientRepository.save(clientEntity);
