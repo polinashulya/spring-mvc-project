@@ -6,7 +6,7 @@ import com.example.entity.EmployeeEntity;
 import java.util.List;
 import java.util.Optional;
 
-public interface EmployeeDao extends AbstractDao<EmployeeEntity> {
+public interface EmployeeDao {
 
     List<EmployeeEntity> findAll(String search, String countyId, String sortBy, String sortType, String page, String pageSize, String positionId, String procedureId);
 
