@@ -43,8 +43,7 @@ public class EmployeeController {
             model.addAttribute("currentCountryId", employeeSearchCriteriaDto.getCountryId());
             model.addAttribute("currentPositionCode", employeeSearchCriteriaDto.getPositionCode());
             model.addAttribute("currentProcedureCode", employeeSearchCriteriaDto.getProcedureCode());
-
-            setCountriesToModel(model);
+            
             setEmployeePositionsToModel(model);
             setProceduresToModel(model);
 
@@ -53,11 +52,6 @@ public class EmployeeController {
             logger.error("Error while executing find all employees", e);
             throw new ControllerCustomException("Error while executing find all employees", e);
         }
-    }
-
-    private void setCountriesToModel(Model model) {
-        List<CountryDto> countries = this.countryService.findAll();
-        model.addAttribute("countries", countries);
     }
 
     private void setEmployeePositionsToModel(Model model) {
@@ -73,7 +67,6 @@ public class EmployeeController {
     @GetMapping("/adding_form")
     public String addingForm(Model model) {
         try {
-            setCountriesToModel(model);
             setEmployeePositionsToModel(model);
             setProceduresToModel(model);
 
@@ -88,11 +81,13 @@ public class EmployeeController {
     }
 
     @PostMapping("/adding_form")
-    public String save(@Validated @ModelAttribute("employeeForm") EmployeeDto employeeDto,
+    public String save(Model model,@Validated @ModelAttribute("employeeForm") EmployeeDto employeeDto,
                        BindingResult bindingResult) {
         try {
 
             if (bindingResult.hasErrors()) {
+                setEmployeePositionsToModel(model);
+                setProceduresToModel(model);
                 return "employee/addEmployee";
             }
 

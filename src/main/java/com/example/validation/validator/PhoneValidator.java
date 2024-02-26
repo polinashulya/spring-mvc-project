@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 public class PhoneValidator implements ConstraintValidator<ValidPhone, String> {
 
 
-    private static final Pattern PATTERN = Pattern.compile(com.example.validation.validator.CommonHolder.PHONE_PATTER);
+    private static final Pattern PATTERN = Pattern.compile(com.example.validation.validator.CommonHolder.PHONE_PATTERN);
 
     @Override
     public boolean isValid(final String phoneNumber, final ConstraintValidatorContext context) {

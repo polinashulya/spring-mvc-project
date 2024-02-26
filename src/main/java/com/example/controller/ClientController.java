@@ -35,7 +35,7 @@ public class ClientController {
             model.addAttribute("sortType", clientSearchCriteriaDto.getSortType());
             model.addAttribute("currentCountryId", clientSearchCriteriaDto.getCountryId());
 
-            setCountriesToModel(model);
+          //  setCountriesToModel(model);
 
             return "client/clients";
         } catch (Exception e) {
