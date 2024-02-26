@@ -1,7 +1,7 @@
 package com.example.repository.impl;
 
 import com.example.dao.ClientDao;
-import com.example.dao.impl.DeletionStatus;
+import com.example.entity.DeletionStatus;
 import com.example.entity.ClientEntity;
 import com.example.exception.DAOException;
 import com.example.exception.RepositoryException;

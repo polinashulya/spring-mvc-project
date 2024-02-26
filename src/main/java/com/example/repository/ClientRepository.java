@@ -1,6 +1,6 @@
 package com.example.repository;
 
-import com.example.dao.impl.DeletionStatus;
+import com.example.entity.DeletionStatus;
 import com.example.entity.ClientEntity;
 import java.util.List;
 import java.util.Optional;

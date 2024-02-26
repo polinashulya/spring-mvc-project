@@ -1,6 +1,6 @@
 package com.example.service.impl;
 
-import com.example.dao.impl.DeletionStatus;
+import com.example.entity.DeletionStatus;
 import com.example.entity.ClientEntity;
 import com.example.entity.UserRoleEntity;
 import com.example.entity.UserRoles;

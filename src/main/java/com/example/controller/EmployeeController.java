@@ -1,6 +1,6 @@
 package com.example.controller;
 
-import com.example.dao.impl.DeletionStatus;
+import com.example.entity.DeletionStatus;
 import com.example.exception.ControllerCustomException;
 import com.example.service.CountryService;
 import com.example.service.EmployeePositionService;
@@ -27,7 +27,6 @@ public class EmployeeController {
     private static final Logger logger = LogManager.getLogger(EmployeeController.class);
 
     private final EmployeeService employeeService;
-    private final CountryService countryService;
     private final EmployeePositionService employeePositionService;
     private final ProcedureService procedureService;
 
@@ -43,7 +42,7 @@ public class EmployeeController {
             model.addAttribute("currentCountryId", employeeSearchCriteriaDto.getCountryId());
             model.addAttribute("currentPositionCode", employeeSearchCriteriaDto.getPositionCode());
             model.addAttribute("currentProcedureCode", employeeSearchCriteriaDto.getProcedureCode());
-            
+
             setEmployeePositionsToModel(model);
             setProceduresToModel(model);
 

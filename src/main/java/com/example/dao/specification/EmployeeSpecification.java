@@ -3,16 +3,14 @@ package com.example.dao.specification;
 import com.example.entity.EmployeeEntity;
 import com.example.entity.EmployeePositionEntity;
 import com.example.entity.ProcedureEntity;
-import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.*;
 import org.hibernate.Session;
 
 import java.util.Optional;
 
-public interface EmployeeSpecification {
+public interface EmployeeSpecification extends AbstractSpecification<EmployeeEntity>{
 
     String SORT_TYPE_ASC = "ASC";
-    String SORT_USERS_BY_SURNAME = "bySurname";
     String SORT_USERS_BY_LOGIN = "byEmail";
     String SORT_USERS_BY_HIRE_DATE = "byHireDate";
 
@@ -61,26 +59,40 @@ public interface EmployeeSpecification {
         return predicate;
     }
 
-    private void applySorting(CriteriaBuilder builder, CriteriaQuery<EmployeeEntity> criteriaQuery, Root<EmployeeEntity> root, String sortBy, String sortType) {
-        if (sortBy != null && !sortBy.isEmpty()) {
-            Expression<?> orderByExpression = switch (sortBy) {
-                case SORT_USERS_BY_LOGIN -> root.get("email");
-                case SORT_USERS_BY_SURNAME -> root.get("surname");
-                case SORT_USERS_BY_HIRE_DATE -> root.get("hireDate");
-                default -> root.get("id");
-            };
+    default void applySorting(CriteriaBuilder builder, CriteriaQuery<EmployeeEntity> criteriaQuery, Root<EmployeeEntity> root, String sortBy, String sortType) {
+        Expression<?> orderByExpression;
+        if (sortBy == null || sortBy.isEmpty() || sortType == null) {
+            Expression<String> firstName = root.get("name");
+            Expression<String> lastName = root.get("surname");
+            Expression<String> fullName = builder.concat(firstName, " ");
+            orderByExpression = builder.concat(fullName, lastName);
+            criteriaQuery.orderBy(builder.asc(orderByExpression));
+        } else {
+            switch (sortBy) {
+                case SORT_USERS_BY_LOGIN -> orderByExpression = root.get("email");
+                case SORT_USERS_BY_HIRE_DATE -> orderByExpression = root.get("hireDate");
+                default -> {
+                    Expression<String> firstName = root.get("name");
+                    Expression<String> lastName = root.get("surname");
+                    Expression<String> fullName = builder.concat(firstName, " ");
+                    orderByExpression = builder.concat(fullName, lastName);
+                }
+            }
             criteriaQuery.orderBy(sortType.equals(SORT_TYPE_ASC) ? builder.asc(orderByExpression) : builder.desc(orderByExpression));
         }
     }
 
-    default void applyPagination(TypedQuery<EmployeeEntity> query, String page, String pageSize) {
-        int offset = Optional.ofNullable(page)
-                .filter(p -> !p.isEmpty())
-                .map(Integer::parseInt)
-                .map(p -> (p - 1) * Optional.ofNullable(pageSize).map(Integer::parseInt).orElse(5))
-                .orElse(0);
-        query.setFirstResult(offset);
-        query.setMaxResults(Optional.ofNullable(pageSize).map(Integer::parseInt).orElse(5));
-    }
+
+
+
+//    default void applyPagination(TypedQuery<EmployeeEntity> query, String page, String pageSize) {
+//        int offset = Optional.ofNullable(page)
+//                .filter(p -> !p.isEmpty())
+//                .map(Integer::parseInt)
+//                .map(p -> (p - 1) * Optional.ofNullable(pageSize).map(Integer::parseInt).orElse(5))
+//                .orElse(0);
+//        query.setFirstResult(offset);
+//        query.setMaxResults(Optional.ofNullable(pageSize).map(Integer::parseInt).orElse(5));
+//    }
 
 }

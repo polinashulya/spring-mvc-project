@@ -1,6 +1,6 @@
 package com.example.controller;
 
-import com.example.dao.impl.DeletionStatus;
+import com.example.entity.DeletionStatus;
 import com.example.exception.ControllerCustomException;
 import com.example.service.ClientService;
 import com.example.service.CountryService;

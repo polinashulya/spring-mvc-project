@@ -22,9 +22,9 @@
 
         <label for="sortBy">Sort By:</label>
         <select name="sortBy" id="sortBy">
-            <%--            <option value="byId" <c:if test="${sortType == 'byId'}">selected</c:if>>ID</option>--%>
-            <option value="byEmail" <c:if test="${sortType == 'byEmail'}">selected</c:if>>Email</option>
+
             <option value="bySurname" <c:if test="${sortType == 'bySurname'}">selected</c:if>>Surname</option>
+            <option value="byEmail" <c:if test="${sortType == 'byEmail'}">selected</c:if>>Email</option>
             <option value="byHireDate" <c:if test="${sortType == 'byHireDate'}">selected</c:if>>Hire Date</option>
         </select>
 
