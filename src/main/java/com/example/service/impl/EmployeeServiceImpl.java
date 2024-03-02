@@ -76,7 +76,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .orElseThrow(() -> new ServiceException("Default role 'EMPLOYEE' not found"));
 
         employeeEntity.setUserRoles(Set.of(employeeRole));
-        employeeEntity.setRegistationDate(LocalDate.now());
+        employeeEntity.setRegistrationDate(LocalDate.now());
 
         try {
             employeeRepository.save(employeeEntity);

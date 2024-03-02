@@ -71,7 +71,7 @@ public class ClientServiceImpl implements ClientService {
                 .orElseThrow(() -> new ServiceException("Default role 'CLIENT' not found"));
 
         clientEntity.setUserRoles(Set.of(clientRole));
-        clientEntity.setRegistationDate(LocalDate.now());
+        clientEntity.setRegistrationDate(LocalDate.now());
 
         try {
             clientRepository.save(clientEntity);

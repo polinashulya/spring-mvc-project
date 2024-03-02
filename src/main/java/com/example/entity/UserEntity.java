@@ -39,8 +39,8 @@ public class UserEntity extends AbstractCoreEntity {
     @Column(name = "birthDate")
     private LocalDate birthDate;
 
-    @Column(name = "registation_date")
-    private LocalDate registationDate;
+    @Column(name = "registration_date")
+    private LocalDate registrationDate;
 
     @Column(name = "banned")
     private boolean banned;

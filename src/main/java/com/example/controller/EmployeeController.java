@@ -46,7 +46,7 @@ public class EmployeeController {
             setEmployeePositionsToModel(model);
             setProceduresToModel(model);
 
-            return "employee/employees";
+            return "user/employee/employees";
         } catch (Exception e) {
             logger.error("Error while executing find all employees", e);
             throw new ControllerCustomException("Error while executing find all employees", e);
@@ -72,7 +72,7 @@ public class EmployeeController {
             EmployeeDto employeeDto = new EmployeeDto();
             model.addAttribute("employeeForm", employeeDto);
 
-            return "employee/addEmployee";
+            return "user/employee/addEmployee";
         } catch (Exception e) {
             logger.error("Error while executing adding form", e);
             throw new ControllerCustomException("Error while executing adding form", e);
@@ -87,7 +87,7 @@ public class EmployeeController {
             if (bindingResult.hasErrors()) {
                 setEmployeePositionsToModel(model);
                 setProceduresToModel(model);
-                return "employee/addEmployee";
+                return "user/employee/addEmployee";
             }
 
             employeeService.save(employeeDto);

@@ -37,7 +37,7 @@ public class ClientController {
 
           //  setCountriesToModel(model);
 
-            return "client/clients";
+            return "user/client/clients";
         } catch (Exception e) {
             throw new ControllerCustomException("Error while executing find all clients", e);
         }
@@ -56,7 +56,7 @@ public class ClientController {
             ClientDto clientDto = new ClientDto();
             model.addAttribute("clientForm", clientDto);
 
-            return "client/addClient";
+            return "user/client/addClient";
         } catch (Exception e) {
             throw new ControllerCustomException("Error while executing adding form", e);
         }
@@ -70,7 +70,7 @@ public class ClientController {
         try {
 
             if (bindingResult.hasErrors()) {
-                return "client/addClient";
+                return "user/client/addClient";
             }
 
             clientService.add(clientDto);
@@ -81,6 +81,7 @@ public class ClientController {
         }
     }
 
+    //@PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/delete/{id}")
     public String delete(@PathVariable(name = "id") String id, Model model) {
         DeletionStatus deletionStatus = clientService.deleteById(Long.valueOf(id));
