@@ -13,7 +13,7 @@ public interface ClientRepository {
 
     Optional<ClientEntity> findById(Long id);
 
-    void save(ClientEntity user);
+    void save(ClientEntity client);
 
     DeletionStatus deleteById(Long id);
 

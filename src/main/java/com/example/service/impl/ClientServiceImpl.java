@@ -16,6 +16,7 @@ import com.example.service.mapper.user.client.ClientMapper;
 import lombok.AllArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -33,6 +34,8 @@ public class ClientServiceImpl implements ClientService {
     private final UserRoleRepository userRoleRepository;
 
     private final ClientMapper clientMapper;
+
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public PageableDto<ClientDto> getAll(UserSearchCriteriaDto clientSearchCriteriaDto) {
@@ -70,6 +73,9 @@ public class ClientServiceImpl implements ClientService {
         UserRoleEntity clientRole = userRoleRepository.findByName(UserRoles.CLIENT.name())
                 .orElseThrow(() -> new ServiceException("Default role 'CLIENT' not found"));
 
+        String encodedPassword = passwordEncoder.encode(clientDto.getPassword());
+
+        clientEntity.setPassword(encodedPassword);
         clientEntity.setUserRoles(Set.of(clientRole));
         clientEntity.setRegistrationDate(LocalDate.now());
 

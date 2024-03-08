@@ -11,26 +11,22 @@
     </style>
 </head>
 <body>
-<div>
-    <%@ include file="/WEB-INF/jsp/common/header.jsp" %>
-</div>
 <div id="container">
-    <h1>Add new client</h1>
+    <h1>Sign-up</h1>
 
-    <form:form method="POST" modelAttribute="clientForm">
+    <form:form method="POST" modelAttribute="userSignUp">
         <table>
             <tr>
                 <td class="form-group">
                     <%@ include file="/WEB-INF/jsp/forms/emailForm.jsp" %>
                 </td>
-                <td class="form-group">
-                    <%@ include file="/WEB-INF/jsp/forms/birthDateForm.jsp" %>
-                </td>
+
                 <%@ include file="/WEB-INF/jsp/forms/userForm.jsp" %>
+
             </tr>
         </table>
 
-        <input type="submit" value="Submit"/>
+        <input type="submit" value="Sign-up"/>
     </form:form>
 </div>
 <%@ include file="/WEB-INF/jsp/common/footer.jsp" %>

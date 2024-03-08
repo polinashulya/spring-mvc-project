@@ -1,29 +1,27 @@
 package com.example.controller;
 
 import com.example.entity.UserRoles;
+import com.example.exception.ControllerCustomException;
+import com.example.exception.UserAlreadyExistException;
 import com.example.service.SecurityService;
 import com.example.service.UserService;
+import com.example.service.dto.ClientDto;
 import com.example.service.dto.UserDto;
 import com.example.service.dto.UserRoleDto;
+import com.example.service.dto.UserSignUpDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.authority.AuthorityUtils;
-
-
-import java.security.Principal;
-import java.util.Objects;
-import java.util.Set;
 
 @Controller
 @AllArgsConstructor
 public class AuthController {
+
+    private final SecurityService securityService;
+    private final UserService userService;
 
     @GetMapping("/login")
     public String login() {
@@ -31,21 +29,21 @@ public class AuthController {
     }
 
 
-    @GetMapping("/default")
-    public String defaultAfterLogin() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
-
-        if (roles.contains("ROLE_ADMIN")) {
-            return "redirect:/admin/home"; // Admin home page URI
-        } else if (roles.contains("ROLE_EMPLOYEE")) {
-            return "redirect:/employee/home"; // Employee home page URI
-        } else if (roles.contains("ROLE_CLIENT")) {
-            return "redirect:/client/home"; // Client home page URI
-        } else {
-            return "redirect:/login"; // Default page
-        }
-    }
+//    @GetMapping("/default")
+//    public String defaultAfterLogin() {
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
+//
+//        if (roles.contains("ROLE_ADMIN")) {
+//            return "redirect:/admin/home"; // Admin home page URI
+//        } else if (roles.contains("ROLE_EMPLOYEE")) {
+//            return "redirect:/employee/home"; // Employee home page URI
+//        } else if (roles.contains("ROLE_CLIENT")) {
+//            return "redirect:/client/home"; // Client home page URI
+//        } else {
+//            return "redirect:/login"; // Default page
+//        }
+//    }
 
 
 //    private final UserSecurityService userSecurityService;
@@ -101,24 +99,25 @@ public class AuthController {
 //        model.addAttribute("userRoles", roleService.findAll());
 //    }
 //
-//    @GetMapping(ControllerPageHolder.URL_USER_SIGN_UP_PAGE)
-//    public String showRegistrationForm(Model model) {
-//        UserSignUpDTO userSignUpDTO = new UserSignUpDTO();
-//        model.addAttribute(ControllerConstantsHolder.USER_FORM, userSignUpDTO);
-//        model.addAttribute("captchaKey", captchaSettings.getKey());
-//        addUserRolesToModel(model);
-//        return ControllerPageHolder.USER_SIGN_UP_PAGE;
-//    }
+    @GetMapping("/user/sign-up")
+    public String showRegistrationForm(Model model) {
+        try {
+
+            UserSignUpDTO userSignUpDTO = new UserSignUpDTO();
+            model.addAttribute("userSignUp", userSignUpDTO);
+
+            return "user/userSignUp";
+        } catch (Exception e) {
+            throw new ControllerCustomException("Error while executing adding form", e);
+        }
+    }
 //
-//    @PostMapping(ControllerPageHolder.URL_USER_SIGN_UP_PAGE)
-//    public String signUpUser(Model model,
-//                             @Validated @ModelAttribute
-//                                     (ControllerConstantsHolder.USER_FORM) UserSignUpDTO userForm,
-//                             BindingResult bindingResult) {
-//        model.addAttribute("captchaKey", captchaSettings.getKey());
-//        addUserRolesToModel(model);
-//
-//
+    @PostMapping("/user/sign-up")
+    public String signUpUser(Model model,
+                             @Validated @ModelAttribute
+                                     ("userForm") UserSignUpDTO userForm,
+                             BindingResult bindingResult) {
+
 //        if (ControllerHelper.checkBindingResult(bindingResult)) {
 //            return ControllerPageHolder.USER_SIGN_UP_PAGE;
 //        }
@@ -128,25 +127,24 @@ public class AuthController {
 //            return ControllerPageHolder.USER_SIGN_UP_PAGE;
 //        }
 //
-//        try {
-//            String email = userSecurityService.signUpUser(userForm);
-//            model.addAttribute("email", email);
-//        } catch (UserAlreadyExistException | InvalidEmailException ex) {
-//            ex.printStackTrace();
-//            model.addAttribute("error", ex.getMessage());
-//            return ControllerPageHolder.USER_SIGN_UP_PAGE;
-//        }
+        try {
+            String email = userService.signUpUser(userForm);
+            model.addAttribute("email", email);
+        } catch (UserAlreadyExistException ex) {
+            model.addAttribute("error", ex.getMessage());
+            return "user/userSignUp";
+        }
 //
-//        securityService.autoLogin(userForm.getEmail(), userForm.getPassword());
-//
-//        return ControllerPageHolder.SUCCESSFUL_REGISTRATION_PAGE;
-//    }
-//
-//    private boolean isPasswordsMatching(UserSignUpDTO userForm) {
-//        return userForm.getPassword().equals(userForm.getMatchingPassword());
-//    }
-//
-//
+ //       securityService.autoLogin(userForm.getEmail(), userForm.getPassword());
+
+        return "common/successfulRegistration";
+    }
+
+    private boolean isPasswordsMatching(UserSignUpDTO userForm) {
+        return userForm.getPassword().equals(userForm.getMatchingPassword());
+    }
+
+
 //    @RequestMapping(value = ControllerPageHolder.URL_CONFIRM_ACCOUNT,
 //            method = {RequestMethod.GET, RequestMethod.POST})
 //    public ModelAndView confirmUserAccount(ModelAndView modelAndView,

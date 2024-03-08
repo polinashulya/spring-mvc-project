@@ -16,6 +16,7 @@ import com.example.service.mapper.user.employee.EmployeeMapper;
 import lombok.AllArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +35,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final UserRoleRepository userRoleRepository;
 
     private final EmployeeMapper employeeMapper;
+
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public PageableDto<EmployeeDto> getAll(EmployeeSearchCriteriaDto employeeSearchCriteriaDto) {
@@ -75,6 +78,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         UserRoleEntity employeeRole = userRoleRepository.findByName(UserRoles.EMPLOYEE.name())
                 .orElseThrow(() -> new ServiceException("Default role 'EMPLOYEE' not found"));
 
+        String encodedPassword = passwordEncoder.encode(employeeDto.getPassword());
+
+        employeeEntity.setPassword(encodedPassword);
         employeeEntity.setUserRoles(Set.of(employeeRole));
         employeeEntity.setRegistrationDate(LocalDate.now());
 

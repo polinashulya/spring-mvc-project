@@ -1,4 +1,3 @@
-<%@ page import="java.time.LocalDate" %>
 <%@ page contentType="text/html;charset=windows-1251;charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
@@ -88,25 +87,6 @@
 
             <div class="error">
                 <form:errors path="surname" cssClass="form-errors"/>
-            </div>
-        </spring:bind>
-    </td>
-
-    <td rowspan="1" class="form-group ">
-        <spring:bind path="birthDate">
-            <label for="birthDate">
-                <sup>*</sup> Birth Date
-            </label>
-            <form:input
-                    id="birthDate"
-                    value="17.05.2005"
-                    path="birthDate"
-                    max="<%= LocalDate.now() %>"
-                    type="date"
-                    name="birthDate"/>
-
-            <div class="error">
-                <form:errors path="birthDate" cssClass="form-errors"/>
             </div>
         </spring:bind>
     </td>
