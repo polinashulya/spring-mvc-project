@@ -8,39 +8,57 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
 
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig {
+public class SecurityConfig extends AbstractSecurityWebApplicationInitializer {
+
+    @Autowired
+    private UserDetailsService userDetailsService;
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth
-                .inMemoryAuthentication()
-                .withUser("admin").password(passwordEncoder().encode("admin")).roles("ADMIN")
-                .and()
-                .withUser("employee").password(passwordEncoder().encode("employee")).roles("EMPLOYEE")
-                .and()
-                .withUser("client").password(passwordEncoder().encode("client")).roles("CLIENT");
+                .userDetailsService(userDetailsService)
+                .passwordEncoder(passwordEncoder());
     }
 
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//        http
+//                .authorizeHttpRequests((authz) -> authz
+//                        .requestMatchers("/", "/home").permitAll()
+//                        .requestMatchers("/admin/**").hasRole("ADMIN")
+//                        .requestMatchers("/employee/**").hasAnyRole("EMPLOYEE", "ADMIN")
+//                        .requestMatchers("/client/**").hasAnyRole("CLIENT", "ADMIN")
+//                        .anyRequest().authenticated()
+//                )
+//                .formLogin((form) -> form
+//                        .loginPage("/login")
+//                        .loginProcessingUrl("/login")
+//                        .failureUrl("/login?error")
+//                        .usernameParameter("username")
+//                        .passwordParameter("password")
+//                        .permitAll()
+//                )
+//                .logout(LogoutConfigurer::permitAll);
         http
                 .authorizeHttpRequests((authz) -> authz
-                        .requestMatchers("/", "/home").permitAll()
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/employee/**").hasAnyRole("EMPLOYEE", "ADMIN")
-                        .requestMatchers("/client/**").hasAnyRole("CLIENT", "ADMIN")
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll() // Разрешаем доступ ко всем запросам
                 )
                 .formLogin((form) -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("/default", true) // Redirect to a specific URL after successful login
+                        .defaultSuccessUrl("/", true)
+                        .loginProcessingUrl("/login")
+                        .failureUrl("/login?error")
+                        .usernameParameter("username")
+                        .passwordParameter("password")
                         .permitAll()
                 )
                 .logout(LogoutConfigurer::permitAll);
@@ -50,8 +68,6 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationManager authenticationManagerBean(HttpSecurity http) throws Exception {
-        // This should be AuthenticationManagerBuilder, NOT HttpSecurity
-        // The below example assumes you're using the builder for configuration
         return http.getSharedObject(AuthenticationManagerBuilder.class).build();
     }
 

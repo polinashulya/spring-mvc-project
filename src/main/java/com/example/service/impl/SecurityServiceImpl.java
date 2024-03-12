@@ -16,30 +16,16 @@ public class SecurityServiceImpl implements SecurityService {
 
 
     private final AuthenticationManager authenticationManager;
-//    private final @Qualifier("customUserDetailService")
-//    private final UserDetailsService userDetailsService;
 
-//
-//    public SecurityServiceImpl(AuthenticationManager authenticationManager) {
-//        this.authenticationManager = authenticationManager;
-//    }
+    private final UserDetailsService userDetailsService;
 
-//    @Override
-//    public String findLoggedInUsername() {
-//        Object userDetails = SecurityContextHolder.getContext().getAuthentication().getDetails();
-//        if (userDetails instanceof UserDetails) {
-//            return ((UserDetails) userDetails).getUsername();
-//        }
-//        return null;
-//    }
-//
-//    @Override
-//    public void autoLogin(String email, String password) {
-//        UserDetails userDetails = userDetailsService.loadUserByUsername(email);
-//        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
-//        authenticationManager.authenticate(usernamePasswordAuthenticationToken);
-//        if (usernamePasswordAuthenticationToken.isAuthenticated()) {
-//            SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-//        }
-//    }
+    @Override
+    public void autoLogin(String email, String password) {
+        UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
+        authenticationManager.authenticate(usernamePasswordAuthenticationToken);
+        if (usernamePasswordAuthenticationToken.isAuthenticated()) {
+            SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+        }
+    }
 }

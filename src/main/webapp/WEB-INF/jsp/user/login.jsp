@@ -1,3 +1,4 @@
+<%--<jsp:useBean id="contextPath" scope="request" type=""/>--%>
 <%--<%@page contentType="text/html" pageEncoding="UTF-8" %>--%>
 <%--<%@taglib prefix="t" tagdir="/WEB-INF/tags" %>--%>
 <%--<%@ include file="/WEB-INF/components/baseTagLibs.jsp" %>--%>
@@ -85,7 +86,7 @@
 </head>
 <body>
 <h2>Login with Username and Password</h2>
-<form action="${pageContext.request.contextPath}/login" method="post">
+<form method="POST" action="/login">
     <div>
         <label for="username">Username:</label>
         <input type="text" id="username" name="username">

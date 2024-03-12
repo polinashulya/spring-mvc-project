@@ -6,6 +6,5 @@ import com.example.service.dto.UserSignUpDTO;
 public interface UserService {
 
     String signUpUser(UserSignUpDTO signUpRequest);
-    UserDto findByEmail(String email);
 
 }

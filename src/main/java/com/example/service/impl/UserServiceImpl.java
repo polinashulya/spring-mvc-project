@@ -27,8 +27,6 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
-    private final UserMapper userMapper;
-
     private final ClientRepository clientRepository;
 
     private final UserRoleRepository userRoleRepository;
@@ -77,17 +75,5 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByEmail(email).isPresent();
     }
 
-    @Override
-    public UserDto findByEmail(String email) {
-        try {
-            return userRepository.findByEmail(email)
-                    .map(userMapper::toDto)
-                    .orElse(null);
-        } catch (NumberFormatException e) {
-            throw new ServiceException("Invalid country ID format", e);
-        } catch (DAOException e) {
-            throw new ServiceException(e);
-        }
-    }
 
 }

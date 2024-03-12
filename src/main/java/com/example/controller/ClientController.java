@@ -35,8 +35,6 @@ public class ClientController {
             model.addAttribute("sortType", clientSearchCriteriaDto.getSortType());
             model.addAttribute("currentCountryId", clientSearchCriteriaDto.getCountryId());
 
-          //  setCountriesToModel(model);
-
             return "user/client/clients";
         } catch (Exception e) {
             throw new ControllerCustomException("Error while executing find all clients", e);

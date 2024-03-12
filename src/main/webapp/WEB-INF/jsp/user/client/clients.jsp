@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=windows-1251;charset=UTF-8" pageEncoding="UTF-8" %>
+r<%@ page contentType="text/html;charset=windows-1251;charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
@@ -22,7 +22,6 @@
 
         <label for="sortBy">Sort By:</label>
         <select name="sortBy" id="sortBy">
-            <%--            <option value="byId" <c:if test="${sortType == 'byId'}">selected</c:if>>ID</option>--%>
             <option value="byEmail" <c:if test="${sortType == 'byEmail'}">selected</c:if>>Email</option>
             <option value="bySurname" <c:if test="${sortType == 'bySurname'}">selected</c:if>>Surname</option>
             <option value="byBirthDate" <c:if test="${sortType == 'byBirthDate'}">selected</c:if>>Birth Date</option>
@@ -37,18 +36,6 @@
                 Descending
             </option>
         </select>
-
-        <%--        <label for="countryFiltering"> Country: </label>--%>
-        <%--        <select id="countryFiltering" name="countryId">--%>
-        <%--            <option disabled selected value> -- select an option --</option>--%>
-        <%--            <c:forEach items="${countries}" var="country">--%>
-        <%--                <option value="${country.id}"--%>
-        <%--                        <c:if test="${country.id == currentCountryId}">selected</c:if>>--%>
-        <%--                        ${country.name}--%>
-        <%--                </option>--%>
-        <%--            </c:forEach>--%>
-        <%--            <option value=""> none</option>--%>
-        <%--        </select>--%>
 
         <label for="searchText">Search:</label>
         <input type="text" id="searchText" name="search" value="${param.search}" placeholder="Search text">
@@ -85,9 +72,7 @@
         <caption>Users</caption>
         <thead>
         <tr>
-            <%--            <th id="id">User`s id</th>--%>
             <th id="name">Name and surname</th>
-            <%--            <th id="secondName">Surname</th>--%>
             <th id="email">Email</th>
             <th id="phoneNumber">Phone number</th>
             <th id="birthDate">Birth date</th>
@@ -96,7 +81,6 @@
         <tbody>
         <c:forEach items="${clientPageable.elements}" var="client">
             <tr>
-                    <%--                <td>${client.id}</td>--%>
                 <td>${client.name} ${client.surname}</td>
                 <td>${client.email}</td>
                 <td>${client.phoneNumber}</td>
