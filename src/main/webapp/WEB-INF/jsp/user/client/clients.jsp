@@ -1,4 +1,5 @@
-r<%@ page contentType="text/html;charset=windows-1251;charset=UTF-8" pageEncoding="UTF-8" %>
+r
+<%@ page contentType="text/html;charset=windows-1251;charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
@@ -85,12 +86,14 @@ r<%@ page contentType="text/html;charset=windows-1251;charset=UTF-8" pageEncodin
                 <td>${client.email}</td>
                 <td>${client.phoneNumber}</td>
                 <td>${client.birthDate}</td>
-                <td>
-                    <form action="clients/delete/${client.id}" method="post">
-                        <input type="submit" class="delete-button" value="Delete"
-                               onclick="return confirm('Are you sure?');"/>
-                    </form>
-                </td>
+                <sec:authorize access="hasAuthority('ROLE_ADMIN')">
+                    <td>
+                        <form action="clients/delete/${client.id}" method="post">
+                            <input type="submit" class="delete-button" value="Delete"
+                                   onclick="return confirm('Are you sure?');"/>
+                        </form>
+                    </td>
+                </sec:authorize>
             </tr>
         </c:forEach>
         </tbody>

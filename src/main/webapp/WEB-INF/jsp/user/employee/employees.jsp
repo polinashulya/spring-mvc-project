@@ -20,23 +20,25 @@
 
         <input type="hidden" name="page" value="${param.page == '' ? '1' : param.page}"/>
 
-        <label for="sortBy">Sort By:</label>
-        <select name="sortBy" id="sortBy">
+        <sec:authorize access="!hasAuthority('ROLE_CLIENT')">
+            <label for="sortBy">Sort By:</label>
+            <select name="sortBy" id="sortBy">
 
-            <option value="bySurname" <c:if test="${sortType == 'bySurname'}">selected</c:if>>Surname</option>
-            <option value="byEmail" <c:if test="${sortType == 'byEmail'}">selected</c:if>>Email</option>
-            <option value="byHireDate" <c:if test="${sortType == 'byHireDate'}">selected</c:if>>Hire Date</option>
-        </select>
+                <option value="bySurname" <c:if test="${sortType == 'bySurname'}">selected</c:if>>Surname</option>
+                <option value="byEmail" <c:if test="${sortType == 'byEmail'}">selected</c:if>>Email</option>
+                <option value="byHireDate" <c:if test="${sortType == 'byHireDate'}">selected</c:if>>Hire Date</option>
+            </select>
 
-        <label for="sortType">Sort Type:</label>
-        <select name="sortType" id="sortType">
-            <option value="ASC" <c:if test="${sortType == 'ASC'}">selected</c:if>>
-                Ascending
-            </option>
-            <option value="DESC" <c:if test="${sortType == 'DESC'}">selected</c:if>>
-                Descending
-            </option>
-        </select>
+            <label for="sortType">Sort Type:</label>
+            <select name="sortType" id="sortType">
+                <option value="ASC" <c:if test="${sortType == 'ASC'}">selected</c:if>>
+                    Ascending
+                </option>
+                <option value="DESC" <c:if test="${sortType == 'DESC'}">selected</c:if>>
+                    Descending
+                </option>
+            </select>
+        </sec:authorize>
 
         <label for="positionFiltering"> Position: </label>
         <select id="positionFiltering" name="positionCode">
@@ -97,12 +99,13 @@
         <caption>Users</caption>
         <thead>
         <tr>
-            <%--            <th id="id">User`s id</th>--%>
             <th id="name">Name and surname</th>
-            <th id="email">Email</th>
-            <th id="phoneNumber">Phone</th>
-            <th id="birthDate">Birth date</th>
-            <th id="hireDate">Hire date</th>
+            <sec:authorize access="!hasAuthority('ROLE_CLIENT')">
+                <th id="email">Email</th>
+                <th id="phoneNumber">Phone</th>
+                <th id="birthDate">Birth date</th>
+                <th id="hireDate">Hire date</th>
+            </sec:authorize>
             <th id="position">Position</th>
             <th id="procedure">Procedure</th>
         </tr>
@@ -110,12 +113,15 @@
         <tbody>
         <c:forEach items="${employeePageable.elements}" var="employee">
             <tr>
-                    <%--                <td>${employee.id}</td>--%>
                 <td>${employee.name} ${employee.surname}</td>
-                <td>${employee.email}</td>
-                <td>${employee.phoneNumber}</td>
-                <td>${employee.birthDate}</td>
-                <td>${employee.hireDate}</td>
+
+                <sec:authorize access="!hasAuthority('ROLE_CLIENT')">
+                    <td>${employee.email}</td>
+                    <td>${employee.phoneNumber}</td>
+                    <td>${employee.birthDate}</td>
+                    <td>${employee.hireDate}</td>
+                </sec:authorize>
+
                 <td>
                     <c:forEach
                             items="${employee.positions}"
@@ -131,10 +137,12 @@
                     </c:forEach>
                 </td>
                 <td>
-                    <form action="employees/delete/${employee.id}" method="post">
-                        <input type="submit" class="delete-button" value="Delete"
-                               onclick="return confirm('Are you sure?');"/>
-                    </form>
+                    <sec:authorize access="hasAuthority('ROLE_ADMIN')">
+                        <form action="employees/delete/${employee.id}" method="post">
+                            <input type="submit" class="delete-button" value="Delete"
+                                   onclick="return confirm('Are you sure?');"/>
+                        </form>
+                    </sec:authorize>
                 </td>
             </tr>
         </c:forEach>

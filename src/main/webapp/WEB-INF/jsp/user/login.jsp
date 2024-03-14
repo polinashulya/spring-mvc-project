@@ -100,6 +100,9 @@
     </div>
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 </form>
+<div>
+    <p>If you are not registered, please <a href="/user/sign-up">sign up</a>.</p>
+</div>
 </body>
 </html>
 

@@ -11,6 +11,9 @@
     </style>
 </head>
 <body>
+<div>
+    <%@ include file="/WEB-INF/jsp/common/header.jsp" %>
+</div>
 <div id="container">
     <h1>Sign-up</h1>
 
