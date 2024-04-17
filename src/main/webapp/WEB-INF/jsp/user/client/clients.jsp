@@ -70,7 +70,7 @@ r
     </form>
 
     <table class="timecard">
-        <caption>Users</caption>
+        <caption>Clients</caption>
         <thead>
         <tr>
             <th id="name">Name and surname</th>

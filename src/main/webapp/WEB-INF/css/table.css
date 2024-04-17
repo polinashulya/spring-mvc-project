@@ -27,8 +27,8 @@ table.timecard caption {
 }
 
 .delete-button {
-    width: 80%; /* Ширина кнопки составляет 80% ширины родительского элемента */
-    height: 30px; /* Увеличена высота */
+    width: 80%;
+    height: 30px;
     margin: 0;
     background-color: #dc6f6f;
     color: #fff;
@@ -37,16 +37,16 @@ table.timecard caption {
     cursor: pointer;
 }
 
-.show-button {
-    width: 50%; /* Ширина кнопки составляет 50% ширины родительского элемента (половина от delete-button) */
-    height: 30px; /* Увеличена высота */
-    margin: 0;
-    color: #4caf50;
-    background-color: #fff;
-    border: none;
-    padding: 5px 10px;
-    cursor: pointer;
-}
+/*.show-button {*/
+/*    width: 50%; !* Ширина кнопки составляет 50% ширины родительского элемента (половина от delete-button) *!*/
+/*    height: 30px; !* Увеличена высота *!*/
+/*    margin: 0;*/
+/*    color: #4caf50;*/
+/*    background-color: #fff;*/
+/*    border: none;*/
+/*    padding: 5px 10px;*/
+/*    cursor: pointer;*/
+/*}*/
 
 
 table.timecard th, table.timecard td {
@@ -93,31 +93,5 @@ input[type="text"] {
     margin-right: 10px;
     border-radius: 4px;
     border: 1px solid #ccc;
-}
-
-button {
-    padding: 8px 12px;
-    font-size: 14px;
-    background-color: #4caf50;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-button:disabled {
-    background-color: #ddd;
-    color: #888;
-}
-
-button.previous {
-    background-color: #2196f3;
-}
-
-button.next {
-    background-color: #2196f3;
 }
 

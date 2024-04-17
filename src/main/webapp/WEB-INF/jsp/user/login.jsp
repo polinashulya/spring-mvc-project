@@ -1,110 +1,78 @@
-<%--<jsp:useBean id="contextPath" scope="request" type=""/>--%>
-<%--<%@page contentType="text/html" pageEncoding="UTF-8" %>--%>
-<%--<%@taglib prefix="t" tagdir="/WEB-INF/tags" %>--%>
-<%--<%@ include file="/WEB-INF/components/baseTagLibs.jsp" %>--%>
-
-
-<%--<t:genericpage>--%>
-
-<%--     <jsp:attribute name="style">--%>
-<%--         <link href="${contextPath}/css/login.css" rel="stylesheet">--%>
-<%--    </jsp:attribute>--%>
-
-<%--    <jsp:body>--%>
-
-<%--        <div class="container-fluid">--%>
-
-<%--            <form method="POST" action="${contextPath}/user/login">--%>
-
-<%--                <div class="row">--%>
-
-<%--                    <div class="col login-nav">--%>
-
-<%--                    </div>--%>
-
-<%--                    <div class="col">--%>
-
-<%--                        <div style="margin-top: 35%; margin-left: 15%; margin-bottom: -25%; width: 50%;">--%>
-
-<%--                            <div style="text-align: center;">--%>
-<%--                                <h1 class="form-heading">--%>
-<%--                                    Вход:--%>
-<%--                                </h1>--%>
-<%--                            </div>--%>
-
-<%--                            <div class="form-group form-style ${error != null ? 'has-error' : ''}">--%>
-<%--                                <span>${message}</span>--%>
-
-<%--                                <label for="username">Имя пользователя:</label>--%>
-<%--                                <div class="form-group input-group">--%>
-<%--                                    <div class="input-group-prepend">--%>
-<%--                                        <span class="input-group-text"> <i class="fa fa-user"></i> </span>--%>
-<%--                                    </div>--%>
-<%--                                    <input id="username" name="username" type="text" class="form-control"--%>
-<%--                                           placeholder="имя пользователя"--%>
-<%--                                           autofocus="true"/>--%>
-<%--                                </div>--%>
-<%--                                <hr/>--%>
-
-<%--                                <label for="password">Пароль:</label>--%>
-<%--                                <div class="form-group input-group">--%>
-<%--                                    <div class="input-group-prepend">--%>
-<%--                                        <span class="input-group-text"> <i class="fa fa-lock"></i> </span>--%>
-<%--                                    </div>--%>
-<%--                                    <input id="password" name="password" type="password" class="form-control"--%>
-<%--                                           placeholder="пароль"/>--%>
-<%--                                </div>--%>
-<%--                                <hr/>--%>
-<%--                                <div class="checkbox mb-3">--%>
-<%--                                    <span>${error}</span>--%>
-<%--                                </div>--%>
-<%--                                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>--%>
-<%--                                <br>--%>
-<%--                                <button class="btn btn-lg btn-primary btn-block" type="submit">--%>
-<%--                                    Войти--%>
-<%--                                </button>--%>
-<%--                                <br>--%>
-
-<%--                            </div>--%>
-<%--                        </div>--%>
-<%--                    </div>--%>
-<%--                </div>--%>
-
-<%--            </form>--%>
-<%--        </div>--%>
-<%--    </jsp:body>--%>
-
-<%--</t:genericpage>--%>
-
-
-
-
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <title>Login Page</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Custom styles for this template -->
+    <style>
+        body {
+            padding-top: 40px;
+            padding-bottom: 40px;
+            background-color: #f5f5f5;
+        }
+        .form-login {
+            max-width: 330px;
+            padding: 15px;
+            margin: auto; /* Center the form on the page */
+        }
+        .form-login .checkbox {
+            font-weight: 400;
+        }
+        .form-login .form-control {
+            position: relative;
+            box-sizing: border-box;
+            height: auto;
+            padding: 10px;
+            font-size: 16px;
+        }
+        .form-login .form-control:focus {
+            z-index: 2;
+        }
+        .form-login input[type="text"],
+        .form-login input[type="password"] {
+            margin-bottom: 10px;
+            border-radius: 0; /* Remove the default border radius */
+        }
+        .form-login button {
+            margin-top: 10px; /* Add some space above the button */
+        }
+        .login-footer {
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-<h2>Login with Username and Password</h2>
-<form method="POST" action="/login">
-    <div>
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username">
+<div class="container">
+    <div class="form-login">
+        <h2 class="form-login-heading text-center">Login with Username and Password</h2>
+        <form method="POST" action="/login">
+            <div class="form-group">
+                <label for="username" class="sr-only">Username</label>
+                <input type="text" id="username" name="username" class="form-control" placeholder="Username" required autofocus>
+            </div>
+            <div class="form-group">
+                <label for="password" class="sr-only">Password</label>
+                <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
+            </div>
+            <div class="checkbox mb-3">
+                <label>
+                    <input type="checkbox" value="remember-me"> Remember me
+                </label>
+            </div>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Log in</button>
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+        </form>
+        <div class="login-footer">
+            <h4><a href="/user/sign-up">Don't have an account? Register!</a></h4>
+        </div>
     </div>
-    <div>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password">
-    </div>
-    <div>
-        <button type="submit">Log in</button>
-    </div>
-    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-</form>
-<div>
-    <p>If you are not registered, please <a href="/user/sign-up">sign up</a>.</p>
 </div>
+<!-- Bootstrap JS, Popper.js, and jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
-
-
 

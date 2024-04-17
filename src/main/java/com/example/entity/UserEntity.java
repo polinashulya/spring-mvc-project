@@ -11,7 +11,9 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-@MappedSuperclass
+@Entity
+@Table(name = "users")
+@Inheritance(strategy = InheritanceType.JOINED)
 @SuperBuilder(toBuilder = true)
 @Setter
 @Getter
@@ -49,14 +51,14 @@ public class UserEntity extends AbstractCoreEntity {
     private boolean deleted;
 
     @ManyToMany
-    @JoinTable(name = "users_userRoles",
+    @JoinTable(name = "users_userroles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "userRole_id"))
     private Set<UserRoleEntity> userRoles = new HashSet<>();
 
 
-//    @PrePersist
-//    protected void beforeSave() {
-//        this.registationDate = LocalDate.now();
-//    }
+    @PrePersist
+    protected void beforeSave() {
+        this.registrationDate = LocalDate.now();
+    }
 }
