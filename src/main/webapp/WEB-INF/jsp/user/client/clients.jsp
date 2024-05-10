@@ -1,104 +1,142 @@
-r
 <%@ page contentType="text/html;charset=windows-1251;charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <html>
 <head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <style type="text/css">
         <%@ include file="/WEB-INF/css/table.css" %>
     </style>
 </head>
 <body>
-<div>
+<div class="container mt-3">
     <%@ include file="/WEB-INF/jsp/common/header.jsp" %>
-</div>
-<div id="main">
-    <c:if test="${deletionStatus == 404}">
-        <div class="alert alert-warning">
-            User not found.
-        </div>
-    </c:if>
-    <form action="/clients" method="get">
 
-        <input type="hidden" name="page" value="${param.page == '' ? '1' : param.page}"/>
+    <h2 class="text-center mb-3">Employees</h2>
 
-        <label for="sortBy">Sort By:</label>
-        <select name="sortBy" id="sortBy">
-            <option value="byEmail" <c:if test="${sortType == 'byEmail'}">selected</c:if>>Email</option>
-            <option value="bySurname" <c:if test="${sortType == 'bySurname'}">selected</c:if>>Surname</option>
-            <option value="byBirthDate" <c:if test="${sortType == 'byBirthDate'}">selected</c:if>>Birth Date</option>
-        </select>
+    <div id="main">
 
-        <label for="sortType">Sort Type:</label>
-        <select name="sortType" id="sortType">
-            <option value="ASC" <c:if test="${sortType == 'ASC'}">selected</c:if>>
-                Ascending
-            </option>
-            <option value="DESC" <c:if test="${sortType == 'DESC'}">selected</c:if>>
-                Descending
-            </option>
-        </select>
+        <c:if test="${deletionStatus == 404}">
+            <div class="alert alert-warning">User not found.</div>
+        </c:if>
 
-        <label for="searchText">Search:</label>
-        <input type="text" id="searchText" name="search" value="${param.search}" placeholder="Search text">
+        <form action="/clients" method="get" class="mb-4">
 
-        <select name="pageSize" onchange="this.form.submit()">
-            <option value="5" <c:if test="${param.pageSize == 5}">selected</c:if>>5 per page</option>
-            <option value="10" <c:if test="${param.pageSize == 10}">selected</c:if>>10 per page</option>
-            <option value="20" <c:if test="${param.pageSize == 20}">selected</c:if>>20 per page</option>
-        </select>
+            <input type="hidden" name="page" value="${param.page == '' ? '1' : param.page}"/>
 
-        <script>
-            function goToPage(page) {
-                if (page > 0) {
-                    document.querySelector("input[name='page']").value = page;
-                    document.querySelector("form").submit();
-                }
-            }
-        </script>
+            <div class="row">
 
-        <button type="button"
-                onclick="goToPage(${param.page - 1})" ${param.page <= 1 || param.page==null  ? 'disabled' : ''}>Previous
-        </button>
-        <button type="button"
-                onclick="goToPage(${param.page + 1})" ${param.page * param.pageSize >= clientPageable.totalSize ? 'disabled' : ''}>
-            Next
-        </button>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="sortBy">Sort By:</label>
+                        <select name="sortBy" id="sortBy" class="form-control">
+                            <option value="bySurname" ${sortType == 'bySurname' ? 'selected' : ''}>Surname</option>
+                            <option value="byEmail" ${sortType == 'byEmail' ? 'selected' : ''}>Email</option>
+                            <option value="byBirthDate" ${sortType == 'byBirthDate' ? 'selected' : ''}>Birth Date</option>
+                        </select>
+                    </div>
+                </div>
 
-        <input type="submit" class="show-button" value="Show">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="sortType">Sort Type:</label>
+                        <select name="sortType" id="sortType" class="form-control">
+                            <option value="ASC" ${sortOrder == 'ASC' ? 'selected' : ''}>Ascending</option>
+                            <option value="DESC" ${sortOrder == 'DESC' ? 'selected' : ''}>Descending</option>
+                        </select>
+                    </div>
+                </div>
 
-        <input hidden="hidden" name="action" value="clients">
-    </form>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="searchText">Search:</label>
+                        <input type="text" id="searchText" name="search" value="${param.search}" class="form-control"
+                               placeholder="Search text">
+                    </div>
+                </div>
 
-    <table class="timecard">
-        <caption>Clients</caption>
-        <thead>
-        <tr>
-            <th id="name">Name and surname</th>
-            <th id="email">Email</th>
-            <th id="phoneNumber">Phone number</th>
-            <th id="birthDate">Birth date</th>
-        </tr>
-        </thead>
-        <tbody>
-        <c:forEach items="${clientPageable.elements}" var="client">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="pageSize">Page size:</label>
+                        <select name="pageSize" id="pageSize" class="form-control">
+                            <option value="5" <c:if test="${param.pageSize == 5}">selected</c:if>>5 per page</option>
+                            <option value="10" <c:if test="${param.pageSize == 10}">selected</c:if>>10 per page</option>
+                            <option value="20" <c:if test="${param.pageSize == 20}">selected</c:if>>20 per page</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12 d-flex justify-content-center">
+                    <button type="submit" class="btn btn-primary">Apply Filters</button>
+                </div>
+            </div>
+
+        </form>
+
+        <table class="table table-striped table-hover">
+            <thead>
             <tr>
-                <td>${client.name} ${client.surname}</td>
-                <td>${client.email}</td>
-                <td>${client.phoneNumber}</td>
-                <td>${client.birthDate}</td>
-                <sec:authorize access="hasAuthority('ROLE_ADMIN')">
+                <th id="name">Name and Surname</th>
+                <%--                <sec:authorize access="!hasAuthority('ROLE_CLIENT')">--%>
+                <th id="email">Email</th>
+                <th id="phoneNumber">Phone</th>
+                <th id="birthDate">Birth Date</th>
+                <%--                </sec:authorize>--%>
+                <%--                <sec:authorize access="hasAuthority('ROLE_ADMIN')">--%>
+                <th>Action</th>
+                <%--                </sec:authorize>--%>
+            </tr>
+            </thead>
+            <tbody>
+            <c:forEach items="${employeePageable.elements}" var="employee">
+                <tr>
+                    <td>${employee.name} ${employee.surname}</td>
+                        <%--                    <sec:authorize access="!hasAuthority('ROLE_CLIENT')">--%>
+                    <td>${employee.email}</td>
+                    <td>${employee.phoneNumber}</td>
+                    <td>${employee.birthDate}</td>
+                        <%--                    </sec:authorize>--%>
+                        <%--                    <sec:authorize access="hasAuthority('ROLE_ADMIN')">--%>
                     <td>
-                        <form action="clients/delete/${client.id}" method="post">
-                            <input type="submit" class="delete-button" value="Delete"
-                                   onclick="return confirm('Are you sure?');"/>
+                        <form action="client/delete/${client.id}" method="post">
+                            <button type="submit" class="btn btn-danger"
+                                    onclick="return confirm('Are you sure you want to delete this client?');">Delete
+                            </button>
                         </form>
                     </td>
-                </sec:authorize>
-            </tr>
-        </c:forEach>
-        </tbody>
-    </table>
+                        <%--                    </sec:authorize>--%>
+                </tr>
+            </c:forEach>
+            </tbody>
+        </table>
+
+        <div class="form-row justify-content-center mt-4">
+            <div class="col-auto">
+                <button type="button" class="btn btn-outline-primary"
+                        onclick="goToPage(${param.page - 1})" ${param.page <= 1 || param.page == null ? 'disabled' : ''}>
+                    Previous
+                </button>
+                <button type="button" class="btn btn-outline-primary"
+                        onclick="goToPage(${param.page + 1})" ${param.page * param.pageSize >= employeePageable.totalSize ? 'disabled' : ''}>
+                    Next
+                </button>
+            </div>
+        </div>
+
+    </div>
 </div>
-<%@ include file="/WEB-INF/jsp/common/footer.jsp" %>
+<script>
+    function goToPage(page) {
+        if (page > 0) {
+            document.querySelector("input[name='page']").value = page;
+            document.querySelector("form").submit();
+        }
+    }
+</script>
 </body>
 </html>
