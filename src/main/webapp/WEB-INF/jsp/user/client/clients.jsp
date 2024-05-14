@@ -15,7 +15,7 @@
 <div class="container mt-3">
     <%@ include file="/WEB-INF/jsp/common/header.jsp" %>
 
-    <h2 class="text-center mb-3">Employees</h2>
+    <h2 class="text-center mb-3">Clients</h2>
 
     <div id="main">
 
@@ -93,13 +93,13 @@
             </tr>
             </thead>
             <tbody>
-            <c:forEach items="${employeePageable.elements}" var="employee">
+            <c:forEach items="${clientPageable.elements}" var="client">
                 <tr>
-                    <td>${employee.name} ${employee.surname}</td>
+                    <td>${client.name} ${client.surname}</td>
                         <%--                    <sec:authorize access="!hasAuthority('ROLE_CLIENT')">--%>
-                    <td>${employee.email}</td>
-                    <td>${employee.phoneNumber}</td>
-                    <td>${employee.birthDate}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phoneNumber}</td>
+                    <td>${client.birthDate}</td>
                         <%--                    </sec:authorize>--%>
                         <%--                    <sec:authorize access="hasAuthority('ROLE_ADMIN')">--%>
                     <td>
@@ -122,7 +122,7 @@
                     Previous
                 </button>
                 <button type="button" class="btn btn-outline-primary"
-                        onclick="goToPage(${param.page + 1})" ${param.page * param.pageSize >= employeePageable.totalSize ? 'disabled' : ''}>
+                        onclick="goToPage(${param.page + 1})" ${param.page * param.pageSize >= clientPageable.totalSize ? 'disabled' : ''}>
                     Next
                 </button>
             </div>
