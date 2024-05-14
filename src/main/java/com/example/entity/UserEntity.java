@@ -50,7 +50,7 @@ public class UserEntity extends AbstractCoreEntity {
     @Column(name = "deleted")
     private boolean deleted;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_userroles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "userRole_id"))

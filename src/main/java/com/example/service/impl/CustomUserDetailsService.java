@@ -3,6 +3,7 @@ package com.example.service.impl;
 import com.example.entity.ClientEntity;
 import com.example.entity.EmployeeEntity;
 import com.example.entity.UserEntity;
+import com.example.entity.UserRoleEntity;
 import com.example.repository.ClientRepository;
 import com.example.repository.EmployeeRepository;
 import com.example.repository.UserRepository;
@@ -72,19 +73,14 @@ public class CustomUserDetailsService implements UserDetailsService {
         if (userOpt.isPresent()) {
             UserEntity user = userOpt.get();
 
-            String role;
-            if (user instanceof ClientEntity) {
-                role = "CLIENT";
-            } else if (user instanceof EmployeeEntity) {
-                role = "EMPLOYEE";
-            } else {
-                throw new UsernameNotFoundException("Unknown user type");
-            }
+            String[] roles = user.getUserRoles().stream()
+                    .map(UserRoleEntity::getName)
+                    .toArray(String[]::new);
 
             return org.springframework.security.core.userdetails.User
                     .withUsername(user.getEmail())
                     .password(user.getPassword())
-                    .roles(role)
+                    .roles(roles)
                     .build();
         }
 

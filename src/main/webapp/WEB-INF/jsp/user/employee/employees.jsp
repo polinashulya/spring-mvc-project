@@ -114,29 +114,29 @@
             <thead>
             <tr>
                 <th id="name">Name and Surname</th>
-                <%--                <sec:authorize access="!hasAuthority('ROLE_CLIENT')">--%>
+                                <sec:authorize access="!hasAuthority('ROLE_CLIENT')">
                 <th id="email">Email</th>
                 <th id="phoneNumber">Phone</th>
                 <th id="birthDate">Birth Date</th>
                 <th id="hireDate">Hire Date</th>
-                <%--                </sec:authorize>--%>
+                                </sec:authorize>
                 <th id="position">Position</th>
                 <th id="procedure">Procedure</th>
-                <%--                <sec:authorize access="hasAuthority('ROLE_ADMIN')">--%>
+                                <sec:authorize access="hasAuthority('ROLE_ADMIN')">
                 <th>Action</th>
-                <%--                </sec:authorize>--%>
+                                </sec:authorize>
             </tr>
             </thead>
             <tbody>
             <c:forEach items="${employeePageable.elements}" var="employee">
                 <tr>
                     <td>${employee.name} ${employee.surname}</td>
-                        <%--                    <sec:authorize access="!hasAuthority('ROLE_CLIENT')">--%>
+                                            <sec:authorize access="!hasAuthority('ROLE_CLIENT')">
                     <td>${employee.email}</td>
                     <td>${employee.phoneNumber}</td>
                     <td>${employee.birthDate}</td>
                     <td>${employee.hireDate}</td>
-                        <%--                    </sec:authorize>--%>
+                                            </sec:authorize>
                     <td>
                         <c:forEach
                                 items="${employee.positions}"
@@ -151,7 +151,7 @@
                             ${procedure.name}<br/>
                         </c:forEach>
                     </td>
-                        <%--                    <sec:authorize access="hasAuthority('ROLE_ADMIN')">--%>
+                                            <sec:authorize access="hasAuthority('ROLE_ADMIN')">
                     <td>
                         <form action="employees/delete/${employee.id}" method="post">
                             <button type="submit" class="btn btn-danger"
@@ -159,7 +159,7 @@
                             </button>
                         </form>
                     </td>
-                        <%--                    </sec:authorize>--%>
+                                            </sec:authorize>
                 </tr>
             </c:forEach>
             </tbody>
