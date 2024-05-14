@@ -18,7 +18,7 @@ ON CONFLICT (id) DO NOTHING;;
   positions
  */
 INSERT INTO employee_positions(code, name)
-values ('test', 'cleaner')
+values ('test1', 'hairdresser')
 ON CONFLICT (code) DO NOTHING;
 
 
@@ -27,12 +27,12 @@ ON CONFLICT (code) DO NOTHING;
  */
 
 insert into procedurecategories(id, name)
-values (1, 'test1')
+values (1, 'hair')
 ON CONFLICT (id) DO NOTHING;
 /**
   producers
  */
 
 INSERT INTO procedures(code, description, duration, name, price, procedurecategories_id)
-values ('test', 'blabla', 3, 'test1', 5, 1)
+values ('test1', 'botox is great', 3, 'botox', 5, 1)
 ON CONFLICT (code) DO NOTHING;

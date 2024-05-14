@@ -24,7 +24,9 @@
                 <td class="form-group">
                     <%@ include file="/WEB-INF/jsp/forms/emailForm.jsp" %>
                 </td>
-
+                <td class="form-group">
+                    <%@ include file="/WEB-INF/jsp/forms/birthDateForm.jsp" %>
+                </td>
                 <%@ include file="/WEB-INF/jsp/forms/userForm.jsp" %>
 
             </tr>
