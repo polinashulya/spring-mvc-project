@@ -28,7 +28,7 @@ public class UserDto extends AbstractCoreDto {
     private String email;
 
     @NotNull
-//    @ValidPhone
+    @ValidPhone
     private String phoneNumber;
 
     @NotBlank(message = "Password is mandatory")

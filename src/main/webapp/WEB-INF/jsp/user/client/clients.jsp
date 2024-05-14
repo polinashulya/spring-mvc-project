@@ -104,6 +104,7 @@
                                             <sec:authorize access="hasAuthority('ROLE_ADMIN')">
                     <td>
                         <form action="client/delete/${client.id}" method="post">
+                            <sec:csrfInput />
                             <button type="submit" class="btn btn-danger"
                                     onclick="return confirm('Are you sure you want to delete this client?');">Delete
                             </button>

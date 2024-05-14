@@ -33,19 +33,11 @@
         <label for="phoneNumber">
             <sup>*</sup> Phone Number
         </label>
-<%--        <form:input--%>
-<%--                id="phoneNumber"--%>
-<%--                value="12341234"--%>
-<%--                path="phoneNumber"--%>
-<%--                pattern="^\+?\d{0,13}"--%>
-<%--                required="true"--%>
-<%--                type="tel"--%>
-<%--                name="phoneNumber"--%>
-<%--                title="Phone number"/>--%>
         <form:input
                 id="phoneNumber"
                 value="12341234"
                 path="phoneNumber"
+                pattern="^\+?\d{0,13}"
                 required="true"
                 type="tel"
                 name="phoneNumber"
