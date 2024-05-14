@@ -47,6 +47,7 @@ public class ClientController {
         model.addAttribute("countries", countries);
     }
 
+    @PreAuthorize("hasAnyRole( 'ADMIN')")
     @GetMapping("/adding_form")
     public String addingForm(Model model) {
         try {
@@ -61,6 +62,7 @@ public class ClientController {
         }
     }
 
+    @PreAuthorize("hasAnyRole( 'ADMIN')")
     @PostMapping("/adding_form")
     public String save(@Validated @ModelAttribute("clientForm") ClientDto clientDto,
                        BindingResult bindingResult
@@ -80,7 +82,7 @@ public class ClientController {
         }
     }
 
-    //@PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/delete/{id}")
     public String delete(@PathVariable(name = "id") String id, Model model) {
         DeletionStatus deletionStatus = clientService.deleteById(Long.valueOf(id));

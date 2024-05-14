@@ -2,15 +2,18 @@ package com.example.controller;
 
 import com.example.entity.DeletionStatus;
 import com.example.exception.ControllerCustomException;
-import com.example.service.CountryService;
 import com.example.service.EmployeePositionService;
 import com.example.service.EmployeeService;
 import com.example.service.ProcedureService;
-import com.example.service.dto.*;
+import com.example.service.dto.EmployeeDto;
+import com.example.service.dto.EmployeePositionDto;
+import com.example.service.dto.PageableDto;
+import com.example.service.dto.ProcedureDto;
 import com.example.service.dto.search.EmployeeSearchCriteriaDto;
 import lombok.AllArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -63,6 +66,7 @@ public class EmployeeController {
         model.addAttribute("procedures", procedures);
     }
 
+    @PreAuthorize("hasAnyRole( 'ADMIN')")
     @GetMapping("/adding_form")
     public String addingForm(Model model) {
         try {
@@ -79,8 +83,9 @@ public class EmployeeController {
         }
     }
 
+    @PreAuthorize("hasAnyRole( 'ADMIN')")
     @PostMapping("/adding_form")
-    public String save(Model model,@Validated @ModelAttribute("employeeForm") EmployeeDto employeeDto,
+    public String save(Model model, @Validated @ModelAttribute("employeeForm") EmployeeDto employeeDto,
                        BindingResult bindingResult) {
         try {
 
@@ -99,6 +104,7 @@ public class EmployeeController {
         }
     }
 
+//    @PreAuthorize("hasAnyRole( 'ROLE_ADMIN')")
     @PostMapping("/delete/{id}")
     public String delete(@PathVariable(name = "id") String id, Model model) {
         DeletionStatus deletionStatus = employeeService.deleteById(Long.valueOf(id));
