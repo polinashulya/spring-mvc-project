@@ -82,26 +82,26 @@
             <thead>
             <tr>
                 <th id="name">Name and Surname</th>
-                <%--                <sec:authorize access="!hasAuthority('ROLE_CLIENT')">--%>
+                                <sec:authorize access="!hasAuthority('ROLE_CLIENT')">
                 <th id="email">Email</th>
                 <th id="phoneNumber">Phone</th>
                 <th id="birthDate">Birth Date</th>
-                <%--                </sec:authorize>--%>
-                <%--                <sec:authorize access="hasAuthority('ROLE_ADMIN')">--%>
+                                </sec:authorize>
+                                <sec:authorize access="hasAuthority('ROLE_ADMIN')">
                 <th>Action</th>
-                <%--                </sec:authorize>--%>
+                           </sec:authorize>
             </tr>
             </thead>
             <tbody>
             <c:forEach items="${clientPageable.elements}" var="client">
                 <tr>
                     <td>${client.name} ${client.surname}</td>
-                        <%--                    <sec:authorize access="!hasAuthority('ROLE_CLIENT')">--%>
+                                            <sec:authorize access="!hasAuthority('ROLE_CLIENT')">
                     <td>${client.email}</td>
                     <td>${client.phoneNumber}</td>
                     <td>${client.birthDate}</td>
-                        <%--                    </sec:authorize>--%>
-                        <%--                    <sec:authorize access="hasAuthority('ROLE_ADMIN')">--%>
+                                            </sec:authorize>
+                                            <sec:authorize access="hasAuthority('ROLE_ADMIN')">
                     <td>
                         <form action="client/delete/${client.id}" method="post">
                             <button type="submit" class="btn btn-danger"
@@ -109,7 +109,7 @@
                             </button>
                         </form>
                     </td>
-                        <%--                    </sec:authorize>--%>
+                                            </sec:authorize>
                 </tr>
             </c:forEach>
             </tbody>

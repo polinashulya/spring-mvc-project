@@ -57,19 +57,19 @@
                         <li class="nav-item">
                             <a class="nav-link" href="/employees">Employees</a>
                         </li>
-<%--                        <sec:authorize access="!hasAuthority('ROLE_CLIENT')">--%>
+                        <sec:authorize access="!hasAuthority('ROLE_CLIENT')">
                             <li class="nav-item">
                                 <a class="nav-link" href="/clients">Clients</a>
                             </li>
-<%--                        </sec:authorize>--%>
-<%--                        <sec:authorize access="hasAuthority('ADMIN')">--%>
+                        </sec:authorize>
+                        <sec:authorize access="hasAuthority('ROLE_ADMIN')">
                             <li class="nav-item">
                                 <a class="nav-link" href="/employees/adding_form">Add new employee</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="/clients/adding_form">Add new client</a>
                             </li>
-<%--                        </sec:authorize>--%>
+                        </sec:authorize>
                     </sec:authorize>
                 </ul>
                 <ul class="navbar-nav">
